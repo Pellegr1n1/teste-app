@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -15,7 +16,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        // Obter o ID do usuário logado
+        $userId = Auth::id();
+
+        // Obter todas as categorias associadas ao usuário logado
+        $categories = Category::where('iduser', $userId)->get();
 
         return Inertia::render('Category', [
             'categories' => $categories,
@@ -65,7 +70,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::find($id);
-        
+
         return Inertia::render('Category', [
             'category' => $category,
         ]);

@@ -59,7 +59,6 @@ export default function ProductForm({auth}) {
                     value={data.quantity}
                     onChange={(e) => setData('quantity', e.target.value)}
                     required
-                    isFocused
                     autoComplete="quantity"
                 />
 
@@ -88,7 +87,6 @@ export default function ProductForm({auth}) {
                     value={data.price}
                     onChange={(e) => setData('price', e.target.value)}
                     required
-                    isFocused
                     autoComplete="price"
                 />
 

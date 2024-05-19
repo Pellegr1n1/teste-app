@@ -55,7 +55,6 @@ export default function CategoryForm({auth}) {
                     value={data.tax}
                     onChange={(e) => setData('tax', e.target.value)}
                     required
-                    isFocused
                     autoComplete="tax"
                 />
 
@@ -71,7 +70,6 @@ export default function CategoryForm({auth}) {
                     value={data.dscategory}
                     onChange={(e) => setData('dscategory', e.target.value)}
                     required
-                    isFocused
                     autoComplete="dscategory"
                 />
 

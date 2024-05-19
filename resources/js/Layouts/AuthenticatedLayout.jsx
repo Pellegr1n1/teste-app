@@ -111,10 +111,10 @@ export default function Authenticated({ user, header, children }) {
                             Carrinho
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
-                            Carrinho
+                            Histórico
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('product')} active={route().current('product')}>
-                            Carrinho
+                            Produto
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('categories.index')} active={route().current('categories.index')}>
                             Carrinho
