@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->decimal('total')->nullable(false);
-            $table->decimal('tax')->nullable(false);
-            $table->unsignedBigInteger('iduser')->nullable(false);
+            $table->decimal('total');
+            $table->decimal('tax');
+            $table->unsignedBigInteger('iduser');
             $table->timestamps();
 
             $table->foreign('iduser')->references('id')->on('users')->onDelete('cascade');

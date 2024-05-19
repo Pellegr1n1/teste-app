@@ -1,23 +1,7 @@
+@import url(TableActionIcon.module.css);
+
 .divForm {
     display: flex;
-}
-
-.iconEdit {
-    color: black;
-}
-
-.iconEdit:hover {
-    transition: 0.3s;
-    color: #313131;
-}
-
-.iconDelete {
-    color: #ad2831;
-}
-
-.iconDelete:hover {
-    transition: 0.3s;
-    color: white;
 }
 
 .tableContainer {

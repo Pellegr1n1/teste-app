@@ -1,57 +1,70 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { React } from "react";
+import { React, useState, useEffect } from "react";
 import CategoryForm from "./Components/Category/CategoryForm";
 import { Table, Space, Modal } from "antd";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
-import styles from "./Styles/Category.module.css";
-import listCategory from '@/Utils/categoryUtils';
+import styles from "./Styles/TableActionIcon.module.css";
+import { useForm } from '@inertiajs/react';
 
-export default function Category({ auth }) {
+const Category = ({ auth, categories }) => {
+    const [data, setData] = useState([]);
 
-    const showEdit = () => {
-        alert('Editando os dados no forms!')
+    const {
+        delete: destroy,
+        put
+    } = useForm();
+
+    useEffect(() => {
+        setData(categories);
+    }, [categories]);
+
+    const showEdit = (id) => {
+       route('categories.edit', {id: id});
     };
 
-    const handleDelete = () => {
+    const handleDelete = (id) => {
         Modal.confirm({
             title: "Confirmar exclusão",
-            content: "Tem certeza que deseja excluir este produto?",
+            content: "Tem certeza que deseja excluir esta categoria?",
             okText: "Sim",
             cancelText: "Cancelar",
             onOk() {
-                // Lógica para exclusão do produto
-                console.log("Produto excluído");
-            },
-        });
+                destroy(route('categories.destroy', { id: id }))
+            }
+        })
     };
 
     const columns = [
         {
             title: "Identificador",
+            align: 'center',
             dataIndex: "id",
             key: "id",
         },
         {
             title: "Nome",
-            dataIndex: "name",
-            key: "name",
+            align: 'center',
+            dataIndex: "nmcategory",
+            key: "nmcategory",
         },
         {
             title: "Taxa",
+            align: 'center',
             dataIndex: "tax",
             key: "tax",
         },
         {
             title: "Ações",
+            align: 'center',
             key: "action",
-            render: () => (
+            render: (record) => (
                 <Space size={30}>
-                    <a onClick={showEdit}>
+                    <a onClick={() => showEdit(record.id)}>
                         <FaRegEdit className={styles.iconEdit} size={20} />
                     </a>
-                    <a onClick={handleDelete}>
+                    <a onClick={() => handleDelete(record.id)}>
                         <IoTrashOutline className={styles.iconDelete} size={20} />
                     </a>
                 </Space>
@@ -73,13 +86,15 @@ export default function Category({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                        <CategoryForm />
+                        <CategoryForm auth={auth.user.id} />
                     </div>
                     <div className={"mt-10"}>
-                        <Table columns={columns} dataSource={listCategory} pagination />
+                        <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
                     </div>
                 </div>
             </div>
         </AuthenticatedLayout>
     );
 }
+
+export default Category;

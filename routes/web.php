@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -30,9 +31,19 @@ Route::get('/product', function () {
     return Inertia::render('Product');
 })->middleware(['auth', 'verified'])->name('product');
 
-Route::get('/category', function () {
-    return Inertia::render('Category');
-})->middleware(['auth', 'verified'])->name('category');
+/**
+ * Routes Category
+ * */
+
+Route::get('/category', [CategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('categories.index');
+
+Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.edit');
+
+Route::post('/category', [CategoryController::class, 'store'])->middleware(['auth', 'verified'])->name('categories.store');
+
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('categories.destroy');
+
+Route::put('/category/{id}', [CategoryController::class, 'update'])->middleware(['auth', 'verified'])->name('categories.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -40,4 +51,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

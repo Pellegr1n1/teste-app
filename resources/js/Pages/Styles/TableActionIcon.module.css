@@ -4,7 +4,7 @@
 
 .iconEdit:hover {
     transition: 0.3s;
-    color: #313131;
+    color: #545454;
 }
 
 .iconDelete {
@@ -13,5 +13,5 @@
 
 .iconDelete:hover {
     transition: 0.3s;
-    color: white;
+    color: rgb(255, 177, 177);
 }

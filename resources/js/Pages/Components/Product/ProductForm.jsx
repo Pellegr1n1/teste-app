@@ -9,7 +9,7 @@ import { Transition } from '@headlessui/react';
 import SelectLabel from '@/Components/SelectLabel';
 import ImageUploadInput from '@/Components/ImageUploadInput';
 
-export default function ProductForm() {
+export default function ProductForm({auth}) {
     const { data, setData, errors, put, reset, processing, recentlySuccessful } = useForm({
         name: '',
         category: '',

@@ -7,35 +7,39 @@ import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import TextAreaInput from '@/Components/TextAreaInput';
 
-export default function CategoryForm() {
-    const { data, setData, errors, put, reset, processing, recentlySuccessful } = useForm({
-        name: '',
-        category: '',
-        quantity: null,
-        price: ''
+export default function CategoryForm({auth}) {
+
+    const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
+        nmcategory: '',
+        tax: '',
+        dscategory: '',
+        iduser: auth
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        console.log(e);
-        //patch(route('teste'));
+        post(route('categories.store'), {
+            onSuccess: () => {
+                reset();
+            }
+        });
     };
 
     return (
-        <form onSubmit={submit} className="mt-6 space-y-6">
+        <form onSubmit={submit} action={route('categories.store')} className="mt-6 space-y-6">
             <div>
-                <InputLabel htmlFor="name" value="Nome" />
+                <InputLabel htmlFor="nmcategory" value="Nome" />
 
                 <TextInput
-                    id="name"
+                    id="nmcategory"
                     type="text"
                     className="mt-1 block w-full"
-                    value={data.name}
-                    onChange={(e) => setData('name', e.target.value)}
+                    value={data.nmcategory}
+                    onChange={(e) => setData('nmcategory', e.target.value)}
                     required
                     isFocused
-                    autoComplete="name"
+                    autoComplete="nmcategory"
                 />
 
                 <InputError className="mt-2" message={errors.name} />
@@ -55,20 +59,20 @@ export default function CategoryForm() {
                     autoComplete="tax"
                 />
 
-                <InputError className="mt-2" message={errors.quantity} />
+                <InputError className="mt-2" message={errors.tax} /> {/* Corrigido de 'quantity' para 'tax' */}
             </div>
 
             <div>
-                <InputLabel htmlFor="description" value="Descrição" />
+                <InputLabel htmlFor="dscategory" value="Descrição" />
 
                 <TextAreaInput
-                    id="description"
+                    id="dscategory"
                     className="mt-1 block w-full"
-                    value={data.description}
-                    onChange={(e) => setData('description', e.target.value)}
+                    value={data.dscategory}
+                    onChange={(e) => setData('dscategory', e.target.value)}
                     required
                     isFocused
-                    autoComplete="description"
+                    autoComplete="dscategory"
                 />
 
                 <InputError className="mt-2" message={errors.description} />
@@ -85,7 +89,7 @@ export default function CategoryForm() {
                     leave="transition ease-in-out"
                     leaveTo="opacity-0"
                 >
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Cadastrando</p>
+                    <p className="text-sm text-gray-600 dark:text-green-400">Cadastrando...</p>
                 </Transition>
             </div>
         </form>

@@ -78,7 +78,7 @@ export default function Product({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                        <ProductForm />
+                        <ProductForm auth={auth.user} />
                     </div>
                     <div className={"mt-10"}>
                         <Table columns={columns} dataSource={products} pagination />

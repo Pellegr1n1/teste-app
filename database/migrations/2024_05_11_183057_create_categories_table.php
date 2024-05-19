@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string("nmcategory")->nullable(false);
-            $table->text("dscategory");
-            $table->decimal("tax")->nullable(false);
-            $table->unsignedBigInteger('iduser')->nullable(false);
+            $table->string("nmcategory");
+            $table->text("dscategory")->nullable();
+            $table->decimal("tax");
+            $table->unsignedBigInteger('iduser');
             $table->timestamps();
 
             $table->foreign('iduser')->references('id')->on('users')->onDelete('cascade');
