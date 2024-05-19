@@ -18,6 +18,22 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/cart', function () {
+    return Inertia::render('Cart');
+})->middleware(['auth', 'verified'])->name('cart');
+
+Route::get('/historic', function () {
+    return Inertia::render('Historic');
+})->middleware(['auth', 'verified'])->name('historic');
+
+Route::get('/product', function () {
+    return Inertia::render('Product');
+})->middleware(['auth', 'verified'])->name('product');
+
+Route::get('/category', function () {
+    return Inertia::render('Category');
+})->middleware(['auth', 'verified'])->name('category');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

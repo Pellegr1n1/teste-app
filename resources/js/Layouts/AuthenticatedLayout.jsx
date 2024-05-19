@@ -9,7 +9,7 @@ export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="min-h-screen bg-gray-100">
             <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
@@ -23,6 +23,18 @@ export default function Authenticated({ user, header, children }) {
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
+                                </NavLink>
+                                <NavLink href={route('cart')} active={route().current('cart')}>
+                                    Carrinho
+                                </NavLink>
+                                <NavLink href={route('historic')} active={route().current('historic')}>
+                                    Histórico
+                                </NavLink>
+                                <NavLink href={route('product')} active={route().current('product')}>
+                                    Produtos
+                                </NavLink>
+                                <NavLink href={route('category')} active={route().current('category')}>
+                                    Categoria
                                 </NavLink>
                             </div>
                         </div>
@@ -94,6 +106,18 @@ export default function Authenticated({ user, header, children }) {
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('cart')} active={route().current('cart')}>
+                            Carrinho
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
+                            Carrinho
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('product')} active={route().current('product')}>
+                            Carrinho
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('category')} active={route().current('category')}>
+                            Carrinho
                         </ResponsiveNavLink>
                     </div>
 
