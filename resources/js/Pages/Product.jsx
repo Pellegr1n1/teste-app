@@ -67,8 +67,12 @@ export default function Product({ auth }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Produto</h2>}
-        >
+            header={
+                <>
+                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Produto</h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Cadastre produtos para serem anunciados no carrinho</p>
+                </>
+            }        >
             <Head title="Produto" />
 
             <div className="py-12">

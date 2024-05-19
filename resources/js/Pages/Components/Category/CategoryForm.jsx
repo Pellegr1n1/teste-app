@@ -1,4 +1,3 @@
-import { useRef, useState } from 'react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -6,10 +5,9 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import SelectLabel from '@/Components/SelectLabel';
-import ImageUploadInput from '@/Components/ImageUploadInput';
+import TextAreaInput from '@/Components/TextAreaInput';
 
-export default function ProductForm() {
+export default function CategoryForm() {
     const { data, setData, errors, put, reset, processing, recentlySuccessful } = useForm({
         name: '',
         category: '',
@@ -23,12 +21,6 @@ export default function ProductForm() {
         console.log(e);
         //patch(route('teste'));
     };
-
-    const options = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        { value: 'option3', label: 'Option 3' },
-    ];
 
     return (
         <form onSubmit={submit} className="mt-6 space-y-6">
@@ -50,59 +42,36 @@ export default function ProductForm() {
             </div>
 
             <div>
-                <InputLabel htmlFor="quantity" value="Quantidade" />
+                <InputLabel htmlFor="tax" value="Taxa" />
 
                 <TextInput
-                    id="quantity"
+                    id="tax"
                     type="number"
                     className="mt-1 block w-full"
-                    value={data.quantity}
-                    onChange={(e) => setData('quantity', e.target.value)}
+                    value={data.tax}
+                    onChange={(e) => setData('tax', e.target.value)}
                     required
                     isFocused
-                    autoComplete="quantity"
+                    autoComplete="tax"
                 />
 
                 <InputError className="mt-2" message={errors.quantity} />
             </div>
 
             <div>
-                <InputLabel htmlFor="category" value="Categoria" />
+                <InputLabel htmlFor="description" value="Descrição" />
 
-                <SelectLabel
-                    options={options}
-                    value={data.category}
-                    onChange={(e) => setData('category', e.target.value)}
+                <TextAreaInput
+                    id="description"
                     className="mt-1 block w-full"
-                />
-
-                <InputError message={errors.category} className="mt-2" />
-            </div>
-
-            <div>
-                <InputLabel htmlFor="price" value="Preço" />
-
-                <TextInput
-                    id="price"
-                    className="mt-1 block w-full"
-                    value={data.price}
-                    onChange={(e) => setData('price', e.target.value)}
+                    value={data.description}
+                    onChange={(e) => setData('description', e.target.value)}
                     required
                     isFocused
-                    autoComplete="price"
+                    autoComplete="description"
                 />
 
-                <InputError className="mt-2" message={errors.price} />
-            </div>
-
-            <div>
-                <InputLabel htmlFor="image" value="Imagem" />
-
-                <ImageUploadInput 
-                    className="custom-input"
-                />
-
-                <InputError className="mt-2" message={errors.image} />
+                <InputError className="mt-2" message={errors.description} />
             </div>
 
             <div className="flex items-center gap-4">
