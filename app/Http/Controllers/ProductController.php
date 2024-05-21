@@ -7,6 +7,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class ProductController extends Controller
@@ -60,11 +62,13 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
 
-        if (!$product) {
-            return redirect()->route('products.index')->with('error', 'Produto não encontrado.');
-        }
+        $imagePath = $product->image;
 
         $product->delete();
+
+        if ($imagePath) {
+            Storage::disk('public')->delete($imagePath);
+        }
 
         return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso.');
     }
