@@ -1,17 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import ToggleSwitch from '@/Components/Toggle';
+import InputMask from 'react-input-mask';
 
 export default function Register() {
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleToggle = () => {
+        setIsChecked(!isChecked);
+    };
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        document: ''
     });
 
     useEffect(() => {
@@ -31,7 +40,38 @@ export default function Register() {
             <Head title="Register" />
 
             <form onSubmit={submit}>
-                <div>
+                <div className='flex'>
+                    <ToggleSwitch
+                        checked={isChecked}
+                        onChange={handleToggle}
+                    />
+                    {isChecked ?
+                        <p className='text-white'>Cadastrar pessoa juridica/empresa</p>
+                        :
+                        <p className='text-white'>Cadastrar pessoa física</p>
+                    }
+                </div>
+
+                <div className='mt-10'>
+                    <InputLabel htmlFor="document" value="Documento" />
+                    <InputMask
+                        id="document"
+                        name="document"
+                        mask={isChecked ? "99.999.999/9999-99" : "999.999.999-99"}
+                        placeholder={isChecked ? "CNPJ" : "CPF"}
+                        value={data.document}
+                        className="mt-1 block w-full"
+                        autoComplete="document"
+                        isFocused={true}
+                        onChange={(e) => setData('document', e.target.value)}
+                        required
+                    >
+                        {(inputProps) => <TextInput {...inputProps} />}
+                    </InputMask>
+                    <InputError message={errors.document} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput
@@ -40,7 +80,6 @@ export default function Register() {
                         value={data.name}
                         className="mt-1 block w-full"
                         autoComplete="name"
-                        isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
                     />
