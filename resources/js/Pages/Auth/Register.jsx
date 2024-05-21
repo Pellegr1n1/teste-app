@@ -20,7 +20,8 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
-        document: ''
+        document: '',
+        type: isChecked ? 'company' : 'client'
     });
 
     useEffect(() => {

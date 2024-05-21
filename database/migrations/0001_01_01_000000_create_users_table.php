@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            
-            // modificar para not null
-            $table->string('iddocument')->nullable();
-            $table->enum('type', ['cpf','cnpj'])->nullable();
+
+            $table->string('document');
+            $table->enum('type', ['client', 'company']);
 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
