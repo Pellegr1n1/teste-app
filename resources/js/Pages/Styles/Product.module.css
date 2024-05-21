@@ -1,0 +1,9 @@
+@import url(TableActionIcon.module.css);
+
+.divForm {
+    display: flex;
+}
+
+.tableContainer {
+    margin-top: 10px;
+}

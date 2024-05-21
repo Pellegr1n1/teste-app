@@ -1,7 +1,40 @@
+import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import Slider from 'react-slick';
+import products from "@/Utils/productUtils";
+import CustomCard from './Components/Cart/Card';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Dashboard({ auth }) {
+    const settings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        arrows: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -11,9 +44,17 @@ export default function Dashboard({ auth }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">You're logged in!</div>
-                    </div>
+                    <Slider {...settings}>
+                        {products.slice().map((product) => (
+                            <CustomCard
+                                key={product.code}
+                                name={product.name}
+                                price={product.price}
+                                stock={product.stock}
+                                src={product.src}
+                            />
+                        ))}
+                    </Slider>
                 </div>
             </div>
         </AuthenticatedLayout>

@@ -1,0 +1,24 @@
+.col_right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.col_right h1 {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.col_right p {
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.image {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('nmproduct')->nullable(false);
-            $table->integer('qtproduct')->nullable(false);
-            $table->decimal('price')->nullable(false);
-            $table->unsignedBigInteger('iduser')->nullable(false);
-            $table->unsignedBigInteger('idcategory')->nullable(false);
-            $table->string('image_path')->nullable();
+            $table->string('nmproduct');
+            $table->integer('qtproduct');
+            $table->decimal('price', 10, 2);
+            $table->unsignedBigInteger('iduser');
+            $table->unsignedBigInteger('idcategory');
+            $table->string('image');
             $table->timestamps();
 
             $table->foreign('iduser')->references('id')->on('users')->onDelete('cascade');

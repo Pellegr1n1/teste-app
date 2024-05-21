@@ -1,0 +1,12 @@
+.header p {
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.table {
+    margin-left: 30px;
+}
+
+.view:hover {
+    cursor: pointer;
+}
