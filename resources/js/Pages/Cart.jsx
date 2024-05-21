@@ -3,7 +3,6 @@ import { Head } from '@inertiajs/react';
 import React, { useEffect, useState } from "react";
 import styles from "./Styles/Cart.module.css";
 import CustomCard from "./Components/Cart/Card";
-import { asset } from '@inertiajs/inertia';
 import { Space, Pagination, FloatButton, Tooltip } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import ModalCart from "./Components/Cart/ModalCart";
@@ -46,10 +45,10 @@ export default function Cart({ auth, products }) {
                     <Space size={[32, 16]} wrap className={styles.cardContainer}>
                         {listProducts.slice(startIndex, endIndex).map((product) => (
                             <CustomCard
-                                key={product.code}
-                                name={product.name}
+                                key={product.id}
+                                name={product.nmproduct}
                                 price={product.price}
-                                stock={product.stock}
+                                stock={product.qtproduct}
                                 src={`storage/${product.image}`}
                             />
                         ))}

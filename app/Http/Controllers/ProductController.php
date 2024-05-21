@@ -42,7 +42,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $file_name = rand(0, 999999) . '-' . $request->file('image')->getClientOriginalName();
-        $path = $request->file('image')->storeAs('uploads', $file_name);
+        $path = $request->file('image')->storeAs('uploads', $file_name, 'public');
 
         $data = $request->all();
         $data['image'] = $path;
