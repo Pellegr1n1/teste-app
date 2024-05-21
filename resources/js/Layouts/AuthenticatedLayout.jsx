@@ -24,13 +24,13 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
-                                <NavLink href={route('cart')} active={route().current('cart')}>
+                                <NavLink href={route('carts.index')} active={route().current('carts.index')}>
                                     Carrinho
                                 </NavLink>
                                 <NavLink href={route('historic')} active={route().current('historic')}>
                                     Histórico
                                 </NavLink>
-                                <NavLink href={route('product')} active={route().current('product')}>
+                                <NavLink href={route('products.index')} active={route().current('products.index')}>
                                     Produtos
                                 </NavLink>
                                 <NavLink href={route('categories.index')} active={route().current('categories.index')}>
@@ -107,13 +107,13 @@ export default function Authenticated({ user, header, children }) {
                         <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('cart')} active={route().current('cart')}>
+                        <ResponsiveNavLink href={route('carts.index')} active={route().current('carts.index')}>
                             Carrinho
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
                             Histórico
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('product')} active={route().current('product')}>
+                        <ResponsiveNavLink href={route('products.index')} active={route().current('products.index')}>
                             Produto
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('categories.index')} active={route().current('categories.index')}>

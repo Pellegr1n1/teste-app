@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -15,36 +17,43 @@ Route::get('/', function () {
     ]);
 });
 
+/** ------------------------------------ **/
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/cart', function () {
-    return Inertia::render('Cart');
-})->middleware(['auth', 'verified'])->name('cart');
+/** ------------------------------------ **/
+
+/** ----------------- Routes Cart ----------------- **/
+Route::get('/cart', [CartController::class, 'index'])->middleware(['auth', 'verified'])->name('carts.index');
+
+
 
 Route::get('/historic', function () {
     return Inertia::render('Historic');
 })->middleware(['auth', 'verified'])->name('historic');
 
-Route::get('/product', function () {
-    return Inertia::render('Product');
-})->middleware(['auth', 'verified'])->name('product');
+/** ----------------- Routes Product ----------------- **/
+
+Route::get('/product',[ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('products.index');
+Route::post('/product',[ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('products.store');
+Route::delete('/product/{id}',[ProductController::class, 'destroy'])->middleware(['auth', 'verified'])->name('products.destroy');
+
+/** -------------------------------------------------- **/
+
 
 /**
  * Routes Category
  * */
 
 Route::get('/category', [CategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('categories.index');
-
 Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.edit');
-
 Route::post('/category', [CategoryController::class, 'store'])->middleware(['auth', 'verified'])->name('categories.store');
-
 Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('categories.destroy');
-
 Route::put('/category/{id}', [CategoryController::class, 'update'])->middleware(['auth', 'verified'])->name('categories.update');
 
+/** ------------------------------------ **/
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -1,27 +1,37 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProductForm from "./Components/Product/ProductForm";
 import styles from "./Styles/Product.module.css";
 import { Table, Space, Modal } from "antd";
-import products from "@/Utils/productUtils";
 import { FaRegEdit } from "react-icons/fa";
+import { useForm } from '@inertiajs/react';
 import { IoTrashOutline } from "react-icons/io5";
 
-export default function Product({ auth }) {
+export default function Product({ auth, products, categories }) {
     const showEdit = () => {
         alert('Editando os dados no forms!')
     };
 
-    const handleDelete = () => {
+    const {
+        delete: destroy,
+        put
+    } = useForm();
+
+    const [listProducts, setListProducts] = useState([]);
+
+    useEffect(() => {
+        setListProducts(products);
+    }, [products])
+
+    const handleDelete = (id) => {
         Modal.confirm({
             title: "Confirmar exclusão",
             content: "Tem certeza que deseja excluir este produto?",
             okText: "Sim",
             cancelText: "Cancelar",
             onOk() {
-                // Lógica para exclusão do produto
-                console.log("Produto excluído");
+                destroy(route('categories.destroy', { id: id }))
             },
         });
     };
@@ -29,34 +39,33 @@ export default function Product({ auth }) {
     const columns = [
         {
             title: "Identificador",
-            dataIndex: "code",
-            key: "code",
+            dataIndex: "id",
+            key: "id",
         },
         {
             title: "Nome",
-            dataIndex: "name",
-            key: "name",
+            dataIndex: "nmproduct",
+            key: "id",
         },
         {
             title: "Preço",
             dataIndex: "price",
-            key: "price",
-            render: (total) => `R$ ${total.toFixed(2)}`,
+            key: "id",
         },
         {
             title: "Estoque",
-            dataIndex: "stock",
-            key: "stock",
+            dataIndex: "qtproduct",
+            key: "id",
         },
         {
             title: "Ações",
             key: "action",
-            render: () => (
+            render: (record) => (
                 <Space size={30}>
-                    <a onClick={showEdit}>
+                    <a onClick={() => showEdit(record)}>
                         <FaRegEdit className={styles.iconEdit} size={20} />
                     </a>
-                    <a onClick={handleDelete}>
+                    <a onClick={() => handleDelete(record)}>
                         <IoTrashOutline className={styles.iconDelete} size={20} />
                     </a>
                 </Space>
@@ -79,10 +88,10 @@ export default function Product({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                        <ProductForm auth={auth.user} />
+                        <ProductForm auth={auth.user.id} categories={categories} />
                     </div>
                     <div className={"mt-10"}>
-                        <Table columns={columns} dataSource={products} pagination />
+                        <Table columns={columns} dataSource={listProducts}  pagination={{ pageSize: 5 }} />
                     </div>
                 </div>
             </div>

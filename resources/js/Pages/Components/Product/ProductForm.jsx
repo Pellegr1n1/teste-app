@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -9,73 +9,79 @@ import { Transition } from '@headlessui/react';
 import SelectLabel from '@/Components/SelectLabel';
 import ImageUploadInput from '@/Components/ImageUploadInput';
 
-export default function ProductForm({auth}) {
-    const { data, setData, errors, put, reset, processing, recentlySuccessful } = useForm({
-        name: '',
-        category: '',
-        quantity: null,
-        price: ''
+export default function ProductForm({ auth, categories }) {
+    const { data, setData, errors, processing, recentlySuccessful, post } = useForm({
+        nmproduct: '',
+        idcategory: '',
+        qtproduct: null,
+        price: '',
+        iduser: auth,
+        image: null
     });
+
+    const [listCategory, setListCategory] = useState([]);
+
+
+    useEffect(() => {
+        setListCategory(categories);
+    }, [categories])
 
     const submit = (e) => {
         e.preventDefault();
-
-        console.log(e);
-        //patch(route('teste'));
+        post(route('products.store'));
     };
 
-    const options = [
-        { value: 'option1', label: 'Option 1' },
-        { value: 'option2', label: 'Option 2' },
-        { value: 'option3', label: 'Option 3' },
-    ];
+    const options = listCategory.map(item => ({
+        value: item.id,
+        label: item.nmcategory
+    }));
 
     return (
-        <form onSubmit={submit} className="mt-6 space-y-6">
+        <form onSubmit={submit} method='post' action={route('products.store')} className="mt-6 space-y-6" encType='multipart/form-data'>
             <div>
-                <InputLabel htmlFor="name" value="Nome" />
+                <InputLabel htmlFor="nmproduct" value="Nome" />
 
                 <TextInput
-                    id="name"
+                    id="nmproduct"
                     type="text"
                     className="mt-1 block w-full"
-                    value={data.name}
-                    onChange={(e) => setData('name', e.target.value)}
+                    value={data.nmproduct}
+                    onChange={(e) => setData('nmproduct', e.target.value)}
                     required
                     isFocused
-                    autoComplete="name"
+                    autoComplete="nmproduct"
                 />
 
                 <InputError className="mt-2" message={errors.name} />
             </div>
 
             <div>
-                <InputLabel htmlFor="quantity" value="Quantidade" />
+                <InputLabel htmlFor="qtproduct" value="Quantidade" />
 
                 <TextInput
-                    id="quantity"
+                    id="qtproduct"
                     type="number"
                     className="mt-1 block w-full"
-                    value={data.quantity}
-                    onChange={(e) => setData('quantity', e.target.value)}
+                    value={data.qtproduct}
+                    onChange={(e) => setData('qtproduct', e.target.value)}
                     required
-                    autoComplete="quantity"
+                    autoComplete="qtproduct"
                 />
 
                 <InputError className="mt-2" message={errors.quantity} />
             </div>
 
             <div>
-                <InputLabel htmlFor="category" value="Categoria" />
+                <InputLabel htmlFor="idcategory" value="Categoria" />
 
                 <SelectLabel
                     options={options}
-                    value={data.category}
-                    onChange={(e) => setData('category', e.target.value)}
+                    value={data.idcategory}
+                    onChange={(e) => setData('idcategory', e.target.value)}
                     className="mt-1 block w-full"
                 />
 
-                <InputError message={errors.category} className="mt-2" />
+                <InputError message={errors.idcategory} className="mt-2" />
             </div>
 
             <div>
@@ -96,9 +102,7 @@ export default function ProductForm({auth}) {
             <div>
                 <InputLabel htmlFor="image" value="Imagem" />
 
-                <ImageUploadInput 
-                    className="custom-input"
-                />
+                <ImageUploadInput className="custom-input" id='image' name='image' onChange={(e) => setData('image', e.target.files[0])} required />
 
                 <InputError className="mt-2" message={errors.image} />
             </div>
@@ -114,7 +118,7 @@ export default function ProductForm({auth}) {
                     leave="transition ease-in-out"
                     leaveTo="opacity-0"
                 >
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Cadastrando</p>
+                    <p className="text-sm text-gray-600 dark:text-green-400">Cadastrando...</p>
                 </Transition>
             </div>
         </form>

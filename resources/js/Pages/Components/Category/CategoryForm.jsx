@@ -69,7 +69,6 @@ export default function CategoryForm({auth}) {
                     className="mt-1 block w-full"
                     value={data.dscategory}
                     onChange={(e) => setData('dscategory', e.target.value)}
-                    required
                     autoComplete="dscategory"
                 />
 

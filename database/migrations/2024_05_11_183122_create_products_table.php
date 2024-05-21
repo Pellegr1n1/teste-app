@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nmproduct');
             $table->integer('qtproduct');
-            $table->decimal('price');
+            $table->decimal('price', 10, 2);
             $table->unsignedBigInteger('iduser');
             $table->unsignedBigInteger('idcategory');
-            $table->binary('image');
+            $table->string('image');
             $table->timestamps();
 
             $table->foreign('iduser')->references('id')->on('users')->onDelete('cascade');

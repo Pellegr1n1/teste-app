@@ -10,16 +10,14 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the categories.
+     * Metodo utilizado para retornar todas as categorias relacionadas
+     * ao usuario logado.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        // Obter o ID do usuário logado
         $userId = Auth::id();
 
-        // Obter todas as categorias associadas ao usuário logado
         $categories = Category::where('iduser', $userId)->get();
 
         return Inertia::render('Category', [
@@ -28,19 +26,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new category.
+     * Metodo utilizado para criar uma categoria
      *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('categories.create');
-    }
-
-    /**
-     * Store a newly created category in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -52,18 +40,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified category.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        return view('categories.show', compact('category'));
-    }
-
-    /**
-     * Show the form for editing the specified category.
+     * Metodo utilizado ao efetuar a edição.
      * @param int
      * @return \Illuminate\Http\Response
      */
@@ -77,7 +54,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified category in storage.
+     * Metodo utilizado para atualizar as informaçoes.
      *
      * @param  \Illuminate\Http\Request  
      * @param  int 
@@ -100,7 +77,7 @@ class CategoryController extends Controller
 
 
     /**
-     * Remove the specified category from storage.
+     * Metodo utilizado para deletar UMA categoria.
      *
      * @return \Illuminate\Http\Response
      */

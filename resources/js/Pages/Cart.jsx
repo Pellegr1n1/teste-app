@@ -1,14 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Styles/Cart.module.css";
 import CustomCard from "./Components/Cart/Card";
-import products from "../Utils/productUtils";
+import { asset } from '@inertiajs/inertia';
 import { Space, Pagination, FloatButton, Tooltip } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import ModalCart from "./Components/Cart/ModalCart";
 
-export default function Cart({ auth }) {
+export default function Cart({ auth, products }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 12;
@@ -21,6 +21,13 @@ export default function Cart({ auth }) {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
+    const [listProducts, setListProducts] = useState([]);
+
+    useEffect(() => {
+        setListProducts(products);
+        console.log(products);
+    }, [products])
 
     return (
         <AuthenticatedLayout
@@ -37,13 +44,13 @@ export default function Cart({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <Space size={[32, 16]} wrap className={styles.cardContainer}>
-                        {products.slice(startIndex, endIndex).map((product) => (
+                        {listProducts.slice(startIndex, endIndex).map((product) => (
                             <CustomCard
                                 key={product.code}
                                 name={product.name}
                                 price={product.price}
                                 stock={product.stock}
-                                src={product.src}
+                                src={`storage/${product.image}`}
                             />
                         ))}
                     </Space>
