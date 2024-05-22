@@ -32,13 +32,13 @@ Route::get('/cart', [CartController::class, 'index'])->middleware(['auth', 'veri
 
 Route::get('/historic', function () {
     return Inertia::render('Historic');
-})->middleware(['auth', 'verified'])->name('historic');
+})->middleware(['auth', 'verified', 'client'])->name('historic');
 
 /** ----------------- Routes Product ----------------- **/
 
-Route::get('/product',[ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('products.index');
-Route::post('/product',[ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('products.store');
-Route::delete('/product/{id}',[ProductController::class, 'destroy'])->middleware(['auth', 'verified'])->name('products.destroy');
+Route::get('/product',[ProductController::class, 'index'])->middleware(['auth', 'verified', 'company'])->name('products.index');
+Route::post('/product',[ProductController::class, 'store'])->middleware(['auth', 'verified', 'company'])->name('products.store');
+Route::delete('/product/{id}',[ProductController::class, 'destroy'])->middleware(['auth', 'verified', 'company'])->name('products.destroy');
 
 /** -------------------------------------------------- **/
 
@@ -47,11 +47,11 @@ Route::delete('/product/{id}',[ProductController::class, 'destroy'])->middleware
  * Routes Category
  * */
 
-Route::get('/category', [CategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('categories.index');
-Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.edit');
-Route::post('/category', [CategoryController::class, 'store'])->middleware(['auth', 'verified'])->name('categories.store');
-Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('categories.destroy');
-Route::put('/category/{id}', [CategoryController::class, 'update'])->middleware(['auth', 'verified'])->name('categories.update');
+Route::get('/category', [CategoryController::class, 'index'])->middleware(['auth', 'verified', 'company'])->name('categories.index');
+Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified', 'company'])->name('categories.edit');
+Route::post('/category', [CategoryController::class, 'store'])->middleware(['auth', 'verified', 'company'])->name('categories.store');
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified', 'company'])->name('categories.destroy');
+Route::put('/category/{id}', [CategoryController::class, 'update'])->middleware(['auth', 'verified', 'company'])->name('categories.update');
 
 /** ------------------------------------ **/
 Route::middleware('auth')->group(function () {
