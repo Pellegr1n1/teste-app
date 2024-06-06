@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -17,7 +18,7 @@ Route::get('/', function () {
     ]);
 });
 
-/** ------------------------------------ **/
+/** ------------------Routes Dashboard------------------ **/
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -29,6 +30,9 @@ Route::get('/dashboard', function () {
 Route::get('/cart', [CartController::class, 'index'])->middleware(['auth', 'verified'])->name('carts.index');
 
 
+Route::post('/address', [AddressController::class, 'create'])->middleware(['auth', 'verified'])->name('address.create');
+
+
 
 Route::get('/historic', function () {
     return Inertia::render('Historic');
@@ -36,9 +40,9 @@ Route::get('/historic', function () {
 
 /** ----------------- Routes Product ----------------- **/
 
-Route::get('/product',[ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('products.index');
-Route::post('/product',[ProductController::class, 'store'])->middleware(['auth', 'verified'])->name('products.store');
-Route::delete('/product/{id}',[ProductController::class, 'destroy'])->middleware(['auth', 'verified'])->name('products.destroy');
+Route::get('/product', [ProductController::class, 'index'])->middleware(['auth', 'verified', 'company'])->name('products.index');
+Route::post('/product', [ProductController::class, 'store'])->middleware(['auth', 'verified', 'company'])->name('products.store');
+Route::delete('/product/{id}', [ProductController::class, 'destroy'])->middleware(['auth', 'verified', 'company'])->name('products.destroy');
 
 /** -------------------------------------------------- **/
 

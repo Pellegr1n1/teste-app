@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Table, Steps, Button, QRCode } from "antd";
 import historicView from "@/Utils/historicViewUtils";
 import styles from "./ModalCart.module.css";
+import FormAddressModalCart from "./FormAddressModalCart";
 
 const ModalHistoric = ({ isModalOpen, closeModal }) => {
     const [filteredHistoricView, setFilteredHistoricView] =
@@ -45,6 +46,14 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
 
     const tab2 = () => {
         return (
+            <>
+               <FormAddressModalCart />
+            </>
+        );
+    };
+
+    const tab3 = () => {
+        return (
             <div className={styles.teste}>
                 <h2>Informações</h2>
                 <p>Total a pagar: R$ 20,00</p>
@@ -61,8 +70,12 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
             content: tab1(),
         },
         {
-            title: "Pagamento",
+            title: "Endereço",
             content: tab2(),
+        },
+        {
+            title: "Pagamento",
+            content: tab3(),
         },
         {
             title: "Cupom Fiscal",
