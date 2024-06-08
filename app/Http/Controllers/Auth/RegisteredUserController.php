@@ -32,12 +32,17 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'document' => 'required|string|max:18',
+            'type' => 'required|in:client,company',
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'password' => ['required', 'confirmed', Rules\Password::defaults()]
         ]);
 
+        // Cria o usuário com o tipo de documento recebido
         $user = User::create([
             'name' => $request->name,
+            'document' => $request->document,
+            'type' => $request->type,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);

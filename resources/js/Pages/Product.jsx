@@ -31,7 +31,7 @@ export default function Product({ auth, products, categories }) {
             okText: "Sim",
             cancelText: "Cancelar",
             onOk() {
-                destroy(route('categories.destroy', { id: id }))
+                destroy(route('products.destroy', { id: id }))
             },
         });
     };

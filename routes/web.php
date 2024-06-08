@@ -36,7 +36,7 @@ Route::post('/address', [AddressController::class, 'create'])->middleware(['auth
 
 Route::get('/historic', function () {
     return Inertia::render('Historic');
-})->middleware(['auth', 'verified'])->name('historic');
+})->middleware(['auth', 'verified', 'client'])->name('historic');
 
 /** ----------------- Routes Product ----------------- **/
 
@@ -51,11 +51,11 @@ Route::delete('/product/{id}', [ProductController::class, 'destroy'])->middlewar
  * Routes Category
  * */
 
-Route::get('/category', [CategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('categories.index');
-Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified'])->name('categories.edit');
-Route::post('/category', [CategoryController::class, 'store'])->middleware(['auth', 'verified'])->name('categories.store');
-Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('categories.destroy');
-Route::put('/category/{id}', [CategoryController::class, 'update'])->middleware(['auth', 'verified'])->name('categories.update');
+Route::get('/category', [CategoryController::class, 'index'])->middleware(['auth', 'verified', 'company'])->name('categories.index');
+Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->middleware(['auth', 'verified', 'company'])->name('categories.edit');
+Route::post('/category', [CategoryController::class, 'store'])->middleware(['auth', 'verified', 'company'])->name('categories.store');
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified', 'company'])->name('categories.destroy');
+Route::put('/category/{id}', [CategoryController::class, 'update'])->middleware(['auth', 'verified', 'company'])->name('categories.update');
 
 /** ------------------------------------ **/
 Route::middleware('auth')->group(function () {

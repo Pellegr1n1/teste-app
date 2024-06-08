@@ -6,6 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 
 export default function Authenticated({ user, header, children }) {
+    console.log(user.type)
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -27,15 +28,21 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('carts.index')} active={route().current('carts.index')}>
                                     Carrinho
                                 </NavLink>
-                                <NavLink href={route('historic')} active={route().current('historic')}>
-                                    Histórico
-                                </NavLink>
-                                <NavLink href={route('products.index')} active={route().current('products.index')}>
-                                    Produtos
-                                </NavLink>
-                                <NavLink href={route('categories.index')} active={route().current('categories.index')}>
-                                    Categoria
-                                </NavLink>
+                                {user.type == 'client' &&
+                                    <NavLink href={route('historic')} active={route().current('historic')}>
+                                        Histórico
+                                    </NavLink>
+                                }
+                                {user.type == 'company' &&
+                                    <NavLink href={route('products.index')} active={route().current('products.index')}>
+                                        Produtos
+                                    </NavLink>
+                                }
+                                {user.type == 'company' &&
+                                    <NavLink href={route('categories.index')} active={route().current('categories.index')}>
+                                        Categoria
+                                    </NavLink>
+                                }
                             </div>
                         </div>
 
@@ -67,9 +74,9 @@ export default function Authenticated({ user, header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        <Dropdown.Link href={route('profile.edit')}>Perfil</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
-                                            Log Out
+                                            Sair
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -110,15 +117,21 @@ export default function Authenticated({ user, header, children }) {
                         <ResponsiveNavLink href={route('carts.index')} active={route().current('carts.index')}>
                             Carrinho
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
-                            Histórico
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('products.index')} active={route().current('products.index')}>
-                            Produto
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('categories.index')} active={route().current('categories.index')}>
-                            Carrinho
-                        </ResponsiveNavLink>
+                        {user.type == 'client' &&
+                            <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
+                                Histórico
+                            </ResponsiveNavLink>
+                        }
+                        {user.type == 'company' &&
+                            <ResponsiveNavLink href={route('products.index')} active={route().current('products.index')}>
+                                Produto
+                            </ResponsiveNavLink>
+                        }
+                        {user.type == 'company' &&
+                            <ResponsiveNavLink href={route('categories.index')} active={route().current('categories.index')}>
+                                Carrinho
+                            </ResponsiveNavLink>
+                        }
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">

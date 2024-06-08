@@ -1,17 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import ToggleSwitch from '@/Components/Toggle';
+import InputMask from 'react-input-mask';
 
 export default function Register() {
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleToggle = () => {
+        setIsChecked(!isChecked);
+    };
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        document: '',
+        type: isChecked ? 'company' : 'client'
     });
 
     useEffect(() => {
@@ -31,8 +41,40 @@ export default function Register() {
             <Head title="Register" />
 
             <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                <div className='flex' style={{ alignItems: 'center'}}>
+                    <ToggleSwitch
+                        checked={isChecked}
+                        onChange={handleToggle}
+                    />
+                    {isChecked ?
+                        <p className='text-white ml-2'>Cadastrar pessoa jurídica/empresa</p>
+                        :
+                        <p className='text-white ml-2'>Cadastrar pessoa física</p>
+                    }
+                </div>
+
+
+                <div className='mt-10'>
+                    <InputLabel htmlFor="document" value="Documento" />
+                    <InputMask
+                        id="document"
+                        name="document"
+                        mask={isChecked ? "99.999.999/9999-99" : "999.999.999-99"}
+                        placeholder={isChecked ? "CNPJ" : "CPF"}
+                        value={data.document}
+                        className="mt-1 block w-full"
+                        autoComplete="document"
+                        isFocused={true}
+                        onChange={(e) => setData('document', e.target.value)}
+                        required
+                    >
+                        {(inputProps) => <TextInput {...inputProps} />}
+                    </InputMask>
+                    <InputError message={errors.document} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="name" value="Nome" />
 
                     <TextInput
                         id="name"
@@ -40,7 +82,6 @@ export default function Register() {
                         value={data.name}
                         className="mt-1 block w-full"
                         autoComplete="name"
-                        isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
                     />
@@ -66,7 +107,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Senha" />
 
                     <TextInput
                         id="password"
@@ -83,7 +124,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
+                    <InputLabel htmlFor="password_confirmation" value="Confirmar Senha" />
 
                     <TextInput
                         id="password_confirmation"
@@ -104,11 +145,11 @@ export default function Register() {
                         href={route('login')}
                         className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                     >
-                        Already registered?
+                        Já possui registro?
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                        Registrar
                     </PrimaryButton>
                 </div>
             </form>
