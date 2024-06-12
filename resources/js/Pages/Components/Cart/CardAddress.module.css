@@ -1,0 +1,44 @@
+.cardAddress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardAddress img {
+   width: 100px;
+   height: 100px;
+}
+
+.textAddress {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+.textAddress .street  {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.edit {
+    font-size: 20px;
+}
+
+.edit:hover {
+    font-size: 22px;
+}
+
+.remove {
+    font-size: 20px;
+}
+
+.remove:hover {
+    font-size: 22px;
+}

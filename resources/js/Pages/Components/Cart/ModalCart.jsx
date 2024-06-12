@@ -3,6 +3,7 @@ import { Modal, Table, Steps, Button, QRCode } from "antd";
 import historicView from "@/Utils/historicViewUtils";
 import styles from "./ModalCart.module.css";
 import FormAddressModalCart from "./FormAddressModalCart";
+import CardAddress from "./CardAddress";
 
 const ModalHistoric = ({ isModalOpen, closeModal }) => {
     const [filteredHistoricView, setFilteredHistoricView] =
@@ -47,7 +48,7 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
     const tab2 = () => {
         return (
             <>
-               <FormAddressModalCart />
+               <CardAddress />
             </>
         );
     };
@@ -102,7 +103,7 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
             footer={null}
             centered
             destroyOnClose
-            width={700}
+            width={1000}
         >
             <Steps current={current} items={items} style={{ marginTop: "20px" }} />
             <div className={styles.content}>{steps[current].content}</div>
