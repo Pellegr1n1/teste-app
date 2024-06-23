@@ -3,30 +3,43 @@ import { Head } from '@inertiajs/react';
 import React, { useEffect, useState } from "react";
 import styles from "./Styles/Cart.module.css";
 import CustomCard from "./Components/Cart/Card";
-import { Space, Pagination, FloatButton, Tooltip } from "antd";
+import { Space, Pagination, FloatButton, Tooltip, List } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import ModalCart from "./Components/Cart/ModalCart";
 
 export default function Cart({ auth, products }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+    const [cartItems, setCartItems] = useState([]);
     const pageSize = 12;
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex =
-        currentPage === 1
-            ? Math.min(pageSize, products.length)
-            : currentPage * pageSize;
+    const endIndex = currentPage * pageSize;
+
+    useEffect(() => {
+        updateCart();
+    }, []);
+
+    const updateCart = () => {
+        const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
+        let total = 0;
+        const items = [];
+        for (const id in storedItems) {
+            total += storedItems[id];
+            if (storedItems[id] > 0) {
+                const product = products.find(p => p.id.toString() === id);
+                if (product) {
+                    items.push({ ...product, quantity: storedItems[id] });
+                }
+            }
+        }
+        setTotalItems(total);
+        setCartItems(items);
+    };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
-    const [listProducts, setListProducts] = useState([]);
-
-    useEffect(() => {
-        setListProducts(products);
-        console.log(products);
-    }, [products])
 
     return (
         <AuthenticatedLayout
@@ -43,13 +56,15 @@ export default function Cart({ auth, products }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <Space size={[32, 16]} wrap className={styles.cardContainer}>
-                        {listProducts.slice(startIndex, endIndex).map((product) => (
+                        {products.slice(startIndex, endIndex).map((product) => (
                             <CustomCard
                                 key={product.id}
+                                id={product.id}
                                 name={product.nmproduct}
                                 price={product.price}
                                 stock={product.qtproduct}
                                 src={`storage/${product.image}`}
+                                updateCart={updateCart}
                             />
                         ))}
                     </Space>
@@ -61,12 +76,23 @@ export default function Cart({ auth, products }) {
                         onChange={handlePageChange}
                         showSizeChanger={false}
                     />
-                    <Tooltip title="Clique para abrir o carrinho">
+                    <Tooltip
+                        title={
+                            <List
+                                dataSource={cartItems}
+                                renderItem={item => (
+                                    <List.Item style={{ color: 'white' }}>
+                                        {item.nmproduct} - {item.quantity}
+                                    </List.Item>
+                                )}
+                            />
+                        }
+                    >
                         <FloatButton
                             icon={<ShoppingCartOutlined />}
                             shape="square"
                             badge={{
-                                count: 7,
+                                count: totalItems,
                             }}
                             onClick={() => setIsModalOpen(true)}
                         />
@@ -74,6 +100,7 @@ export default function Cart({ auth, products }) {
                     <ModalCart
                         isModalOpen={isModalOpen}
                         closeModal={() => setIsModalOpen(false)}
+                        cartItems={cartItems}
                     />
                 </div>
             </div>

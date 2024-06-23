@@ -1,14 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Table, Steps, Button, QRCode } from "antd";
-import historicView from "@/Utils/historicViewUtils";
+import { jsPDF } from "jspdf";
 import styles from "./ModalCart.module.css";
-import FormAddressModalCart from "./FormAddressModalCart";
 import CardAddress from "./CardAddress";
 
-const ModalHistoric = ({ isModalOpen, closeModal }) => {
-    const [filteredHistoricView, setFilteredHistoricView] =
-        useState(historicView);
-    const [text, setText] = React.useState("https://ant.design/");
+const ModalCart = ({ isModalOpen, closeModal, cartItems }) => {
+    const [text, setText] = useState("https://ant.design/");
+    const [totalAmount, setTotalAmount] = useState(0);
+
+    useEffect(() => {
+        const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        setTotalAmount(total);
+    }, [cartItems]);
+
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(12);
+        doc.text("Cupom Fiscal", 20, 20);
+        doc.text(`Total a pagar: R$ ${totalAmount.toFixed(2)}`, 20, 30);
+        doc.text("Produtos:", 20, 40);
+
+        cartItems.forEach((item, index) => {
+            doc.text(
+                `${item.nmproduct} - ${item.quantity} x R$ ${parseFloat(item.price).toFixed(2)} = R$ ${(item.price * item.quantity).toFixed(2)}`,
+                20,
+                50 + (index * 10)
+            );
+        });
+
+        doc.text(`Total: R$ ${totalAmount.toFixed(2)}`, 20, 50 + (cartItems.length * 10) + 10);
+        doc.save("cupom_fiscal.pdf");
+    };
 
     const columns = [
         {
@@ -38,7 +60,13 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
     const tab1 = () => {
         return (
             <Table
-                dataSource={filteredHistoricView}
+                dataSource={cartItems.map(item => ({
+                    key: item.id,
+                    product: item.nmproduct,
+                    price: item.price,
+                    qtd: item.quantity,
+                    total: item.price * item.quantity,
+                }))}
                 columns={columns}
                 pagination={false}
             />
@@ -57,10 +85,17 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
         return (
             <div className={styles.teste}>
                 <h2>Informações</h2>
-                <p>Total a pagar: R$ 20,00</p>
-                <p>Impostos: R$ 5,00</p>
+                <p>Total a pagar: R$ {totalAmount.toFixed(2)}</p>
                 <QRCode value={text || "-"} style={{ marginTop: '20px' }} />
                 <p style={{ marginTop: '10px' }}>Você tem 5 minutos para realizar o pagamento</p>
+            </div>
+        );
+    };
+
+    const tab4 = () => {
+        return (
+            <div className={styles.receipt}>                
+                <Button type="primary" onClick={generatePDF}>Baixar Cupom Fiscal</Button>
             </div>
         );
     };
@@ -80,7 +115,7 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
         },
         {
             title: "Cupom Fiscal",
-            content: "Cupom Fiscal",
+            content: tab4(),
         },
     ];
 
@@ -110,7 +145,7 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
             <div style={{ marginTop: 24 }}>
                 {current < steps.length - 1 && (
                     <Button type="primary" onClick={() => next()}>
-                        Next
+                        Próximo
                     </Button>
                 )}
                 {current === steps.length - 1 && (
@@ -118,12 +153,12 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
                         type="primary"
                         onClick={() => closeModal()}
                     >
-                        Done
+                        Concluir
                     </Button>
                 )}
                 {current > 0 && (
                     <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
-                        Previous
+                        Anterior
                     </Button>
                 )}
             </div>
@@ -131,4 +166,4 @@ const ModalHistoric = ({ isModalOpen, closeModal }) => {
     );
 };
 
-export default ModalHistoric;
+export default ModalCart;

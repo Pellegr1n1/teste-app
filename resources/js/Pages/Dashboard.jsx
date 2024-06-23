@@ -2,8 +2,6 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Slider from 'react-slick';
-import products from "@/Utils/productUtils";
-import CustomCard from './Components/Cart/Card';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -54,17 +52,7 @@ export default function Dashboard({ auth }) {
                     <div className="mt-6">
                         <h2 className="text-xl font-semibold text-black mb-4">Produtos mais vendidos</h2>
                         <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                            <Slider {...settings}>
-                                {products.slice().map((product) => (
-                                    <CustomCard
-                                        key={product.code}
-                                        name={product.name}
-                                        price={product.price}
-                                        stock={product.stock}
-                                        src={product.src}
-                                    />
-                                ))}
-                            </Slider>
+                            <p className="text-gray-600 dark:text-gray-300">Nenhum produto vendido ainda.</p>
                         </div>
                     </div>
 

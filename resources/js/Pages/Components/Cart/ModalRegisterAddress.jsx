@@ -15,6 +15,7 @@ const ModalRegisterAddress = ({ isModalOpen, closeModal }) => {
                     Cancelar
                 </Button>
             ]}
+            width={800}
         >
             <FormAddressModalCart />
         </Modal>

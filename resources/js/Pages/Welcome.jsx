@@ -3,6 +3,7 @@ import image1 from '@/Assets/Images/sacolas-de-compras.png';
 import image2 from '@/Assets/Images/atendimento.png';
 import image3 from '@/Assets/Images/experiencia.png';
 import image4 from '@/Assets/Images/entrega.png';
+import logo from '@/Assets/Images/logo.png';
 
 export default function Welcome({ auth }) {
     return (
@@ -12,8 +13,9 @@ export default function Welcome({ auth }) {
 
                 <div className="relative min-h-screen flex flex-col items-center justify-center">
                     <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                        <header className="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
-                            <h1 style={{ fontSize: '30px' }}>THINGS & FOODS</h1>
+                        <header className="grid grid-cols-2 items-center gap-2 lg:grid-cols-3">
+                            <img id="logo" src={logo} />
+                            
                             <div className="flex  lg:col-start-2">
 
                             </div>
