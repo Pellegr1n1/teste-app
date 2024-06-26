@@ -41,6 +41,22 @@ export default function Cart({ auth, products }) {
         setCurrentPage(page);
     };
 
+    const handleAddItem = (id) => {
+        const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
+        storedItems[id] = (storedItems[id] || 0) + 1;
+        localStorage.setItem("cart", JSON.stringify(storedItems));
+        updateCart();
+    };
+
+    const handleRemoveItem = (id) => {
+        const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
+        if (storedItems[id] > 0) {
+            storedItems[id] -= 1;
+            localStorage.setItem("cart", JSON.stringify(storedItems));
+            updateCart();
+        }
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -56,17 +72,23 @@ export default function Cart({ auth, products }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <Space size={[32, 16]} wrap className={styles.cardContainer}>
-                        {products.slice(startIndex, endIndex).map((product) => (
-                            <CustomCard
-                                key={product.id}
-                                id={product.id}
-                                name={product.nmproduct}
-                                price={product.price}
-                                stock={product.qtproduct}
-                                src={`storage/${product.image}`}
-                                updateCart={updateCart}
-                            />
-                        ))}
+                        {products.slice(startIndex, endIndex).map((product) => {
+                            const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
+                            const initialQuantity = storedItems[product.id] || 0;
+                            return (
+                                <CustomCard
+                                    key={product.id}
+                                    id={product.id}
+                                    name={product.nmproduct}
+                                    price={product.price}
+                                    stock={product.qtproduct}
+                                    src={`storage/${product.image}`}
+                                    initialQuantity={initialQuantity}
+                                    onAddItem={handleAddItem}
+                                    onRemoveItem={handleRemoveItem}
+                                />
+                            );
+                        })}
                     </Space>
                     <Pagination
                         className={styles.pagination}

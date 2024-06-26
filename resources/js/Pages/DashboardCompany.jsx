@@ -6,7 +6,7 @@ import CustomCard from './Components/Cart/Card';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Dashboard({ auth, products }) {
+export default function DashboardCompany({ auth, products }) {
     const updateCart = () => {
 
     };
@@ -41,9 +41,9 @@ export default function Dashboard({ auth, products }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Painel</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Painel de Produtos</h2>}
         >
-            <Head title="Dashboard" />
+            <Head title="DashboardCompany" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -51,11 +51,11 @@ export default function Dashboard({ auth, products }) {
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                             Bem-vindo(a), {auth.user.name}!
                         </h1>
-                        <p className="text-gray-600 dark:text-gray-300">Aqui está o resumo do que está acontecendo na sua loja hoje:</p>
+                        <p className="text-gray-600 dark:text-gray-300">Aqui está o resumo do que está acontecendo na sua empresa hoje:</p>
                     </div>
 
                     <div className="mt-6">
-                        <h2 className="text-xl font-semibold text-black mb-4">Produtos mais vendidos</h2>
+                        <h2 className="text-xl font-semibold text-black mb-4">Produtos Cadastrados</h2>
                         <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                             <Slider {...settings}>
                                 {products.slice().map((product) => (
@@ -74,16 +74,9 @@ export default function Dashboard({ auth, products }) {
                     </div>
 
                     <div className="mt-6">
-                        <h2 className="text-xl font-semibold text-black mb-4">Pedidos Recentes</h2>
+                        <h2 className="text-xl font-semibold text-black mb-4">Top 3 produtos mais vendido</h2>
                         <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                            <p className="text-gray-600 dark:text-gray-300">Nenhum pedido recente disponível.</p>
-                        </div>
-                    </div>
-
-                    <div className="mt-6">
-                        <h2 className="text-xl font-semibold text-black mb-4">Categorias Principais</h2>
-                        <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                            <p className="text-gray-600 dark:text-gray-300">Nenhuma categoria principal disponível.</p>
+                            <p className="text-gray-600 dark:text-gray-300">Nenhum produto.</p>
                         </div>
                     </div>
                 </div>

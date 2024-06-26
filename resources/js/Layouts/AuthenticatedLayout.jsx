@@ -16,14 +16,21 @@ export default function Authenticated({ user, header, children }) {
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <img id="logo" src={logo} width={140}/>
+                                    <img id="logo" src={logo} width={140} />
                                 </Link>
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
-                                </NavLink>
+                                {user.type == 'client' &&
+                                    <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                        Painel
+                                    </NavLink>
+                                }
+                                {user.type == 'company' &&
+                                    <NavLink href={route('dashboardCompany.index')} active={route().current('dashboardCompany.index')}>
+                                        Painel de Produtos
+                                    </NavLink>
+                                }
                                 <NavLink href={route('carts.index')} active={route().current('carts.index')}>
                                     Carrinho
                                 </NavLink>
@@ -110,9 +117,16 @@ export default function Authenticated({ user, header, children }) {
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
-                        </ResponsiveNavLink>
+                        {user.type == 'client' &&
+                            <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                Dashboard
+                            </ResponsiveNavLink>
+                        }
+                        {user.type == 'company' &&
+                            <NavLink href={route('dashboardCompany.index')} active={route().current('dashboardCompany.index')}>
+                                Painel de Produtos
+                            </NavLink>
+                        }
                         <ResponsiveNavLink href={route('carts.index')} active={route().current('carts.index')}>
                             Carrinho
                         </ResponsiveNavLink>

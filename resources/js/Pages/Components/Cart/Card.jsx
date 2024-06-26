@@ -4,32 +4,24 @@ import { Card } from "antd";
 const { Meta } = Card;
 import styles from "./Card.module.css";
 
-function CustomCard({ id, name, price, stock, src, updateCart }) {
+function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, initialQuantity }) {
     let situationStyle = stock > 0 ? "available" : "unavailable";
     let situation = stock > 0 ? "Em estoque" : "Fora de estoque";
-    const [addItem, setAddItem] = useState(0);
+    const [addItem, setAddItem] = useState(initialQuantity);
 
     useEffect(() => {
-        const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
-        if (storedItems[id]) {
-            setAddItem(storedItems[id]);
-        }
-    }, [id]);
-
-    useEffect(() => {
-        const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
-        storedItems[id] = addItem;
-        localStorage.setItem("cart", JSON.stringify(storedItems));
-        updateCart();
-    }, [addItem, id]);
+        setAddItem(initialQuantity);
+    }, [initialQuantity]);
 
     const handleAddItem = () => {
         setAddItem(addItem + 1);
+        onAddItem(id);
     };
 
     const handleRemoveItem = () => {
         if (addItem > 0) {
             setAddItem(addItem - 1);
+            onRemoveItem(id);
         }
     };
 

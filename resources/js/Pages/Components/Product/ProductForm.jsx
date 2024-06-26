@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -9,11 +9,11 @@ import { Transition } from '@headlessui/react';
 import SelectLabel from '@/Components/SelectLabel';
 import ImageUploadInput from '@/Components/ImageUploadInput';
 
-export default function ProductForm({ auth, categories }) {
-    const { data, setData, errors, processing, recentlySuccessful, post } = useForm({
+export default function ProductForm({ auth, categories, onPreviewChange, onResetPreview }) {
+    const { data, setData, errors, processing, recentlySuccessful, post, reset } = useForm({
         nmproduct: '',
         idcategory: '',
-        qtproduct: null,
+        qtproduct: '',
         price: '',
         iduser: auth,
         image: null
@@ -21,14 +21,22 @@ export default function ProductForm({ auth, categories }) {
 
     const [listCategory, setListCategory] = useState([]);
 
-
     useEffect(() => {
         setListCategory(categories);
-    }, [categories])
+    }, [categories]);
+
+    useEffect(() => {
+        onPreviewChange(data);
+    }, [data]);
 
     const submit = (e) => {
         e.preventDefault();
         post(route('products.store'));
+    };
+
+    const resetForm = () => {
+        reset();
+        onResetPreview();
     };
 
     const options = listCategory.map(item => ({
@@ -40,7 +48,6 @@ export default function ProductForm({ auth, categories }) {
         <form onSubmit={submit} method='post' action={route('products.store')} className="mt-6 space-y-6" encType='multipart/form-data'>
             <div>
                 <InputLabel htmlFor="nmproduct" value="Nome" />
-
                 <TextInput
                     id="nmproduct"
                     type="text"
@@ -51,13 +58,11 @@ export default function ProductForm({ auth, categories }) {
                     isFocused
                     autoComplete="nmproduct"
                 />
-
                 <InputError className="mt-2" message={errors.name} />
             </div>
 
             <div>
                 <InputLabel htmlFor="qtproduct" value="Quantidade" />
-
                 <TextInput
                     id="qtproduct"
                     type="number"
@@ -67,26 +72,22 @@ export default function ProductForm({ auth, categories }) {
                     required
                     autoComplete="qtproduct"
                 />
-
                 <InputError className="mt-2" message={errors.quantity} />
             </div>
 
             <div>
                 <InputLabel htmlFor="idcategory" value="Categoria" />
-
                 <SelectLabel
                     options={options}
                     value={data.idcategory}
                     onChange={(e) => setData('idcategory', e.target.value)}
                     className="mt-1 block w-full"
                 />
-
                 <InputError message={errors.idcategory} className="mt-2" />
             </div>
 
             <div>
                 <InputLabel htmlFor="price" value="Preço" />
-
                 <TextInput
                     id="price"
                     className="mt-1 block w-full"
@@ -95,21 +96,18 @@ export default function ProductForm({ auth, categories }) {
                     required
                     autoComplete="price"
                 />
-
                 <InputError className="mt-2" message={errors.price} />
             </div>
 
             <div>
                 <InputLabel htmlFor="image" value="Imagem" />
-
                 <ImageUploadInput className="custom-input" id='image' name='image' onChange={(e) => setData('image', e.target.files[0])} required />
-
                 <InputError className="mt-2" message={errors.image} />
             </div>
 
             <div className="flex items-center gap-4">
                 <PrimaryButton disabled={processing}>Cadastrar</PrimaryButton>
-                <SecondaryButton type="button" className="text-gray-500">Cancelar</SecondaryButton>
+                <SecondaryButton type="button" className="text-gray-500" onClick={resetForm}>Cancelar</SecondaryButton>
 
                 <Transition
                     show={recentlySuccessful}
