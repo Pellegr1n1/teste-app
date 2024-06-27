@@ -7,7 +7,7 @@ import { Space, Pagination, FloatButton, Tooltip, List } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import ModalCart from "./Components/Cart/ModalCart";
 
-export default function Cart({ auth, products }) {
+export default function Cart({ auth, products, address }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
@@ -122,6 +122,7 @@ export default function Cart({ auth, products }) {
                     <ModalCart
                         isModalOpen={isModalOpen}
                         closeModal={() => setIsModalOpen(false)}
+                        listAddress={address}
                         cartItems={cartItems}
                     />
                 </div>

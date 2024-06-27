@@ -6,13 +6,16 @@ import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import TextAreaInput from '@/Components/TextAreaInput';
+import ColorPicker from '@/Components/ColorPicker';
+import { message } from 'antd';
 
-export default function CategoryForm({auth}) {
+export default function CategoryForm({ auth }) {
 
     const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
         nmcategory: '',
         tax: '',
         dscategory: '',
+        color: '',
         iduser: auth
     });
 
@@ -30,7 +33,6 @@ export default function CategoryForm({auth}) {
         <form onSubmit={submit} action={route('categories.store')} className="mt-6 space-y-6">
             <div>
                 <InputLabel htmlFor="nmcategory" value="Nome" />
-
                 <TextInput
                     id="nmcategory"
                     type="text"
@@ -41,13 +43,10 @@ export default function CategoryForm({auth}) {
                     isFocused
                     autoComplete="nmcategory"
                 />
-
                 <InputError className="mt-2" message={errors.name} />
             </div>
-
             <div>
                 <InputLabel htmlFor="tax" value="Taxa" />
-
                 <TextInput
                     id="tax"
                     type="number"
@@ -57,13 +56,10 @@ export default function CategoryForm({auth}) {
                     required
                     autoComplete="tax"
                 />
-
                 <InputError className="mt-2" message={errors.tax} /> {/* Corrigido de 'quantity' para 'tax' */}
             </div>
-
             <div>
                 <InputLabel htmlFor="dscategory" value="Descrição" />
-
                 <TextAreaInput
                     id="dscategory"
                     className="mt-1 block w-full"
@@ -71,10 +67,19 @@ export default function CategoryForm({auth}) {
                     onChange={(e) => setData('dscategory', e.target.value)}
                     autoComplete="dscategory"
                 />
-
                 <InputError className="mt-2" message={errors.description} />
             </div>
-
+            <div>
+                <InputLabel htmlFor="color" value="Selecione uma cor" />
+                <ColorPicker
+                    className='mt-1 block'
+                    id="color"
+                    value={data.color}
+                    onChange={(e) => setData('color', e.target.value)}
+                    autoComplete="color"
+                />
+                <InputError className="mt-2" message={errors.description} />
+            </div>
             <div className="flex items-center gap-4">
                 <PrimaryButton disabled={processing}>Cadastrar</PrimaryButton>
                 <SecondaryButton type="button" className="text-gray-500">Cancelar</SecondaryButton>

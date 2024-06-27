@@ -11,16 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('address', function (Blueprint $table) {
-            $table->id();
-            $table->string('cep');
-            $table->string('state');
-            $table->string('city');
-            $table->string('street');
-            $table->string('neighborhood');
-            $table->string('number');
-            $table->timestamps();
-        });
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -29,12 +19,23 @@ return new class extends Migration
             $table->enum('type', ['client', 'company']);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->unsignedBigInteger('idaddress')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+        });
 
-            $table->foreign('idaddress')->references('id')->on('address')->onDelete('cascade');
+        Schema::create('address', function (Blueprint $table) {
+            $table->id();
+            $table->string('cep');
+            $table->string('state');
+            $table->string('city');
+            $table->string('street');
+            $table->string('neighborhood');
+            $table->string('number');
+            $table->unsignedBigInteger('iduser');
+            $table->timestamps();
+
+            $table->foreign('iduser')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -53,7 +54,7 @@ return new class extends Migration
         });
     }
 
-       /**
+    /**
      * Reverse the migrations.
      */
     public function down(): void

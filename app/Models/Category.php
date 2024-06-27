@@ -18,6 +18,7 @@ class Category extends Model
         'nmcategory',
         'tax',
         'dscategory',
+        'color',
         'iduser'
     ];
 }

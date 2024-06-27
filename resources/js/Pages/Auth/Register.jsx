@@ -21,7 +21,7 @@ export default function Register() {
         password: '',
         password_confirmation: '',
         document: '',
-        type: isChecked ? 'company' : 'client'
+        type: 'client'
     });
 
     useEffect(() => {
@@ -41,10 +41,13 @@ export default function Register() {
             <Head title="Register" />
 
             <form onSubmit={submit}>
-                <div className='flex' style={{ alignItems: 'center'}}>
+                <div className='flex' style={{ alignItems: 'center' }}>
                     <ToggleSwitch
                         checked={isChecked}
-                        onChange={handleToggle}
+                        onChange={() => {
+                            handleToggle();
+                            setData('type', isChecked ? 'client' : 'company');
+                        }}
                     />
                     {isChecked ?
                         <p className='text-white ml-2'>Cadastrar pessoa jurídica/empresa</p>

@@ -68,6 +68,7 @@ class CategoryController extends Controller
             'nmcategory' => 'required',
             'tax' => 'required',
             'dscategory' => 'required',
+            'color' => 'required'
         ]);
 
         $category->update($request->all());

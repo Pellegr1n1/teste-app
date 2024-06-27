@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Card, Button } from 'antd';
-import address from "@/Utils/addressUtils";
+import React, { useState, useEffect } from "react";
+import { Card, Button, Modal } from 'antd';
+import ModalRegisterAddress from "./ModalRegisterAddress";
 import location from "@/Assets/Images/location.png";
 import confirm from "@/Assets/Images/confirm.png";
 import { CaretRightOutlined, CaretLeftOutlined } from '@ant-design/icons';
@@ -9,18 +9,22 @@ import styles from "./CardAddress.module.css";
 import { FaEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
 import PrimaryButton from "@/Components/PrimaryButton";
-import ModalRegisterAddress from "./ModalRegisterAddress";
-import ModalDelete from "@/Components/ModalDelete";
+import { useForm } from '@inertiajs/react';
 
-export default function CardAddress() {
+export default function CardAddress({ list }) {
     const [pageIndex, setPageIndex] = useState(0);
     const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
     const [showRegisterAddress, setShowRegisterAddress] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const addressesPerPage = 2;
-    const totalPages = Math.ceil(address.length / addressesPerPage);
+    const totalPages = Math.ceil(list.length / addressesPerPage);
     const startAddressIndex = pageIndex * addressesPerPage;
-    const endAddressIndex = Math.min(startAddressIndex + addressesPerPage, address.length);
+    const endAddressIndex = Math.min(startAddressIndex + addressesPerPage, list.length);
+
+    const {
+        delete: destroy,
+        put
+    } = useForm();
 
     const nextAddress = (e) => {
         e.stopPropagation();
@@ -36,14 +40,20 @@ export default function CardAddress() {
         setSelectedAddressIndex(index);
     };
 
-    const handleEditClick = (e) => {
-        e.stopPropagation();
-        setShowRegisterAddress(true);
+    const handleEditClick = (id) => {
+
     };
 
-    const handleDeleteClick = (e) => {
-        e.stopPropagation();
-        setShowDelete(true);
+    const handleDeleteClick = (id) => {
+        Modal.confirm({
+            title: "Confirmar exclusão",
+            content: "Tem certeza que deseja excluir este endereço?",
+            okText: "Sim",
+            cancelText: "Cancelar",
+            onOk() {
+                destroy(route('address.destroy', { id: id }))
+            },
+        });
     };
 
     return (
@@ -54,8 +64,8 @@ export default function CardAddress() {
                 <Button onClick={nextAddress} disabled={pageIndex === totalPages - 1} shape="circle" icon={<CaretRightOutlined />} style={{ fontSize: '20px', width: '40px', height: '40px' }} />
             </div>
 
-            <div style={{ display: 'flex',justifyContent: 'space-between' }}>
-                {address.slice(startAddressIndex, endAddressIndex).map((addr, index) => (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {list.slice(startAddressIndex, endAddressIndex).map((addr, index) => (
                     <Card
                         key={index}
                         style={{
@@ -70,9 +80,9 @@ export default function CardAddress() {
                     >
                         <div className={styles.cardAddress}>
                             <div className={styles.textAddress}>
-                                <p className={styles.street}>Rua: {addr.street}</p>
+                                <p className={styles.street}>{addr.street}</p>
                                 <p>CEP: {addr.cep}</p>
-                                <p>Rua: {addr.street}, {addr.number}</p>
+                                <p>{addr.street}, {addr.number}</p>
                                 <p>Bairro: {addr.neighborhood}</p>
                                 <p>Cidade: {addr.city}, {addr.state}</p>
                             </div>
@@ -80,19 +90,22 @@ export default function CardAddress() {
                             <div>
                                 <img src={selectedAddressIndex === startAddressIndex + index ? confirm : location} alt="Card Location" />
                                 <div className={styles.actions}>
-                                    <FaEdit onClick={handleEditClick} color="grey" className={styles.edit} />
-                                    <FaRegTrashCan onClick={handleDeleteClick} color="grey" className={styles.remove} />
+                                    <a onClick={() => handleEditClick(addr.id)}>
+                                        <FaEdit color="grey" className={styles.edit} />
+                                    </a>
+                                    <a onClick={() => handleDeleteClick(addr.id)}>
+                                        <FaRegTrashCan color="grey" className={styles.remove} />
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </Card>
                 ))}
             </div>
-            {address.length < 4 && (
+            {list.length < 4 && (
                 <>
                     <PrimaryButton style={{ width: '100%' }} onClick={() => setShowRegisterAddress(true)}>Cadastrar Novo Endereço</PrimaryButton>
                     <ModalRegisterAddress isModalOpen={showRegisterAddress} closeModal={() => setShowRegisterAddress(false)} />
-                    <ModalDelete isModalOpen={showDelete} closeModal={() => setShowDelete(false)} />
                 </>
             )}
         </div>

@@ -26,6 +26,7 @@ class Address extends Model
         'city',
         'street',
         'neighborhood',
-        'number'
+        'number',
+        'iduser'
     ];
 }

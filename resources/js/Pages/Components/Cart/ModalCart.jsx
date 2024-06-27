@@ -4,7 +4,7 @@ import { jsPDF } from "jspdf";
 import styles from "./ModalCart.module.css";
 import CardAddress from "./CardAddress";
 
-const ModalCart = ({ isModalOpen, closeModal, cartItems }) => {
+const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
     const [text, setText] = useState("https://ant.design/");
     const [totalAmount, setTotalAmount] = useState(0);
 
@@ -76,7 +76,7 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems }) => {
     const tab2 = () => {
         return (
             <>
-               <CardAddress />
+                <CardAddress list={listAddress} />
             </>
         );
     };

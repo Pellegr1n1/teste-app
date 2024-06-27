@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { React, useState, useEffect } from "react";
 import CategoryForm from "./Components/Category/CategoryForm";
-import { Table, Space, Modal } from "antd";
+import { Table, Space, Modal, ColorPicker } from "antd";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import styles from "./Styles/TableActionIcon.module.css";
@@ -21,7 +21,7 @@ const Category = ({ auth, categories }) => {
     }, [categories]);
 
     const showEdit = (id) => {
-       route('categories.edit', {id: id});
+        route('categories.edit', { id: id });
     };
 
     const handleDelete = (id) => {
@@ -38,10 +38,13 @@ const Category = ({ auth, categories }) => {
 
     const columns = [
         {
-            title: "Identificador",
+            title: "Cor",
             align: 'center',
-            dataIndex: "id",
-            key: "id",
+            dataIndex: "color",
+            key: "color",
+            render: (_, record) => (
+                <ColorPicker defaultValue={record.color} showText />
+            ),
         },
         {
             title: "Nome",
@@ -59,7 +62,7 @@ const Category = ({ auth, categories }) => {
             title: "Ações",
             align: 'center',
             key: "action",
-            render: (record) => (
+            render: (_, record) => (
                 <Space size={30}>
                     <a onClick={() => showEdit(record.id)}>
                         <FaRegEdit className={styles.iconEdit} size={20} />

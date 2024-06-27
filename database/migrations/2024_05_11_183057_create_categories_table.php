@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("nmcategory");
             $table->text("dscategory")->nullable();
             $table->decimal("tax");
+            $table->string("color");
             $table->unsignedBigInteger('iduser');
             $table->timestamps();
 

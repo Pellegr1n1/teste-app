@@ -21,34 +21,33 @@ export default function Authenticated({ user, header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                {user.type == 'client' &&
-                                    <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                        Painel
-                                    </NavLink>
-                                }
-                                {user.type == 'company' &&
-                                    <NavLink href={route('dashboardCompany.index')} active={route().current('dashboardCompany.index')}>
-                                        Painel de Produtos
-                                    </NavLink>
-                                }
-                                <NavLink href={route('carts.index')} active={route().current('carts.index')}>
-                                    Carrinho
-                                </NavLink>
-                                {user.type == 'client' &&
-                                    <NavLink href={route('historic')} active={route().current('historic')}>
-                                        Histórico
-                                    </NavLink>
-                                }
-                                {user.type == 'company' &&
-                                    <NavLink href={route('products.index')} active={route().current('products.index')}>
-                                        Produtos
-                                    </NavLink>
-                                }
-                                {user.type == 'company' &&
-                                    <NavLink href={route('categories.index')} active={route().current('categories.index')}>
-                                        Categoria
-                                    </NavLink>
-                                }
+                                {user.type === 'client' && (
+                                    <>
+                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                            Painel
+                                        </NavLink>
+                                        <NavLink href={route('carts.index')} active={route().current('carts.index')}>
+                                            Carrinho
+                                        </NavLink>
+                                        <NavLink href={route('historic')} active={route().current('historic')}>
+                                            Histórico
+                                        </NavLink>
+                                    </>
+                                )}
+                                {user.type === 'company' && (
+                                    <>
+                                        <NavLink href={route('dashboardCompany.index')} active={route().current('dashboardCompany.index')}>
+                                            Painel de Produtos
+                                        </NavLink>
+                                        <NavLink href={route('products.index')} active={route().current('products.index')}>
+                                            Produtos
+                                        </NavLink>
+                                        <NavLink href={route('categories.index')} active={route().current('categories.index')}>
+                                            Categoria
+                                        </NavLink>
+                                    </>
+                                )}
+
                             </div>
                         </div>
 
@@ -117,34 +116,32 @@ export default function Authenticated({ user, header, children }) {
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        {user.type == 'client' &&
-                            <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                Dashboard
-                            </ResponsiveNavLink>
-                        }
-                        {user.type == 'company' &&
-                            <NavLink href={route('dashboardCompany.index')} active={route().current('dashboardCompany.index')}>
-                                Painel de Produtos
-                            </NavLink>
-                        }
-                        <ResponsiveNavLink href={route('carts.index')} active={route().current('carts.index')}>
-                            Carrinho
-                        </ResponsiveNavLink>
-                        {user.type == 'client' &&
-                            <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
-                                Histórico
-                            </ResponsiveNavLink>
-                        }
-                        {user.type == 'company' &&
-                            <ResponsiveNavLink href={route('products.index')} active={route().current('products.index')}>
-                                Produto
-                            </ResponsiveNavLink>
-                        }
-                        {user.type == 'company' &&
-                            <ResponsiveNavLink href={route('categories.index')} active={route().current('categories.index')}>
-                                Carrinho
-                            </ResponsiveNavLink>
-                        }
+                        {user.type == 'client' && (
+                            <>
+                                <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                    Dashboard
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('carts.index')} active={route().current('carts.index')}>
+                                    Carrinho
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
+                                    Histórico
+                                </ResponsiveNavLink>
+                            </>
+                        )}
+                        {user.type == 'company' && (
+                            <>
+                                <NavLink href={route('dashboardCompany.index')} active={route().current('dashboardCompany.index')}>
+                                    Painel de Produtos
+                                </NavLink>
+                                <ResponsiveNavLink href={route('products.index')} active={route().current('products.index')}>
+                                    Produto
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('categories.index')} active={route().current('categories.index')}>
+                                    Categoria
+                                </ResponsiveNavLink>
+                            </>
+                        )}
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
