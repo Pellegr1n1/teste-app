@@ -12,9 +12,10 @@ import ImageUploadInput from '@/Components/ImageUploadInput';
 export default function ProductForm({ auth, categories, onPreviewChange, onResetPreview }) {
     const { data, setData, errors, processing, recentlySuccessful, post, reset } = useForm({
         nmproduct: '',
-        idcategory: '',
         qtproduct: '',
         price: '',
+        color: '',
+        idcategory: '',
         iduser: auth,
         image: null
     });
@@ -40,8 +41,8 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
     };
 
     const options = listCategory.map(item => ({
-        value: item.id,
-        label: item.nmcategory
+        value: `${item.id}-${item.color}`,
+        label: item.nmcategory,
     }));
 
     return (
@@ -80,7 +81,11 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
                 <SelectLabel
                     options={options}
                     value={data.idcategory}
-                    onChange={(e) => setData('idcategory', e.target.value)}
+                    onChange={(e) => {
+                        const [id, color] = e.target.value.split('-');
+                        setData('idcategory', id);
+                        setData('color', color);
+                    }}
                     className="mt-1 block w-full"
                 />
                 <InputError message={errors.idcategory} className="mt-2" />

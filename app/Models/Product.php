@@ -22,4 +22,11 @@ class Product extends Model
         'iduser',
         'idcategory'
     ];
+
+    // Relacionamento
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'idcategory');
+    }
 }

@@ -1,27 +1,19 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import SecondaryButton from '@/Components/SecondaryButton';
-import TextInput from '@/Components/TextInput';
+import { Form, Input, Button, message, InputNumber, ColorPicker } from 'antd';
 import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import { Transition } from '@headlessui/react';
-import TextAreaInput from '@/Components/TextAreaInput';
-import ColorPicker from '@/Components/ColorPicker';
-import { message } from 'antd';
 
 export default function CategoryForm({ auth }) {
-
     const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
         nmcategory: '',
         tax: '',
         dscategory: '',
-        color: '',
+        color: '#fff',
         iduser: auth
     });
+    const [_, setColor] = useState('');
 
-    const submit = (e) => {
-        e.preventDefault();
-
+    const submit = () => {
         post(route('categories.store'), {
             onSuccess: () => {
                 reset();
@@ -30,60 +22,66 @@ export default function CategoryForm({ auth }) {
     };
 
     return (
-        <form onSubmit={submit} action={route('categories.store')} className="mt-6 space-y-6">
-            <div>
-                <InputLabel htmlFor="nmcategory" value="Nome" />
-                <TextInput
-                    id="nmcategory"
-                    type="text"
-                    className="mt-1 block w-full"
+        <Form onFinish={submit} layout="vertical" className="mt-6 space-y-6">
+            <Form.Item
+                label="Nome"
+                validateStatus={errors.nmcategory ? 'error' : ''}
+                help={errors.nmcategory}
+            >
+                <Input
                     value={data.nmcategory}
                     onChange={(e) => setData('nmcategory', e.target.value)}
                     required
-                    isFocused
                     autoComplete="nmcategory"
                 />
-                <InputError className="mt-2" message={errors.name} />
-            </div>
-            <div>
-                <InputLabel htmlFor="tax" value="Taxa" />
-                <TextInput
-                    id="tax"
-                    type="number"
-                    className="mt-1 block w-full"
+            </Form.Item>
+            <Form.Item
+                label="Taxa"
+                validateStatus={errors.tax ? 'error' : ''}
+                help={errors.tax}
+            >
+                <InputNumber
                     value={data.tax}
-                    onChange={(e) => setData('tax', e.target.value)}
+                    onChange={(value) => setData('tax', value)}
                     required
                     autoComplete="tax"
+                    style={{ width: '100%' }}
                 />
-                <InputError className="mt-2" message={errors.tax} /> {/* Corrigido de 'quantity' para 'tax' */}
-            </div>
-            <div>
-                <InputLabel htmlFor="dscategory" value="Descrição" />
-                <TextAreaInput
-                    id="dscategory"
-                    className="mt-1 block w-full"
+            </Form.Item>
+            <Form.Item
+                label="Descrição"
+                validateStatus={errors.dscategory ? 'error' : ''}
+                help={errors.dscategory}
+            >
+                <Input.TextArea
                     value={data.dscategory}
                     onChange={(e) => setData('dscategory', e.target.value)}
                     autoComplete="dscategory"
                 />
-                <InputError className="mt-2" message={errors.description} />
-            </div>
-            <div>
-                <InputLabel htmlFor="color" value="Selecione uma cor" />
+            </Form.Item>
+            <Form.Item
+                label="Selecione uma cor"
+                validateStatus={errors.color ? 'error' : ''}
+                help={errors.color}
+            >
                 <ColorPicker
-                    className='mt-1 block'
-                    id="color"
-                    value={data.color}
-                    onChange={(e) => setData('color', e.target.value)}
-                    autoComplete="color"
+                    showText
+                    arrow
+                    trigger='hover'
+                    defaultValue={data.color}
+                    onChange={(c) => {
+                        setColor(c.toHexString());
+                        setData('color', c.toHexString());
+                    }}
                 />
-                <InputError className="mt-2" message={errors.description} />
-            </div>
-            <div className="flex items-center gap-4">
-                <PrimaryButton disabled={processing}>Cadastrar</PrimaryButton>
-                <SecondaryButton type="button" className="text-gray-500">Cancelar</SecondaryButton>
-
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" loading={processing}>
+                    Cadastrar
+                </Button>
+                <Button type="default" className="ml-2">
+                    Cancelar
+                </Button>
                 <Transition
                     show={recentlySuccessful}
                     enter="transition ease-in-out"
@@ -93,7 +91,7 @@ export default function CategoryForm({ auth }) {
                 >
                     <p className="text-sm text-gray-600 dark:text-green-400">Cadastrando...</p>
                 </Transition>
-            </div>
-        </form>
+            </Form.Item>
+        </Form>
     );
 }

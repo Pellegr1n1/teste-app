@@ -13,10 +13,9 @@ class CartController extends Controller
      * Metodo utilizado para retornar todos os produtos ao carrinho
      * 
      */
-
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category:id,color')->get();
         $address = Address::where('iduser', Auth::id())->get();
 
         return Inertia::render('Cart', [

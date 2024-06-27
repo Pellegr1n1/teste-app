@@ -1,24 +1,23 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
 import React, { useEffect, useState } from "react";
-import ProductForm from "./Components/Product/ProductForm";
-import styles from "./Styles/Product.module.css";
+import { Head } from '@inertiajs/react';
 import { Table, Space, Modal } from "antd";
 import { FaRegEdit } from "react-icons/fa";
 import { useForm } from '@inertiajs/react';
 import { IoTrashOutline } from "react-icons/io5";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import ProductForm from "./Components/Product/ProductForm";
 import CustomCard from './Components/Cart/Card';
+import styles from "./Styles/Product.module.css";
 
 export default function Product({ auth, products, categories }) {
     const defaultImage = "https://via.placeholder.com/200";
 
-    const showEdit = () => {
+    const showEdit = (record) => {
         alert('Editando os dados no forms!')
     };
 
     const {
-        delete: destroy,
-        put
+        delete: destroy
     } = useForm();
 
     const [listProducts, setListProducts] = useState([]);
@@ -33,14 +32,14 @@ export default function Product({ auth, products, categories }) {
         setListProducts(products);
     }, [products]);
 
-    const handleDelete = (id) => {
+    const handleDelete = (record) => {
         Modal.confirm({
             title: "Confirmar exclusão",
             content: "Tem certeza que deseja excluir este produto?",
             okText: "Sim",
             cancelText: "Cancelar",
             onOk() {
-                destroy(route('products.destroy', { id: id }));
+                destroy(route('products.destroy', { id: record.id }));
             },
         });
     };
@@ -66,6 +65,7 @@ export default function Product({ auth, products, categories }) {
             nmproduct: data.nmproduct,
             qtproduct: data.qtproduct,
             price: data.price,
+            color: data.color,
             image: data.image ? URL.createObjectURL(data.image) : defaultImage
         });
     };
@@ -75,6 +75,7 @@ export default function Product({ auth, products, categories }) {
             nmproduct: '',
             qtproduct: '',
             price: '',
+            color: '',
             image: defaultImage
         });
     };
@@ -88,17 +89,17 @@ export default function Product({ auth, products, categories }) {
         {
             title: "Nome",
             dataIndex: "nmproduct",
-            key: "id",
+            key: "nmproduct",
         },
         {
             title: "Preço",
             dataIndex: "price",
-            key: "id",
+            key: "price",
         },
         {
             title: "Estoque",
             dataIndex: "qtproduct",
-            key: "id",
+            key: "qtproduct",
         },
         {
             title: "Ações",
@@ -138,6 +139,7 @@ export default function Product({ auth, products, categories }) {
                                 </div>
 
                                 <CustomCard
+                                    categoryColor={previewProduct.color}
                                     key={1}
                                     id={1}
                                     name={previewProduct.nmproduct || "Nome do Produto"}

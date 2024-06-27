@@ -37,28 +37,32 @@ const Category = ({ auth, categories }) => {
     };
 
     const columns = [
-        {
+        {   
+            width: '15%',
             title: "Cor",
             align: 'center',
             dataIndex: "color",
             key: "color",
             render: (_, record) => (
-                <ColorPicker defaultValue={record.color} showText />
+                <ColorPicker value={record.color} disabled showText />
             ),
         },
         {
+            width: '35%',
             title: "Nome",
             align: 'center',
             dataIndex: "nmcategory",
             key: "nmcategory",
         },
         {
+            width: '25%',
             title: "Taxa",
             align: 'center',
             dataIndex: "tax",
             key: "tax",
         },
         {
+            width: '25%',
             title: "Ações",
             align: 'center',
             key: "action",
@@ -92,7 +96,7 @@ const Category = ({ auth, categories }) => {
                         <CategoryForm auth={auth.user.id} />
                     </div>
                     <div className={"mt-10"}>
-                        <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
+                        <Table columns={columns} dataSource={data} size='large' pagination={{ pageSize: 5 }} />
                     </div>
                 </div>
             </div>

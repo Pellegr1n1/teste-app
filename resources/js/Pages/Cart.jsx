@@ -77,6 +77,7 @@ export default function Cart({ auth, products, address }) {
                             const initialQuantity = storedItems[product.id] || 0;
                             return (
                                 <CustomCard
+                                    categoryColor={product.category.color}
                                     key={product.id}
                                     id={product.id}
                                     name={product.nmproduct}

@@ -3,29 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payload;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Mpdf\QrCode\QrCode;
 use Mpdf\QrCode\Output;
 use Nette\Utils\Random;
 
 class PayloadController extends Controller
 {
-    public function create()
+    public function create(Request $req)
     {
         $obPayload = (new Payload)->setPixKey('cb238d65-c0ee-48a7-ad8b-d6d5ad7b907e')
             ->setDescription('Pagamento do Pedido Things Foods')
             ->setMerchantName('ThingsFoods')
             ->setMerchantCity('JOINVILLE')
-            ->setAmount(1000000.00)
+            ->setAmount($req->get('total'))
             ->setTxid('THINGSFOODS' . strtoupper(Random::generate()));
 
-        $payloadQrCode = $obPayload->getPayload();
+        $payload = $obPayload->getPayload();
 
-        $obQrCode = new QrCode($payloadQrCode);
-
-        $image = (new Output\Png)->output($obQrCode, 400);
-
-        header('Content-Type: image/png');
-
-        echo $image;
+        return Inertia::render('Cart', [
+            'payload' => $payload
+        ]);
     }
 }

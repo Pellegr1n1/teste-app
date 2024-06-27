@@ -4,7 +4,7 @@ import { Card } from "antd";
 const { Meta } = Card;
 import styles from "./Card.module.css";
 
-function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, initialQuantity }) {
+function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, initialQuantity, categoryColor }) {
     let situationStyle = stock > 0 ? "available" : "unavailable";
     let situation = stock > 0 ? "Em estoque" : "Fora de estoque";
     const [addItem, setAddItem] = useState(initialQuantity);
@@ -28,6 +28,7 @@ function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, init
     return (
         <Card
             cover={<img alt={name} src={src} className={styles.img} />}
+            style={{ borderTop: `8px solid ${categoryColor}` }}
             className={stock > 0 ? styles.card : styles.noStock}
             actions={stock > 0 ? [
                 <PlusOutlined key="add" onClick={handleAddItem} />,
