@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import Slider from 'react-slick';
-import CustomCard from './Components/Cart/Card';
+import React, { useState } from "react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+import Slider from "react-slick";
+import CustomCard from "./Components/Cart/Card";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ModalCompany from './Components/Company/ModalCompany';
+import ModalCompany from "./Components/Company/ModalCompany";
 
 export default function Dashboard({ auth, products }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,23 +32,27 @@ export default function Dashboard({ auth, products }) {
                     slidesToShow: 2,
                     slidesToScroll: 1,
                     infinite: true,
-                    dots: true
-                }
+                    dots: true,
+                },
             },
             {
                 breakpoint: 600,
                 settings: {
                     slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
+                    slidesToScroll: 1,
+                },
+            },
+        ],
     };
 
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Painel</h2>}
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    Painel
+                </h2>
+            }
         >
             <Head title="Dashboard" />
 
@@ -58,16 +62,25 @@ export default function Dashboard({ auth, products }) {
                         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                             Bem-vindo(a), {auth.user.name}!
                         </h1>
-                        <p className="text-gray-600 dark:text-gray-300">Aqui está o resumo do que está acontecendo na sua loja hoje:</p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                            Aqui está o resumo do que está acontecendo na sua
+                            loja hoje:
+                        </p>
                     </div>
 
                     <div className="mt-6">
-                        <h2 className="text-xl font-semibold text-black mb-4">Produtos mais vendidos</h2>
+                        <h2 className="text-xl font-semibold text-black mb-4">
+                            Produtos mais vendidos
+                        </h2>
                         <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                             <Slider {...settings}>
                                 {products.slice().map((product) => {
-                                    const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
-                                    const initialQuantity = storedItems[product.id] || 0;
+                                    const storedItems =
+                                        JSON.parse(
+                                            localStorage.getItem("cart")
+                                        ) || {};
+                                    const initialQuantity =
+                                        storedItems[product.id] || 0;
                                     return (
                                         <CustomCard
                                             key={product.id}
@@ -88,20 +101,32 @@ export default function Dashboard({ auth, products }) {
                     </div>
 
                     <div className="mt-6">
-                        <h2 className="text-xl font-semibold text-black mb-4">Pedidos Recentes</h2>
+                        <h2 className="text-xl font-semibold text-black mb-4">
+                            Pedidos Recentes
+                        </h2>
                         <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                            <p className="text-gray-600 dark:text-gray-300">Nenhum pedido recente disponível.</p>
+                            <p className="text-gray-600 dark:text-gray-300">
+                                Nenhum pedido recente disponível.
+                            </p>
                         </div>
                     </div>
 
                     <div className="mt-6">
-                        <h2 className="text-xl font-semibold text-black mb-4">Categorias Principais</h2>
+                        <h2 className="text-xl font-semibold text-black mb-4">
+                            Categorias Principais
+                        </h2>
                         <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                            <p className="text-gray-600 dark:text-gray-300">Nenhuma categoria principal disponível.</p>
+                            <p className="text-gray-600 dark:text-gray-300">
+                                Nenhuma categoria principal disponível.
+                            </p>
                         </div>
                     </div>
                 </div>
-                <ModalCompany isModalOpen={isModalOpen} closeModal={closeModal} />
+                <ModalCompany
+                    isModalOpen={isModalOpen}
+                    closeModal={closeModal}
+                    products={products}
+                />
             </div>
         </AuthenticatedLayout>
     );
