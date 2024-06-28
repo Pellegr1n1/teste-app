@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import { Card } from "antd";
+import { Card, Tooltip } from "antd";
 const { Meta } = Card;
 import styles from "./Card.module.css";
 
-function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, initialQuantity, categoryColor }) {
+function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, initialQuantity, categoryColor, showModal }) {
     let situationStyle = stock > 0 ? "available" : "unavailable";
     let situation = stock > 0 ? "Em estoque" : "Fora de estoque";
     const [addItem, setAddItem] = useState(initialQuantity);
+    const [showCompany, setShowCompany] = useState(false);
 
     useEffect(() => {
         setAddItem(initialQuantity);
@@ -25,14 +26,18 @@ function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, init
         }
     };
 
+    const handleShowCompany = () => {
+        showModal();
+    };
+
     return (
         <Card
             cover={<img alt={name} src={src} className={styles.img} />}
             style={{ borderTop: `8px solid ${categoryColor}` }}
             className={stock > 0 ? styles.card : styles.noStock}
             actions={stock > 0 ? [
-                <PlusOutlined key="add" onClick={handleAddItem} />,
-                <MinusOutlined key="remove" onClick={handleRemoveItem} />,
+                <Tooltip title={"Adicionar ao carrinho"}> <PlusOutlined key="add" onClick={handleAddItem} /></Tooltip>,
+                <Tooltip title={"Remover do carrinho"}><MinusOutlined key="remove" onClick={handleRemoveItem} /></Tooltip>,
             ] : null}
             bordered={false}
             hoverable
@@ -40,12 +45,15 @@ function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, init
             <Meta
                 title={name}
                 description={
-                    <div className={styles.desc}>
-                        <div>
-                            <p>R$ {parseFloat(price).toFixed(2)}</p>
-                            <p className={styles[situationStyle]}>{situation}</p>
+                    <div>
+                        <div className={styles.desc}>
+                            <div>
+                                <p>R$ {parseFloat(price).toFixed(2)}</p>
+                                <p className={styles[situationStyle]}>{situation}</p>
+                            </div>
+                            <span>{addItem}</span>
                         </div>
-                        <span>{addItem}</span>
+                        <a onClick={handleShowCompany}>Empresa</a>
                     </div>
                 }
             />

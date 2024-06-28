@@ -1,14 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Slider from 'react-slick';
 import CustomCard from './Components/Cart/Card';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ModalCompany from './Components/Company/ModalCompany';
 
 export default function DashboardCompany({ auth, products }) {
-    const updateCart = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const showCompanyModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     const settings = {
@@ -58,17 +65,24 @@ export default function DashboardCompany({ auth, products }) {
                         <h2 className="text-xl font-semibold text-black mb-4">Produtos Cadastrados</h2>
                         <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                             <Slider {...settings}>
-                                {products.slice().map((product) => (
-                                    <CustomCard
-                                        key={product.id}
-                                        id={product.id}
-                                        name={product.nmproduct}
-                                        price={product.price}
-                                        stock={product.qtproduct}
-                                        src={`storage/${product.image}`}
-                                        updateCart={updateCart}
-                                    />
-                                ))}
+                                {products.slice().map((product) => {
+                                    const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
+                                    const initialQuantity = storedItems[product.id] || 0;
+                                    return (
+                                        <CustomCard
+                                            key={product.id}
+                                            id={product.id}
+                                            name={product.nmproduct}
+                                            price={product.price}
+                                            stock={product.qtproduct}
+                                            src={`storage/${product.image}`}
+                                            initialQuantity={initialQuantity}
+                                            onAddItem={() => {}}
+                                            onRemoveItem={() => {}}
+                                            showModal={showCompanyModal}
+                                        />
+                                    );
+                                })}
                             </Slider>
                         </div>
                     </div>
@@ -80,6 +94,7 @@ export default function DashboardCompany({ auth, products }) {
                         </div>
                     </div>
                 </div>
+                <ModalCompany isModalOpen={isModalOpen} closeModal={closeModal} />
             </div>
         </AuthenticatedLayout>
     );

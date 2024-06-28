@@ -4,17 +4,18 @@ import React, { useEffect, useState } from "react";
 import styles from "./Styles/Cart.module.css";
 import CustomCard from "./Components/Cart/Card";
 import { Space, Pagination, FloatButton, Tooltip, List } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import ModalCart from "./Components/Cart/ModalCart";
+import ModalCompany from './Components/Company/ModalCompany';
+import ModalInfoColor from './Components/Cart/ModalInfoColor';
 
-export default function Cart({ auth, products, address }) {
+export default function Cart({ auth, products, address, categories }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpenInfoColor, setIsModalInfoColor] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [cartItems, setCartItems] = useState([]);
-    const pageSize = 12;
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = currentPage * pageSize;
+    const [isModalOpenCompany, setIsModalOpenCompany] = useState(false);
 
     useEffect(() => {
         updateCart();
@@ -57,13 +58,21 @@ export default function Cart({ auth, products, address }) {
         }
     };
 
+    const showCompanyModal = () => {
+        setIsModalOpenCompany(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpenCompany(false);
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
                 <>
                     <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Carrinho</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Adicione produtos ao seu carrinho, e aproveite nossas promoções</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Adicione produtos ao seu carrinho e aproveite nossas promoções</p>
                 </>
             }
         >
@@ -72,21 +81,22 @@ export default function Cart({ auth, products, address }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <Space size={[32, 16]} wrap className={styles.cardContainer}>
-                        {products.slice(startIndex, endIndex).map((product) => {
+                        {products.slice((currentPage - 1) * 12, currentPage * 12).map((product) => {
                             const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
                             const initialQuantity = storedItems[product.id] || 0;
                             return (
                                 <CustomCard
-                                    categoryColor={product.category.color}
                                     key={product.id}
+                                    categoryColor={product.category.color}
                                     id={product.id}
                                     name={product.nmproduct}
                                     price={product.price}
                                     stock={product.qtproduct}
                                     src={`storage/${product.image}`}
                                     initialQuantity={initialQuantity}
-                                    onAddItem={handleAddItem}
-                                    onRemoveItem={handleRemoveItem}
+                                    onAddItem={() => handleAddItem(product.id)}
+                                    onRemoveItem={() => handleRemoveItem(product.id)}
+                                    showModal={showCompanyModal}
                                 />
                             );
                         })}
@@ -94,7 +104,7 @@ export default function Cart({ auth, products, address }) {
                     <Pagination
                         className={styles.pagination}
                         current={currentPage}
-                        pageSize={pageSize}
+                        pageSize={12}
                         total={products.length}
                         onChange={handlePageChange}
                         showSizeChanger={false}
@@ -111,20 +121,42 @@ export default function Cart({ auth, products, address }) {
                             />
                         }
                     >
-                        <FloatButton
-                            icon={<ShoppingCartOutlined />}
-                            shape="square"
-                            badge={{
-                                count: totalItems,
+                        <FloatButton.Group
+                            shape="circle"
+                            style={{
+                                right: 30,
                             }}
-                            onClick={() => setIsModalOpen(true)}
-                        />
+                        >
+                            <FloatButton 
+                                icon={<InfoCircleOutlined />}
+                                onClick={() => setIsModalInfoColor(true)}
+                            />
+                            <FloatButton
+                                icon={<ShoppingCartOutlined />}
+                                badge={{
+                                    count: totalItems,
+                                }}
+                                onClick={() => setIsModalOpen(true)}
+                            />
+                        </FloatButton.Group>
                     </Tooltip>
                     <ModalCart
                         isModalOpen={isModalOpen}
                         closeModal={() => setIsModalOpen(false)}
                         listAddress={address}
                         cartItems={cartItems}
+                    />
+                    <ModalCompany
+                        isModalOpen={isModalOpenCompany}
+                        closeModal={closeModal}
+                        products={products}
+                        handleAddItem={handleAddItem}
+                        handleRemoveItem={handleRemoveItem}
+                    />
+                    <ModalInfoColor
+                        isModalOpen={isModalOpenInfoColor}
+                        closeModal={() => setIsModalInfoColor(false)}
+                        categories={categories}
                     />
                 </div>
             </div>

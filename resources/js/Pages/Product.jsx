@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { Table, Space, Modal } from "antd";
 import { FaRegEdit } from "react-icons/fa";
-import { useForm } from '@inertiajs/react';
 import { IoTrashOutline } from "react-icons/io5";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import ProductForm from "./Components/Product/ProductForm";
 import CustomCard from './Components/Cart/Card';
-import styles from "./Styles/Product.module.css";
+import ModalCompany from "./Components/Company/ModalCompany";
+import styles from './Styles/Product.module.css';
+import defaultImage from '@/Assets/Images/commonItem.jpg';
 
 export default function Product({ auth, products, categories }) {
-    const defaultImage = "https://via.placeholder.com/200";
-
-    const showEdit = (record) => {
+    const showEdit = () => {
         alert('Editando os dados no forms!')
     };
 
     const {
-        delete: destroy
+        delete: destroy,
+        put
     } = useForm();
 
     const [listProducts, setListProducts] = useState([]);
@@ -27,6 +27,8 @@ export default function Product({ auth, products, categories }) {
         price: '',
         image: defaultImage
     });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         setListProducts(products);
@@ -41,22 +43,6 @@ export default function Product({ auth, products, categories }) {
             onOk() {
                 destroy(route('products.destroy', { id: record.id }));
             },
-        });
-    };
-
-    const handleAddItem = () => {
-        Modal.info({
-            title: "Item Adicionado",
-            content: "O item foi adicionado ao carrinho com sucesso.",
-            okText: "Ok"
-        });
-    };
-
-    const handleRemoveItem = () => {
-        Modal.info({
-            title: "Item Removido",
-            content: "O item foi removido do carrinho com sucesso.",
-            okText: "Ok"
         });
     };
 
@@ -78,6 +64,14 @@ export default function Product({ auth, products, categories }) {
             color: '',
             image: defaultImage
         });
+    };
+
+    const showCompanyModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     const columns = [
@@ -135,7 +129,7 @@ export default function Product({ auth, products, categories }) {
                         <div className="w-1/2 pr-4 flex items-center justify-center">
                             <div>
                                 <div className="flex items-center justify-center mb-4">
-                                    <h1 className="font-semibold text-xl text-gray-800  leading-tight">Pré-visualização</h1>
+                                    <h1 className="font-semibold text-xl text-gray-800 leading-tight">Pré-visualização</h1>
                                 </div>
 
                                 <CustomCard
@@ -147,8 +141,9 @@ export default function Product({ auth, products, categories }) {
                                     stock={previewProduct.qtproduct || 12}
                                     src={previewProduct.image}
                                     initialQuantity={0}
-                                    onAddItem={handleAddItem}
-                                    onRemoveItem={handleRemoveItem}
+                                    onAddItem={() => {}}
+                                    onRemoveItem={() => {}}
+                                    showModal={showCompanyModal}
                                 />
                             </div>
                         </div>
@@ -167,6 +162,7 @@ export default function Product({ auth, products, categories }) {
                         <Table columns={columns} dataSource={listProducts} pagination={{ pageSize: 5 }} />
                     </div>
                 </div>
+                <ModalCompany isModalOpen={isModalOpen} closeModal={closeModal} />
             </div>
         </AuthenticatedLayout>
     );
