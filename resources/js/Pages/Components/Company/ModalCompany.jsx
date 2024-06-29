@@ -86,7 +86,6 @@ const ModalCompany = ({ isModalOpen, closeModal, products }) => {
                     {products.map((product) => {
                         const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
                         const initialQuantity = storedItems[product.id] || 0;
-                        console.log(products)
                         return (
                             <CustomCard
                                 key={product.id}

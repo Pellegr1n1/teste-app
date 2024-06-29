@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/react';
 import React, { useEffect, useState } from "react";
 import styles from "./Styles/Cart.module.css";
 import CustomCard from "./Components/Cart/Card";
-import { Space, Pagination, FloatButton, Tooltip, List } from "antd";
+import { Space, Pagination, FloatButton, Tooltip, List, TreeSelect, Input } from "antd";
 import { ShoppingCartOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import ModalCart from "./Components/Cart/ModalCart";
 import ModalCompany from './Components/Company/ModalCompany';
@@ -17,9 +17,27 @@ export default function Cart({ auth, products, address, categories }) {
     const [cartItems, setCartItems] = useState([]);
     const [isModalOpenCompany, setIsModalOpenCompany] = useState(false);
 
+    // Guardar os dados dos produtos e das categorias
+    const [listProduct, setListProduct] = useState([]);
+    const [listCategory, setListCategory] = useState([]);
+
+    // Utilizadas para realizar os filtros
+    const [productFilter, setProductFilter] = useState([]);
+    const [filterProductTree, setFilterProductTree] = useState([]);
+    const [tree, setTree] = useState(false);
+
     useEffect(() => {
         updateCart();
     }, []);
+
+    useEffect(() => {
+        setListCategory(categories);
+    }, [categories]);
+
+    useEffect(() => {
+        setProductFilter(products);
+        setListProduct(products);
+    }, [products]);
 
     const updateCart = () => {
         const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
@@ -66,6 +84,59 @@ export default function Cart({ auth, products, address, categories }) {
         setIsModalOpenCompany(false);
     };
 
+    const filterBySearch = (value) => {
+        if (tree) {
+            if (value === '') {
+                setProductFilter(filterProductTree);
+            } else {
+                const regex = new RegExp(value, 'i');
+                const filterProducts = productFilter.filter((product) => regex.test(product.nmproduct));
+                setProductFilter(filterProducts);
+            }
+        } else {
+            const regex = new RegExp(value, 'i');
+            const filterProducts = listProduct.filter((product) => regex.test(product.nmproduct));
+            setProductFilter(filterProducts);
+        }
+    };
+
+    const treeFilter = (value) => {
+        if (value) {
+            setProductFilter(listProduct);
+            const filteredProducts = listProduct.filter(product => product.idcategory === value);
+            setProductFilter(filteredProducts);
+            setFilterProductTree(filteredProducts);
+            setTree(true);
+        } else {
+            setTree(false);
+            setProductFilter(products);
+        }
+    };
+
+    const treeData = listCategory.map((ctg) => ({
+        value: ctg.id,
+        title: (
+            <span style={{ display: 'flex', alignItems: 'center' }}>
+                <span
+                    style={{
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '50%',
+                        backgroundColor: `${ctg.color}`,
+                        marginRight: '5px',
+                    }}
+                ></span>
+                <span
+                    style={{
+                        fontWeight: '500',
+                    }}
+                >
+                    {ctg.nmcategory}
+                </span>
+            </span>
+        ),
+    }));
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -78,10 +149,29 @@ export default function Cart({ auth, products, address, categories }) {
         >
             <Head title="Carrinho" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto sm:px-6 lg:px-20 py-5">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Input.Search
+                        placeholder="Busque por produtos"
+                        onSearch={filterBySearch}
+                        enterButton
+                        style={{
+                            width: 600,
+                        }} />
+                    <TreeSelect
+                        allowClear
+                        placeholder={'Selecione uma categoria'}
+                        treeLine
+                        onChange={treeFilter}
+                        style={{
+                            width: 300,
+                        }}
+                        treeData={treeData}
+                    />
+                </div>
+                <div className="py-10">
                     <Space size={[32, 16]} wrap className={styles.cardContainer}>
-                        {products.slice((currentPage - 1) * 12, currentPage * 12).map((product) => {
+                        {productFilter.slice((currentPage - 1) * 12, currentPage * 12).map((product) => {
                             const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
                             const initialQuantity = storedItems[product.id] || 0;
                             return (
@@ -105,7 +195,7 @@ export default function Cart({ auth, products, address, categories }) {
                         className={styles.pagination}
                         current={currentPage}
                         pageSize={12}
-                        total={products.length}
+                        total={productFilter.length}
                         onChange={handlePageChange}
                         showSizeChanger={false}
                     />
@@ -127,7 +217,7 @@ export default function Cart({ auth, products, address, categories }) {
                                 right: 30,
                             }}
                         >
-                            <FloatButton 
+                            <FloatButton
                                 icon={<InfoCircleOutlined />}
                                 onClick={() => setIsModalInfoColor(true)}
                             />
