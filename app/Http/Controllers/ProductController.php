@@ -9,66 +9,70 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-
-
 class ProductController extends Controller
 {
-
     /**
-     * Metodo utilizado para retornar todos os produtos relacionados 
-     * ao usuario logado.
-     * 
+     * Retorna todos os produtos relacionados ao usuário logado.
+     *
+     * @return \Inertia\Response
      */
-
     public function index()
     {
         $userId = Auth::id();
-
-        $products = Product::where('iduser', $userId)->get();
+        $products = Product::where('iduser', $userId)->with('category:id,color')->get();
         $categories = Category::all();
 
         return Inertia::render('Product', [
             'products' => $products,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
-
     /**
-     * Metodo utilizado para criar um produto
+     * Cria um novo produto.
      *
-     * @param  \Illuminate\Http\Request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-
     public function store(Request $request)
     {
-        $file_name = rand(0, 999999) . '-' . $request->file('image')->getClientOriginalName();
+        $request->validate([
+            'nmproduct' => 'required',
+            'qtproduct' => 'required',
+            'price' => 'required',
+            'idcategory' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // ajuste conforme suas necessidades de validação
+        ]);
+
+        $file_name = time() . '-' . $request->file('image')->getClientOriginalName();
         $path = $request->file('image')->storeAs('uploads', $file_name, 'public');
 
         $data = $request->all();
         $data['image'] = $path;
 
         Product::create($data);
-        return redirect()->route('products.index');
+
+        return redirect()->route('products.index')
+            ->with('success', 'Produto criado com sucesso.');
     }
 
     /**
-     * Metodo utilizado para deletar UM produto.
+     * Remove um produto existente.
      *
-     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         $product = Product::find($id);
 
-        $imagePath = $product->image;
+        if (!$product) {
+            return redirect()->route('products.index')->with('error', 'Produto não encontrado.');
+        }
+
+        Storage::disk('public')->delete($product->image);
 
         $product->delete();
-
-        if ($imagePath) {
-            Storage::disk('public')->delete($imagePath);
-        }
 
         return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso.');
     }

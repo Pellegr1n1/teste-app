@@ -6,7 +6,6 @@ import { IoTrashOutline } from "react-icons/io5";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import ProductForm from "./Components/Product/ProductForm";
 import CustomCard from './Components/Cart/Card';
-import ModalCompany from "./Components/Company/ModalCompany";
 import styles from './Styles/Product.module.css';
 import defaultImage from '@/Assets/Images/commonItem.jpg';
 
@@ -28,8 +27,6 @@ export default function Product({ auth, products, categories }) {
         image: defaultImage
     });
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
     useEffect(() => {
         setListProducts(products);
     }, [products]);
@@ -47,13 +44,23 @@ export default function Product({ auth, products, categories }) {
     };
 
     const handlePreviewChange = (data) => {
-        setPreviewProduct({
-            nmproduct: data.nmproduct,
-            qtproduct: data.qtproduct,
-            price: data.price,
-            color: data.color,
-            image: data.image ? URL.createObjectURL(data.image) : defaultImage
-        });
+        if (data.image instanceof File || data.image instanceof Blob) {
+            setPreviewProduct({
+                nmproduct: data.nmproduct,
+                qtproduct: data.qtproduct,
+                price: data.price,
+                color: data.color,
+                image: URL.createObjectURL(data.image)
+            });
+        } else {
+            setPreviewProduct({
+                nmproduct: data.nmproduct,
+                qtproduct: data.qtproduct,
+                price: data.price,
+                color: data.color,
+                image: defaultImage
+            });
+        }
     };
 
     const handleResetPreview = () => {
@@ -64,14 +71,6 @@ export default function Product({ auth, products, categories }) {
             color: '',
             image: defaultImage
         });
-    };
-
-    const showCompanyModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
     };
 
     const columns = [
@@ -143,12 +142,12 @@ export default function Product({ auth, products, categories }) {
                                     initialQuantity={0}
                                     onAddItem={() => {}}
                                     onRemoveItem={() => {}}
-                                    showModal={showCompanyModal}
+                                    showModal={() => {}}
                                 />
                             </div>
                         </div>
                         <div className="w-1/2 pl-4">
-                            <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                            <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                                 <ProductForm
                                     auth={auth.user.id}
                                     categories={categories}
@@ -162,7 +161,6 @@ export default function Product({ auth, products, categories }) {
                         <Table columns={columns} dataSource={listProducts} pagination={{ pageSize: 5 }} />
                     </div>
                 </div>
-                <ModalCompany isModalOpen={isModalOpen} closeModal={closeModal} />
             </div>
         </AuthenticatedLayout>
     );

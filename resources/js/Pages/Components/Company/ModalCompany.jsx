@@ -82,7 +82,6 @@ const ModalCompany = ({ isModalOpen, closeModal, products }) => {
                 </div>
                 <Divider />
                 <Space size={[32, 16]} wrap className={styles.cardContainer}>
-
                     {products.map((product) => {
                         const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
                         const initialQuantity = storedItems[product.id] || 0;
