@@ -9,7 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardCompanyController;
-
+use App\Http\Controllers\PayloadController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -31,9 +31,9 @@ Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->m
 /** ----------------- Routes Cart ----------------- **/
 Route::get('/cart', [CartController::class, 'index'])->middleware(['auth', 'verified'])->name('carts.index');
 
-
 Route::post('/address', [AddressController::class, 'create'])->middleware(['auth', 'verified'])->name('address.create');
 
+Route::post('/payload', [PayloadController::class, 'create'])->middleware(['auth', 'verified'])->name('payload.create');
 
 
 Route::get('/historic', function () {

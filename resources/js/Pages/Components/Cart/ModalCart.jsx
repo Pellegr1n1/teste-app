@@ -3,15 +3,22 @@ import { Modal, Table, Steps, Button, QRCode } from "antd";
 import { jsPDF } from "jspdf";
 import styles from "./ModalCart.module.css";
 import CardAddress from "./CardAddress";
+import { useForm } from '@inertiajs/react';
 
 const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
     const [text, setText] = useState("https://ant.design/");
     const [totalAmount, setTotalAmount] = useState(0);
 
+    const { post, data, setData, } = useForm({
+        total: ''
+    });
+
     useEffect(() => {
         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        setData('total', total);
         setTotalAmount(total);
     }, [cartItems]);
+
 
     const generatePDF = () => {
         const doc = new jsPDF();
@@ -31,6 +38,7 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
         doc.text(`Total: R$ ${totalAmount.toFixed(2)}`, 20, 50 + (cartItems.length * 10) + 10);
         doc.save("cupom_fiscal.pdf");
     };
+
 
     const columns = [
         {
@@ -82,19 +90,27 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
     };
 
     const tab3 = () => {
+        const acceptPix = () => {
+            post(route('payload.create'));
+        }
+
         return (
             <div className={styles.teste}>
-                <h2>Informações</h2>
-                <p>Total a pagar: R$ {totalAmount.toFixed(2)}</p>
-                <QRCode value={text || "-"} style={{ marginTop: '20px' }} />
-                <p style={{ marginTop: '10px' }}>Você tem 5 minutos para realizar o pagamento</p>
+                <b>Informações</b>
+                <p style={{ color: '#2E4369' }}>Total a pagar: R$ {totalAmount.toFixed(2)}</p>
+                <p style={{ fontSize: '16px' }}>Por favor, note que aceitamos apenas pagamentos via PIX. Deseja continuar com a compra?</p>
+                <div>
+                    <Button onClick={() => acceptPix()} style={{ width: '100px', marginRight: '15px' }}>Sim</Button>
+                    <Button style={{ width: '100px' }} danger>Cancelar</Button>
+                </div>
             </div>
         );
     };
 
+
     const tab4 = () => {
         return (
-            <div className={styles.receipt}>                
+            <div className={styles.receipt}>
                 <Button type="primary" onClick={generatePDF}>Baixar Cupom Fiscal</Button>
             </div>
         );

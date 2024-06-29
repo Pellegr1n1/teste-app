@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Mpdf\QrCode\QrCode;
 use Mpdf\QrCode\Output;
@@ -17,12 +18,14 @@ class PayloadController extends Controller
             ->setDescription('Pagamento do Pedido Things Foods')
             ->setMerchantName('ThingsFoods')
             ->setMerchantCity('JOINVILLE')
-            ->setAmount($req->get('total'))
+            ->setAmount($req->total)
             ->setTxid('THINGSFOODS' . strtoupper(Random::generate()));
 
         $payload = $obPayload->getPayload();
 
-        return Inertia::render('Cart', [
+        return Inertia::render('Payload', [
+            'auth' => Auth::user(),
+            'total' => $req->total,
             'payload' => $payload
         ]);
     }

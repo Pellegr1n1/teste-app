@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Avatar, Button, Divider, Modal, Space } from 'antd';
+import { Avatar, Button, Divider, Modal, Space, Rate } from 'antd';
 import { AntDesignOutlined } from '@ant-design/icons';
 import CustomCard from '../Cart/Card';
 import styles from '../../Styles/Cart.module.css'
@@ -61,7 +61,7 @@ const ModalCompany = ({ isModalOpen, closeModal, products }) => {
                         icon={<AntDesignOutlined />}
                         className='mr-5'
                     />
-                    <div className='flex w-full items-center'>
+                    <div className='flex w-3/4 items-center'>
                         <div>
                             <p className='m-0 text-3xl'>Nome da Empresa - N&E</p>
                             <p className='m-0'>999.999.999-99</p>
@@ -79,6 +79,9 @@ const ModalCompany = ({ isModalOpen, closeModal, products }) => {
                             </div>
                         </div>
                     </div>
+                        <div>
+                            <Rate disabled defaultValue={3}/>
+                        </div>
                 </div>
                 <Divider />
                 <Space size={[32, 16]} wrap className={styles.cardContainer}>
@@ -97,7 +100,7 @@ const ModalCompany = ({ isModalOpen, closeModal, products }) => {
                                 initialQuantity={initialQuantity}
                                 onAddItem={() => handleAddItem(product.id)}
                                 onRemoveItem={() => handleRemoveItem(product.id)}
-                                showModal={() => {}}
+                                showModal={() => { }}
                             />
                         );
                     })}

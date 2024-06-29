@@ -36,8 +36,8 @@ function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, init
             style={{ borderTop: `8px solid ${categoryColor}` }}
             className={stock > 0 ? styles.card : styles.noStock}
             actions={stock > 0 ? [
-                <Tooltip title={"Adicionar ao carrinho"}> <PlusOutlined key="add" onClick={handleAddItem} /></Tooltip>,
-                <Tooltip title={"Remover do carrinho"}><MinusOutlined key="remove" onClick={handleRemoveItem} /></Tooltip>,
+                <Tooltip title={"Adicionar ao carrinho"}> <PlusOutlined key="add" style={{ display: 'flex', justifyContent: 'center' }} onClick={handleAddItem} /></Tooltip>,
+                <Tooltip title={"Remover do carrinho"}><MinusOutlined key="remove" style={{ display: 'flex', justifyContent: 'center' }} onClick={handleRemoveItem} /></Tooltip>,
             ] : null}
             bordered={false}
             hoverable
