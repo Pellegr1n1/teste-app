@@ -59,7 +59,7 @@ export default function Welcome({ auth }) {
                                         <img
                                             id="background1"
                                             className="absolute left-0 top-0 w-full"
-                                            src={"https://tm.ibxk.com.br/2012/9/materias/9185683506151515.jpg"}
+                                            src={"https://images.spiceworks.com/wp-content/uploads/2022/06/16081603/Sales-Intelligence.jpg"}
                                         />
                                         <div className="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"></div>
                                     </div>

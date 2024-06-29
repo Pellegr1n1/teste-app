@@ -14,7 +14,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $products = Product::with('category:id,color')->get();
+        $products = Product::with('category:id,nmcategory,color')->get();
 
         return Inertia::render('Dashboard', [
             'products' => $products,

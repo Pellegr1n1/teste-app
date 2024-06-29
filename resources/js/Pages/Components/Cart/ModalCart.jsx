@@ -15,7 +15,7 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
 
     useEffect(() => {
         const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        setData('total', total);
+        setData('total', total.toFixed(2));
         setTotalAmount(total);
     }, [cartItems]);
 

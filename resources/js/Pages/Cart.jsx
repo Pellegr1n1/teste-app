@@ -3,8 +3,8 @@ import { Head } from '@inertiajs/react';
 import React, { useEffect, useState } from "react";
 import styles from "./Styles/Cart.module.css";
 import CustomCard from "./Components/Cart/Card";
-import { Space, Pagination, FloatButton, Tooltip, List, TreeSelect, Input } from "antd";
-import { ShoppingCartOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Space, Pagination, FloatButton, Tooltip, List, TreeSelect, Input, Button } from "antd";
+import { ShoppingCartOutlined, InfoCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import ModalCart from "./Components/Cart/ModalCart";
 import ModalCompany from './Components/Company/ModalCompany';
 import ModalInfoColor from './Components/Cart/ModalInfoColor';
@@ -16,15 +16,12 @@ export default function Cart({ auth, products, address, categories }) {
     const [totalItems, setTotalItems] = useState(0);
     const [cartItems, setCartItems] = useState([]);
     const [isModalOpenCompany, setIsModalOpenCompany] = useState(false);
-
-    // Guardar os dados dos produtos e das categorias
     const [listProduct, setListProduct] = useState([]);
     const [listCategory, setListCategory] = useState([]);
-
-    // Utilizadas para realizar os filtros
     const [productFilter, setProductFilter] = useState([]);
     const [filterProductTree, setFilterProductTree] = useState([]);
     const [tree, setTree] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         updateCart();
@@ -84,17 +81,17 @@ export default function Cart({ auth, products, address, categories }) {
         setIsModalOpenCompany(false);
     };
 
-    const filterBySearch = (value) => {
+    const filterBySearch = () => {
         if (tree) {
-            if (value === '') {
+            if (searchValue === '') {
                 setProductFilter(filterProductTree);
             } else {
-                const regex = new RegExp(value, 'i');
+                const regex = new RegExp(searchValue, 'i');
                 const filterProducts = productFilter.filter((product) => regex.test(product.nmproduct));
                 setProductFilter(filterProducts);
             }
         } else {
-            const regex = new RegExp(value, 'i');
+            const regex = new RegExp(searchValue, 'i');
             const filterProducts = listProduct.filter((product) => regex.test(product.nmproduct));
             setProductFilter(filterProducts);
         }
@@ -151,20 +148,33 @@ export default function Cart({ auth, products, address, categories }) {
 
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-20 py-5">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Input.Search
+                    <div>
+                    <Input
                         placeholder="Busque por produtos"
-                        onSearch={filterBySearch}
-                        enterButton
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
                         style={{
-                            width: 600,
-                        }} />
+                            width: 400,
+                            marginRight: 8,
+                            borderRadius: '6px', 
+                            borderColor: "#d9d9d9" 
+                        }}
+                    />
+                    <Button
+                        type="primary"
+                        size='large'
+                        onClick={filterBySearch}
+                        icon={<SearchOutlined />}
+                    />
+                    </div>
                     <TreeSelect
                         allowClear
                         placeholder={'Selecione uma categoria'}
                         treeLine
+                        size='large'
                         onChange={treeFilter}
                         style={{
-                            width: 300,
+                            width: 300
                         }}
                         treeData={treeData}
                     />
