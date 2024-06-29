@@ -77,8 +77,8 @@ export default function Dashboard({ auth, products }) {
                                             stock={product.qtproduct}
                                             src={`storage/${product.image}`}
                                             initialQuantity={initialQuantity}
-                                            onAddItem={() => {}}
-                                            onRemoveItem={() => {}}
+                                            onAddItem={() => { }}
+                                            onRemoveItem={() => { }}
                                             showModal={showCompanyModal}
                                         />
                                     );
@@ -101,7 +101,11 @@ export default function Dashboard({ auth, products }) {
                         </div>
                     </div>
                 </div>
-                <ModalCompany isModalOpen={isModalOpen} closeModal={closeModal} />
+                <ModalCompany
+                    isModalOpen={isModalOpen}
+                    closeModal={closeModal}
+                    products={products}
+                />
             </div>
         </AuthenticatedLayout>
     );
