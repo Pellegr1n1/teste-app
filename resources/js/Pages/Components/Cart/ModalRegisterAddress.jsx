@@ -14,7 +14,7 @@ const ModalRegisterAddress = ({ isModalOpen, closeModal }) => {
             ]}
             width={800}
         >
-            <FormAddressModalCart />
+            <FormAddressModalCart user={'client'} />
         </Modal>
     );
 };

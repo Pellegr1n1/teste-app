@@ -23,14 +23,16 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboardCompany.index');
+Route::middleware('auth', 'verified')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->name('dashboardCompany.index');
+    Route::post('/address', [AddressController::class, 'create'])->name('address.create');
+    Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
+});
 
 /** ----------------- Routes Client ----------------- **/
 Route::middleware('auth', 'verified', 'client')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
-    Route::post('/address', [AddressController::class, 'create'])->name('address.create');
-    Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
     Route::post('/payload', [PayloadController::class, 'create'])->name('payload.create');
     Route::post('/order', [OrderController::class, 'create'])->name('orders.create');
     Route::get('/historic', [HistoricController::class, 'index'])->name('historic.index');
@@ -38,6 +40,7 @@ Route::middleware('auth', 'verified', 'client')->group(function () {
 
 /** ----------------- Routes Company ----------------- **/
 Route::middleware('auth', 'verified', 'company')->group(function () {
+    Route::get('/address', [AddressController::class, 'edit'])->name('address.edit');
     Route::get('/product', [ProductController::class, 'index'])->name('products.index');
     Route::post('/product', [ProductController::class, 'store'])->name('products.store');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('products.destroy');

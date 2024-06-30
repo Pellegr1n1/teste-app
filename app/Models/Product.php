@@ -29,4 +29,14 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'idcategory');
     }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'iduser');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'iduser');
+    }
 }

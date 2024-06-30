@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class DashboardCompanyController extends Controller
 {
     public function index() {
-        $products = Product::with('category:id,color')->get();
+        $products = Product::with('category:id,nmcategory,color', 'user:id,document,name,email')->get();
 
         return Inertia::render('DashboardCompany', [
             'products' => $products

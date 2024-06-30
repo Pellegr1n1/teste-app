@@ -139,6 +139,7 @@ export default function Product({ auth, products, categories }) {
                                     price={previewProduct.price || "0,00"}
                                     stock={previewProduct.qtproduct || 12}
                                     src={previewProduct.image}
+                                    company={'Empresa'}
                                     initialQuantity={0}
                                     onAddItem={() => {}}
                                     onRemoveItem={() => {}}

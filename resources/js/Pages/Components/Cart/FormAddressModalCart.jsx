@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, Col, Row } from "antd";
 import { useForm } from '@inertiajs/react';
 
-function FormAddressModalCart() {
+function FormAddressModalCart({ user, address }) {
     const [addressFieldsDisabled, setAddressFieldsDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +16,15 @@ function FormAddressModalCart() {
         neighborhood: '',
         number: ''
     });
+
+    if (address) {
+        useEffect(() => {
+            if (address.length > 0) {
+                const { cep, state, city, street, neighborhood, number } = address[0];
+                form.setFieldsValue({ cep, state, city, street, neighborhood, number });
+            }
+        }, [address]);
+    }
 
     const onSearch = async (cep) => {
         try {
@@ -135,12 +144,14 @@ function FormAddressModalCart() {
                         </Form.Item>
                     </Col>
                 </Row>
+                {(user === 'company' && address.length == 1) ? "" :
                 <Form.Item>
                     <Button loading={isLoading} type="primary" htmlType="submit" block size="large">Cadastrar</Button>
                 </Form.Item>
+                }
             </Form>
         </div>
     )
 }
 
-export default FormAddressModalCart
+export default FormAddressModalCart;

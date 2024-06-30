@@ -22,6 +22,8 @@ export default function Cart({ auth, products, address, categories }) {
     const [filterProductTree, setFilterProductTree] = useState([]);
     const [tree, setTree] = useState(false);
     const [searchValue, setSearchValue] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [selectedCompanyProducts, setSelectedCompanyProducts] = useState([]);
 
     useEffect(() => {
         updateCart();
@@ -73,7 +75,10 @@ export default function Cart({ auth, products, address, categories }) {
         }
     };
 
-    const showCompanyModal = () => {
+    const showCompanyModal = (product, companyId) => {
+        const relatedProducts = products.filter(product => product.iduser === companyId);
+        setSelectedCompanyProducts(relatedProducts);
+        setSelectedProduct(product);
         setIsModalOpenCompany(true);
     };
 
@@ -149,23 +154,23 @@ export default function Cart({ auth, products, address, categories }) {
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-20 py-5">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                    <Input
-                        placeholder="Busque por produtos"
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        style={{
-                            width: 400,
-                            marginRight: 8,
-                            borderRadius: '6px', 
-                            borderColor: "#d9d9d9" 
-                        }}
-                    />
-                    <Button
-                        type="primary"
-                        size='large'
-                        onClick={filterBySearch}
-                        icon={<SearchOutlined />}
-                    />
+                        <Input
+                            placeholder="Busque por produtos"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            style={{
+                                width: 400,
+                                marginRight: 8,
+                                borderRadius: '6px',
+                                borderColor: "#d9d9d9"
+                            }}
+                        />
+                        <Button
+                            type="primary"
+                            size='large'
+                            onClick={filterBySearch}
+                            icon={<SearchOutlined />}
+                        />
                     </div>
                     <TreeSelect
                         allowClear
@@ -194,9 +199,12 @@ export default function Cart({ auth, products, address, categories }) {
                                     stock={product.qtproduct}
                                     src={`storage/${product.image}`}
                                     initialQuantity={initialQuantity}
+                                    company={product.user.name}
                                     onAddItem={() => handleAddItem(product.id)}
                                     onRemoveItem={() => handleRemoveItem(product.id)}
-                                    showModal={showCompanyModal}
+                                    showModal={() => showCompanyModal(product, product.iduser)}
+                                    product={product}
+                                    user={product.iduser}
                                 />
                             );
                         })}
@@ -249,9 +257,8 @@ export default function Cart({ auth, products, address, categories }) {
                     <ModalCompany
                         isModalOpen={isModalOpenCompany}
                         closeModal={closeModal}
-                        products={products}
-                        handleAddItem={handleAddItem}
-                        handleRemoveItem={handleRemoveItem}
+                        products={selectedCompanyProducts}
+                        product={selectedProduct}
                     />
                     <ModalInfoColor
                         isModalOpen={isModalOpenInfoColor}

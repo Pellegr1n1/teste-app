@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Form, Input, Button, InputNumber, Select, Upload, message, ConfigProvider } from 'antd';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 
 export default function ProductForm({ auth, categories, onPreviewChange, onResetPreview }) {
     const { data, setData, errors, processing, recentlySuccessful, post, reset } = useForm({

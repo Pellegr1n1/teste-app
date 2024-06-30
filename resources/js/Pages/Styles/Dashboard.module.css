@@ -22,3 +22,16 @@
     justify-content: center;
     align-items: center;
 }
+
+.avatarContainer {
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-10px); /* Ajuste conforme necessário */
+    }
+}

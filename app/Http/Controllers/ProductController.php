@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $products = Product::where('iduser', $userId)->with('category:id,color')->get();
+        $products = Product::where('iduser', $userId)->with('category:id,nmcategory,color')->get();
         $categories = Category::all();
 
         return Inertia::render('Product', [

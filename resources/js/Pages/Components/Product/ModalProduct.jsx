@@ -35,7 +35,7 @@ const ModalProduct = ({ isModalOpen, closeModal, product }) => {
                             width={200}
                             src={`storage/${product.image}`}
                         />
-                        <p className='text-center'>{'Empresa'}</p>
+                        <p className='text-center'>{product.user.name}</p>
                     </div>
                     <div className='w-full'>
                         <p className='text-2xl font-bold text-center'>{product.nmproduct}</p>

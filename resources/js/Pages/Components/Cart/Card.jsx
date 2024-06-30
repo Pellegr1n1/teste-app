@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import { Card, Tooltip } from "antd";
+import { Card, Tooltip, message } from "antd";
 const { Meta } = Card;
 import styles from "./Card.module.css";
 
-function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, initialQuantity, categoryColor, showModal }) {
+function CustomCard({ id, name, price, stock, src, company, onAddItem, onRemoveItem, initialQuantity, categoryColor, showModal, product, user }) {
     let situationStyle = stock > 0 ? "available" : "unavailable";
     let situation = stock > 0 ? "Em estoque" : "Fora de estoque";
     const [addItem, setAddItem] = useState(initialQuantity);
-    const [showCompany, setShowCompany] = useState(false);
 
     useEffect(() => {
         setAddItem(initialQuantity);
     }, [initialQuantity]);
 
     const handleAddItem = () => {
-        setAddItem(addItem + 1);
-        onAddItem(id);
+        if (addItem < stock) {
+            setAddItem(addItem + 1);
+            onAddItem(id);
+        } else {
+            message.error(`Você já adicionou o máximo disponível (${stock} unidades)`);
+        }
     };
 
     const handleRemoveItem = () => {
@@ -27,7 +30,7 @@ function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, init
     };
 
     const handleShowCompany = () => {
-        showModal();
+        showModal(product, user);
     };
 
     return (
@@ -53,7 +56,7 @@ function CustomCard({ id, name, price, stock, src, onAddItem, onRemoveItem, init
                             </div>
                             <span>{addItem}</span>
                         </div>
-                        <a onClick={handleShowCompany}>Empresa</a>
+                        <a onClick={handleShowCompany}>{company}</a>
                     </div>
                 }
             />

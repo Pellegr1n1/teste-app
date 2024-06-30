@@ -6,9 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AddressController extends Controller
 {
+    public function edit(Request $request): Response
+    {
+        $address = Address::where('iduser', Auth::id())->get();
+
+        return Inertia::render('Profile/AddressCompany', [
+            'address' => $address
+        ]);
+    }
 
     public function create(Request $request)
     {

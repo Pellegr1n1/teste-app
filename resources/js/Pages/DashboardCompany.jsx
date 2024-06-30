@@ -76,6 +76,7 @@ export default function DashboardCompany({ auth, products }) {
                                             price={product.price}
                                             stock={product.qtproduct}
                                             src={`storage/${product.image}`}
+                                            company={product.user.name}
                                             initialQuantity={initialQuantity}
                                             onAddItem={() => { }}
                                             onRemoveItem={() => { }}
