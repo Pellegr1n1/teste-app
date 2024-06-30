@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,5 +23,10 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'idorder');
+    }
+
+    public function avaliables()
+    {
+        return $this->hasMany(Avaliable::class, 'idorder');
     }
 }

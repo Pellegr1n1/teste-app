@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $products = Product::where('iduser', $userId)->with('category:id,nmcategory,color')->get();
+        $products = Product::where('iduser', $userId)->with('category:id,color,nmcategory')->get();
         $categories = Category::all();
 
         return Inertia::render('Product', [
@@ -48,6 +48,7 @@ class ProductController extends Controller
         $path = $request->file('image')->storeAs('uploads', $file_name, 'public');
 
         $data = $request->all();
+        $data['iduser'] = Auth::id();
         $data['image'] = $path;
 
         Product::create($data);

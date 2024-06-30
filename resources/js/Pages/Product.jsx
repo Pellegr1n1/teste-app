@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Head, useForm } from '@inertiajs/react';
-import { Table, Space, Modal } from "antd";
+import { Table, Space, Modal, ColorPicker } from "antd";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -29,6 +29,7 @@ export default function Product({ auth, products, categories }) {
 
     useEffect(() => {
         setListProducts(products);
+        console.log(products);
     }, [products]);
 
     const handleDelete = (record) => {
@@ -75,27 +76,38 @@ export default function Product({ auth, products, categories }) {
 
     const columns = [
         {
-            title: "Identificador",
-            dataIndex: "id",
-            key: "id",
+            title: "Categoria",
+            width: '15%',
+            dataIndex: "category[id]",
+            key: "category[id]",
+            render: (_, record) => (
+                <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <ColorPicker value={record.category.color} disabled />
+                    <span style={{ marginLeft: '8px' }}>{record.category.nmcategory}</span>
+                </span>
+            ),
         },
         {
             title: "Nome",
+            align: 'center',
             dataIndex: "nmproduct",
             key: "nmproduct",
         },
         {
             title: "Preço",
+            align: 'center',
             dataIndex: "price",
             key: "price",
         },
         {
             title: "Estoque",
+            align: 'center',
             dataIndex: "qtproduct",
             key: "qtproduct",
         },
         {
             title: "Ações",
+            align: 'center',
             key: "action",
             render: (record) => (
                 <Space size={30}>
@@ -141,16 +153,15 @@ export default function Product({ auth, products, categories }) {
                                     src={previewProduct.image}
                                     company={'Empresa'}
                                     initialQuantity={0}
-                                    onAddItem={() => {}}
-                                    onRemoveItem={() => {}}
-                                    showModal={() => {}}
+                                    onAddItem={() => { }}
+                                    onRemoveItem={() => { }}
+                                    showModal={() => { }}
                                 />
                             </div>
                         </div>
                         <div className="w-1/2 pl-4">
                             <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                                 <ProductForm
-                                    auth={auth.user.id}
                                     categories={categories}
                                     onPreviewChange={handlePreviewChange}
                                     onResetPreview={handleResetPreview}

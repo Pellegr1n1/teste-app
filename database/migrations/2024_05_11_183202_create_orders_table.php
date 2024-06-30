@@ -27,12 +27,14 @@ return new class extends Migration
             $table->decimal('price');
             $table->decimal('qtproduct');
             $table->unsignedBigInteger('iduser');
+            $table->unsignedBigInteger('idcompany');
             $table->unsignedBigInteger('idcategory');
             $table->unsignedBigInteger('idorder');
             $table->unsignedBigInteger('idproduct');
             $table->timestamps();
 
             $table->foreign('iduser')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('idcompany')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('idcategory')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('idorder')->references('id')->on('orders')->onDelete('cascade');
             $table->foreign('idproduct')->references('id')->on('products')->onDelete('cascade');

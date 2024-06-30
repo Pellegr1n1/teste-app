@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\AvaliableController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -35,6 +36,7 @@ Route::middleware('auth', 'verified', 'client')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
     Route::post('/payload', [PayloadController::class, 'create'])->name('payload.create');
     Route::post('/order', [OrderController::class, 'create'])->name('orders.create');
+    Route::post('/avaliable', [AvaliableController::class, 'create'])->name('avaliable.create');
     Route::get('/historic', [HistoricController::class, 'index'])->name('historic.index');
 });
 

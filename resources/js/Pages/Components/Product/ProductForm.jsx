@@ -4,14 +4,13 @@ import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { PlusOutlined } from '@ant-design/icons';
 
-export default function ProductForm({ auth, categories, onPreviewChange, onResetPreview }) {
+export default function ProductForm({ categories, onPreviewChange, onResetPreview }) {
     const { data, setData, errors, processing, recentlySuccessful, post, reset } = useForm({
         nmproduct: '',
         qtproduct: '',
         price: '',
         color: '',
         idcategory: '',
-        iduser: auth,
         image: null
     });
 
@@ -42,6 +41,15 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
     const resetForm = () => {
         reset();
         onResetPreview();
+    };
+
+    const handleCategoryChange = (value) => {
+        const [id, color] = value.split('-');
+        setData({
+            ...data,
+            idcategory: id,
+            color: color
+        });
     };
 
     return (
@@ -91,13 +99,8 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
                 >
                     <Select
                         options={options}
-                        value={data.idcategory}
-                        onChange={(e) => {
-                            let idcategory = e.split('-')[0];
-                            let color = e.split('-')[1];
-                            setData('idcategory', idcategory);
-                            setData('color', color);
-                        }}
+                        value={data.idcategory ? `${data.idcategory}-${data.color}` : undefined}
+                        onChange={handleCategoryChange}
                         size="large"
                         style={{ width: '100%' }}
                     />
@@ -136,27 +139,20 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
                                 }}
                                 type="button"
                             >
-
-                                <div
-                                    
-                                >
-                                    <div className="flex flex-col items-center">
+                                <div className="flex flex-col items-center">
                                     <PlusOutlined />
                                     Upload
-                                    </div>
                                 </div>
                             </Button>
                         </Upload>
                     </Form.Item>
                     <Form.Item className='flex items-end'>
-
                         <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", backgroundColor: "#01344a" }}>
                             Cadastrar
                         </Button>
                         <Button type="primary" className="ml-2" onClick={resetForm} style={{ height: "40px", backgroundColor: "#01344a" }}>
                             Cancelar
                         </Button>
-
                         <Transition
                             show={recentlySuccessful}
                             enter="transition ease-in-out"
@@ -168,6 +164,7 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
                         </Transition>
                     </Form.Item>
                 </div>
-            </Form></ConfigProvider>
+            </Form>
+        </ConfigProvider>
     );
 }

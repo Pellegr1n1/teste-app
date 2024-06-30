@@ -1,19 +1,26 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
-import { Table, Tooltip } from 'antd';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Head, useForm } from '@inertiajs/react';
+import { Table, Tooltip, Modal, Rate } from 'antd';
 import { jsPDF } from "jspdf";
 import styles from './Styles/Historic.module.css';
-import { FaEye, FaDownload } from "react-icons/fa";
+import { FaEye, FaDownload, FaStar, FaExclamationCircle } from "react-icons/fa";
 import ModalHistoric from './Components/Historic/ModalHistoric';
 
-export default function Historic({ auth, orders }) {
+export default function Historic({ auth, orders, unavaliatedOrders }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [rateModalOpen, setRateModalOpen] = useState(false);
+    const [selectedRateOrder, setSelectedRateOrder] = useState(null);
+
+    const { post, setData } = useForm({
+        idorder: null,
+        value: 0
+    });
 
     useEffect(() => {
-        console.log(orders);
-    }, [orders]);
+        console.log(unavaliatedOrders);
+    });
 
     const generatePDF = (order) => {
         const doc = new jsPDF();
@@ -41,6 +48,17 @@ export default function Historic({ auth, orders }) {
     const viewOrderItems = (order) => {
         setSelectedOrder(order);
         setIsModalOpen(true);
+    };
+
+    const openRateModal = (order) => {
+        setSelectedRateOrder(order);
+        setRateModalOpen(true);
+    };
+
+    const avaliableOrder = () => {
+        post(route('avaliable.create'));
+        setRateModalOpen(false);
+        setSelectedRateOrder(null);
     };
 
     const columns = [
@@ -73,6 +91,25 @@ export default function Historic({ auth, orders }) {
             render: (date) => new Date(date).toLocaleDateString(),
         },
         {
+            title: 'Avaliação',
+            dataIndex: 'avaliables',
+            align: 'center',
+            key: 'avaliables',
+            render: (avaliables, order) => (
+                unavaliatedOrders.includes(order.id) ? (
+                    <Tooltip title='Avaliação pendente'>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <FaExclamationCircle color='red' />
+                        </div>
+                    </Tooltip>
+                ) : (
+                    <Tooltip title={avaliables[0].value}>
+                        <Rate allowHalf disabled value={avaliables.length > 0 ? parseFloat(avaliables[0].value) : 0} />
+                    </Tooltip>
+                )
+            ),
+        },
+        {
             title: 'Ações',
             align: 'center',
             key: 'actions',
@@ -84,10 +121,17 @@ export default function Historic({ auth, orders }) {
                         </span>
                     </Tooltip>
                     <Tooltip title='Baixar Cupom Fiscal'>
-                        <span onClick={() => generatePDF(order)} className={styles.view}>
+                        <span onClick={() => generatePDF(order)} style={{ marginRight: '15px' }} className={styles.view}>
                             <FaDownload size={16} color='#01344a' />
                         </span>
                     </Tooltip>
+                    {unavaliatedOrders.includes(order.id) && (
+                        <Tooltip title='Avaliar'>
+                            <span onClick={() => openRateModal(order)} className={styles.view}>
+                                <FaStar size={18} color='#01344a' />
+                            </span>
+                        </Tooltip>
+                    )}
                 </div>
             ),
         },
@@ -115,6 +159,24 @@ export default function Historic({ auth, orders }) {
                         closeModal={() => setIsModalOpen(false)}
                         order={selectedOrder}
                     />
+                    <Modal
+                        title="Avaliação do Pedido"
+                        visible={rateModalOpen}
+                        onOk={avaliableOrder} // Chama a função ao pressionar OK
+                        onCancel={() => setRateModalOpen(false)}
+                    >
+                        {selectedRateOrder && (
+                            <div style={{ textAlign: 'center' }}>
+                                <p style={{ fontSize: '16px', fontWeight: 400 }}>Avalie seu pedido ID: {selectedRateOrder.id}</p>
+                                <Rate allowHalf defaultValue={0} onChange={(value) => {
+                                    setData({
+                                        idorder: selectedRateOrder.id,
+                                        value: value
+                                    });
+                                }} />
+                            </div>
+                        )}
+                    </Modal>
                 </div>
             </div>
         </AuthenticatedLayout>

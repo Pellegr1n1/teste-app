@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import { Card, Tooltip, message } from "antd";
+import { Card, Tooltip, Rate, message } from "antd";
 const { Meta } = Card;
 import styles from "./Card.module.css";
 
-function CustomCard({ id, name, price, stock, src, company, onAddItem, onRemoveItem, initialQuantity, categoryColor, showModal, product, user }) {
+function CustomCard({ id, name, company, product, user, price, stock, src, onAddItem, onRemoveItem, initialQuantity, categoryColor, showModal, rating, ratingsCount }) {
     let situationStyle = stock > 0 ? "available" : "unavailable";
     let situation = stock > 0 ? "Em estoque" : "Fora de estoque";
     const [addItem, setAddItem] = useState(initialQuantity);
@@ -35,7 +35,16 @@ function CustomCard({ id, name, price, stock, src, company, onAddItem, onRemoveI
 
     return (
         <Card
-            cover={<img alt={name} src={src} className={styles.img} />}
+            cover={
+                <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+                    <img alt={name} src={src} className={styles.img} style={{ marginBottom: '10px' }} />
+                    <div style={{display: 'flex'}}>
+                        <Rate allowHalf disabled value={rating} />
+                        <span style={{marginLeft: '10px'}}>({ratingsCount})</span>
+                    </div>
+                </div >
+
+            }
             style={{ borderTop: `8px solid ${categoryColor}` }}
             className={stock > 0 ? styles.card : styles.noStock}
             actions={stock > 0 ? [

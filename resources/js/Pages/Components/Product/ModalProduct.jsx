@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Divider, Image, Modal, message } from 'antd';
 
 const ModalProduct = ({ isModalOpen, closeModal, product }) => {
-    console.log(product)
     const handleAddItem = (id) => {
         const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
         storedItems[id] = (storedItems[id] || 0) + 1;

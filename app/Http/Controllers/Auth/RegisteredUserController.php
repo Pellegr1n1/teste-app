@@ -51,6 +51,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        if ($request->type === 'company') {
+            return redirect(route('dashboardCompany.index', absolute: false));
+        } else {
+            return redirect(route('dashboard', absolute: false));
+        }
     }
 }

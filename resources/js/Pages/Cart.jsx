@@ -9,7 +9,7 @@ import ModalCart from "./Components/Cart/ModalCart";
 import ModalCompany from './Components/Company/ModalCompany';
 import ModalInfoColor from './Components/Cart/ModalInfoColor';
 
-export default function Cart({ auth, products, address, categories }) {
+export default function Cart({ auth, products, address, categories, ratingsCount }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpenInfoColor, setIsModalInfoColor] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -192,6 +192,8 @@ export default function Cart({ auth, products, address, categories }) {
                             return (
                                 <CustomCard
                                     key={product.id}
+                                    ratingsCount={ratingsCount[product.id]}
+                                    rating={product.rating}
                                     categoryColor={product.category.color}
                                     id={product.id}
                                     name={product.nmproduct}

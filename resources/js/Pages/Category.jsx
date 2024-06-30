@@ -44,7 +44,7 @@ const Category = ({ auth, categories }) => {
             dataIndex: "color",
             key: "color",
             render: (_, record) => (
-                <ColorPicker value={record.color} disabled showText />
+                <ColorPicker value={record.color} disabled />
             ),
         },
         {

@@ -27,6 +27,7 @@ class OrderController extends Controller
                     'price' => $product['price'],
                     'qtproduct' => $product['qtproduct'],
                     'idcategory' => $product['idcategory'],
+                    'idcompany' => $product['iduser'],
                     'idorder' => $newOrder->id,
                     'iduser' => Auth::id(),
                     'idproduct' => $product['id']
