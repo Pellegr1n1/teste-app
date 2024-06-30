@@ -1,46 +1,34 @@
 import React from 'react';
 import { Modal, Table } from 'antd';
-import historicView from '@/Utils/historicViewUtils';
 
-const ModalHistoric = ({ isModalOpen, closeModal }) => {
+const ModalHistoric = ({ isModalOpen, closeModal, order }) => {
     const columns = [
         {
             title: 'Produto',
-            dataIndex: 'product',
-            key: 'product',
+            dataIndex: 'nmproduct',
+            key: 'nmproduct',
+        },
+        {
+            title: 'Quantidade',
+            dataIndex: 'qtproduct',
+            key: 'qtproduct',
         },
         {
             title: 'Preço',
             dataIndex: 'price',
             key: 'price',
-            render: (price) => `R$ ${price.toFixed(2)}`,
-            sorter: (a, b) => a.price - b.price,
-        },
-        {
-            title: 'Quantidade',
-            dataIndex: 'qtd',
-            key: 'qtd',
-        },
-        {
-            title: 'Total',
-            dataIndex: 'total',
-            key: 'total',
-            render: (total) => `R$ ${total.toFixed(2)}`,
-            sorter: (a, b) => a.total - b.total,
+            render: (price) => `R$ ${parseFloat(price).toFixed(2)}`,
         },
     ];
 
     return (
         <Modal
-            title="Dados da Compra"
-            open={isModalOpen}
+            title="Itens do Pedido"
+            visible={isModalOpen}
             onCancel={closeModal}
-            footer={<h1>THINGS & FOODS</h1>}
-            centered
-            destroyOnClose
-            width={800}
+            footer={null}
         >
-            <Table columns={columns} dataSource={historicView} pagination />
+            {order && <Table columns={columns} dataSource={order.items} rowKey="id" />}
         </Modal>
     );
 };

@@ -11,7 +11,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm } from '@inertiajs/react';
 
-export default function CardAddress({ list }) {
+export default function CardAddress({ list, disabledButton }) {
     const [pageIndex, setPageIndex] = useState(0);
     const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
     const [showRegisterAddress, setShowRegisterAddress] = useState(false);
@@ -38,6 +38,7 @@ export default function CardAddress({ list }) {
 
     const selectAddress = (index) => {
         setSelectedAddressIndex(index);
+        disabledButton(false);
     };
 
     const handleEditClick = (id) => {
@@ -51,6 +52,7 @@ export default function CardAddress({ list }) {
             okText: "Sim",
             cancelText: "Cancelar",
             onOk() {
+                disabledButton(true);
                 destroy(route('address.destroy', { id: id }))
             },
         });

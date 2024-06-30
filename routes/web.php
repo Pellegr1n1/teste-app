@@ -9,6 +9,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardCompanyController;
+use App\Http\Controllers\HistoricController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PayloadController;
 use Inertia\Inertia;
 
@@ -21,31 +23,23 @@ Route::get('/', function () {
     ]);
 });
 
-/** ------------------Routes Dashboard------------------ **/
+/** ----------------- Routes Client ----------------- **/
+Route::middleware('auth', 'verified', 'client')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
+    Route::post('/address', [AddressController::class, 'create'])->name('address.create');
+    Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
+    Route::post('/payload', [PayloadController::class, 'create'])->name('payload.create');
+    Route::post('/order', [OrderController::class, 'create'])->name('orders.create');
+    Route::get('/historic', [HistoricController::class, 'index'])->name('historic.index');
+});
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboardCompany.index');
-
-/** ------------------------------------ **/
-
-/** ----------------- Routes Cart ----------------- **/
-Route::get('/cart', [CartController::class, 'index'])->middleware(['auth', 'verified'])->name('carts.index');
-
-Route::post('/address', [AddressController::class, 'create'])->middleware(['auth', 'verified'])->name('address.create');
-
-Route::post('/payload', [PayloadController::class, 'create'])->middleware(['auth', 'verified'])->name('payload.create');
-
-
-Route::get('/historic', function () {
-    return Inertia::render('Historic');
-})->middleware(['auth', 'verified', 'client'])->name('historic');
-
+/** ----------------- Routes Company ----------------- **/
 Route::middleware('auth', 'verified', 'company')->group(function () {
-    /** ----------------- Routes Product ----------------- **/
+    Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->name('dashboardCompany.index');
     Route::get('/product', [ProductController::class, 'index'])->name('products.index');
     Route::post('/product', [ProductController::class, 'store'])->name('products.store');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-    /** ----------------- Routes Categories -------------- **/
     Route::get('/category', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::post('/category', [CategoryController::class, 'store'])->name('categories.store');

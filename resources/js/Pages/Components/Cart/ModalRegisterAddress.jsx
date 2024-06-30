@@ -11,9 +11,6 @@ const ModalRegisterAddress = ({ isModalOpen, closeModal }) => {
             centered
             destroyOnClose
             footer={[
-                <Button key="cancel" onClick={closeModal}>
-                    Cancelar
-                </Button>
             ]}
             width={800}
         >

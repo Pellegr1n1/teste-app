@@ -29,7 +29,7 @@ export default function Authenticated({ user, header, children }) {
                                         <NavLink href={route('carts.index')} active={route().current('carts.index')}>
                                             Carrinho
                                         </NavLink>
-                                        <NavLink href={route('historic')} active={route().current('historic')}>
+                                        <NavLink href={route('historic.index')} active={route().current('historic.index')}>
                                             Histórico
                                         </NavLink>
                                     </>
@@ -124,7 +124,7 @@ export default function Authenticated({ user, header, children }) {
                                 <ResponsiveNavLink href={route('carts.index')} active={route().current('carts.index')}>
                                     Carrinho
                                 </ResponsiveNavLink>
-                                <ResponsiveNavLink href={route('historic')} active={route().current('historic')}>
+                                <ResponsiveNavLink href={route('historic.index')} active={route().current('historic.index')}>
                                     Histórico
                                 </ResponsiveNavLink>
                             </>

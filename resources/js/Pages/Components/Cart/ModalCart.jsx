@@ -1,43 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Table, Steps, Button, QRCode } from "antd";
-import { jsPDF } from "jspdf";
+import { Modal, Table, Steps, Button } from "antd";
 import styles from "./ModalCart.module.css";
 import CardAddress from "./CardAddress";
 import { useForm } from '@inertiajs/react';
 
 const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
-    const [text, setText] = useState("https://ant.design/");
-    const [totalAmount, setTotalAmount] = useState(0);
+    const [disabledButton, setDisabledButton] = useState(false);
 
     const { post, data, setData, } = useForm({
-        total: ''
+        total: 0,
+        products: cartItems
     });
 
     useEffect(() => {
-        const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        setData('total', total.toFixed(2));
-        setTotalAmount(total);
-    }, [cartItems]);
+        const updatedCartItems = cartItems.map(item => ({
+            ...item,
+            qtproduct: item.quantity
+        }));
 
+        const total = updatedCartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    const generatePDF = () => {
-        const doc = new jsPDF();
-        doc.setFontSize(12);
-        doc.text("Cupom Fiscal", 20, 20);
-        doc.text(`Total a pagar: R$ ${totalAmount.toFixed(2)}`, 20, 30);
-        doc.text("Produtos:", 20, 40);
-
-        cartItems.forEach((item, index) => {
-            doc.text(
-                `${item.nmproduct} - ${item.quantity} x R$ ${parseFloat(item.price).toFixed(2)} = R$ ${(item.price * item.quantity).toFixed(2)}`,
-                20,
-                50 + (index * 10)
-            );
+        setData({
+            total: total.toFixed(2),
+            products: updatedCartItems
         });
-
-        doc.text(`Total: R$ ${totalAmount.toFixed(2)}`, 20, 50 + (cartItems.length * 10) + 10);
-        doc.save("cupom_fiscal.pdf");
-    };
+        if (cartItems.length === 0) {
+            setDisabledButton(true);
+        } else {
+            setDisabledButton(false);
+        }
+    }, [cartItems]);
 
 
     const columns = [
@@ -84,37 +76,26 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
     const tab2 = () => {
         return (
             <>
-                <CardAddress list={listAddress} />
+                <CardAddress list={listAddress} disabledButton={setDisabledButton} />
             </>
         );
     };
 
-    const tab3 = () => {
-        const acceptPix = () => {
-            post(route('payload.create'));
-        }
+    const payloadGenerate = () => {
+        post(route('payload.create'));
+    }
 
+    const tab3 = () => {
         return (
             <div className={styles.teste}>
                 <b>Informações</b>
-                <p style={{ color: '#2E4369' }}>Total a pagar: R$ {totalAmount.toFixed(2)}</p>
-                <p style={{ fontSize: '16px' }}>Por favor, note que aceitamos apenas pagamentos via PIX. Deseja continuar com a compra?</p>
-                <div>
-                    <Button onClick={() => acceptPix()} style={{ width: '100px', marginRight: '15px' }}>Sim</Button>
-                    <Button style={{ width: '100px' }} danger>Cancelar</Button>
-                </div>
+                <p style={{ color: '#2E4369' }}>Total a pagar: R$ {data.total}</p>
+                <p style={{ fontSize: '16px' }}>Por favor, note que aceitamos apenas pagamentos via PIX. Deseja finalizar sua a compra?</p>
             </div>
         );
     };
 
 
-    const tab4 = () => {
-        return (
-            <div className={styles.receipt}>
-                <Button type="primary" onClick={generatePDF}>Baixar Cupom Fiscal</Button>
-            </div>
-        );
-    };
 
     const steps = [
         {
@@ -129,18 +110,22 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
             title: "Pagamento",
             content: tab3(),
         },
-        {
-            title: "Cupom Fiscal",
-            content: tab4(),
-        },
     ];
 
     const [current, setCurrent] = useState(0);
     const next = () => {
+        if (data.total < 0) {
+            setDisabledButton(true);
+        } else if (listAddress.length === 0) {
+            setDisabledButton(true);
+        } else {
+            setDisabledButton(false);
+        }
         setCurrent(current + 1);
     };
     const prev = () => {
         setCurrent(current - 1);
+        setDisabledButton(false);
     };
     const items = steps.map((item) => ({
         key: item.title,
@@ -160,21 +145,31 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
             <div className={styles.content}>{steps[current].content}</div>
             <div style={{ marginTop: 24 }}>
                 {current < steps.length - 1 && (
-                    <Button type="primary" onClick={() => next()}>
+                    <Button type="primary" disabled={disabledButton} onClick={() => next()}>
                         Próximo
                     </Button>
                 )}
                 {current === steps.length - 1 && (
                     <Button
                         type="primary"
-                        onClick={() => closeModal()}
+                        onClick={() => {
+                            payloadGenerate();
+                        }}
                     >
-                        Concluir
+                        Finalizar
                     </Button>
                 )}
-                {current > 0 && (
-                    <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+                {current != 2 && (
+                    <Button style={{ margin: "0 8px" }} disabled={current != 0 ? false : true} onClick={() => prev()}>
                         Anterior
+                    </Button>
+                )}
+                {current === 2 && (
+                    <Button style={{ margin: "0 8px" }} onClick={() => {
+                        setCurrent(0);
+                        closeModal();
+                    }}>
+                        Cancelar
                     </Button>
                 )}
             </div>

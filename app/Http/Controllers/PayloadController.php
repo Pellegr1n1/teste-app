@@ -6,8 +6,6 @@ use App\Models\Payload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Mpdf\QrCode\QrCode;
-use Mpdf\QrCode\Output;
 use Nette\Utils\Random;
 
 class PayloadController extends Controller
@@ -26,6 +24,7 @@ class PayloadController extends Controller
         return Inertia::render('Payload', [
             'auth' => Auth::user(),
             'total' => $req->total,
+            'products' => $req->products,
             'payload' => $payload
         ]);
     }

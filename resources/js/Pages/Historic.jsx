@@ -1,44 +1,94 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import React, { useState } from 'react';
-import { Table, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Tooltip } from 'antd';
+import { jsPDF } from "jspdf";
 import styles from './Styles/Historic.module.css';
-import historicData from '@/Utils/historicUtils'; 
-import { FaRegEye } from "react-icons/fa";
+import { FaEye, FaDownload } from "react-icons/fa";
 import ModalHistoric from './Components/Historic/ModalHistoric';
 
-export default function Historic({ auth }) {
+export default function Historic({ auth, orders }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+
+    useEffect(() => {
+        console.log(orders);
+    }, [orders]);
+
+    const generatePDF = (order) => {
+        const doc = new jsPDF();
+        doc.setFontSize(12);
+
+        doc.text("Cupom Fiscal", 20, 20);
+        doc.text(`ID do Pedido: ${order.id}`, 20, 30);
+        doc.text(`Data do Pedido: ${new Date(order.created_at).toLocaleDateString()}`, 20, 40);
+        doc.text(`Taxa: R$ ${parseFloat(order.tax).toFixed(2)}`, 20, 50);
+        doc.text(`Total a pagar: R$ ${parseFloat(order.total).toFixed(2)}`, 20, 60);
+        doc.text("Produtos:", 20, 70);
+
+        order.items.forEach((item, index) => {
+            doc.text(
+                `${item.nmproduct} - ${item.qtproduct} x R$ ${parseFloat(item.price).toFixed(2)} = R$ ${(item.price * item.qtproduct).toFixed(2)}`,
+                20,
+                80 + (index * 10)
+            );
+        });
+
+        doc.text(`Total: R$ ${parseFloat(order.total).toFixed(2)}`, 20, 90 + (order.items.length * 10) + 10);
+        doc.save("cupom_fiscal.pdf");
+    };
+
+    const viewOrderItems = (order) => {
+        setSelectedOrder(order);
+        setIsModalOpen(true);
+    };
 
     const columns = [
         {
-            title: 'Situação',
-            dataIndex: 'situation',
-            key: 'situation',
-            render: (situation) => (
-                <Tag color={situation === 'Realizada com sucesso' ? 'green' : 'red'}>{situation}</Tag>
-            ),
-            sorter: (a, b) => a.situation.localeCompare(b.situation),
+            title: 'ID',
+            dataIndex: 'id',
+            align: 'center',
+            key: 'id',
         },
         {
             title: 'Total',
             dataIndex: 'total',
+            align: 'center',
             key: 'total',
-            render: (total) => `R$ ${total.toFixed(2)}`,
-            sorter: (a, b) => a.total - b.total,
+            render: (total) => `R$ ${parseFloat(total).toFixed(2)}`,
+            sorter: (a, b) => parseFloat(a.total) - parseFloat(b.total),
+        },
+        {
+            title: 'Tax',
+            dataIndex: 'tax',
+            align: 'center',
+            key: 'tax',
+            render: (tax) => `R$ ${parseFloat(tax).toFixed(2)}`,
         },
         {
             title: 'Data',
-            dataIndex: 'date',
-            key: 'date'
+            dataIndex: 'created_at',
+            align: 'center',
+            key: 'created_at',
+            render: (date) => new Date(date).toLocaleDateString(),
         },
         {
-            title: 'Visualizar',
-            key: 'view',
-            render: (_, item) => (
-                <span onClick={() => setIsModalOpen(true)} className={styles.view}>
-                    <FaRegEye size={20} />
-                </span>
+            title: 'Ações',
+            align: 'center',
+            key: 'actions',
+            render: (_, order) => (
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Tooltip title='Visualizar Produtos'>
+                        <span onClick={() => viewOrderItems(order)} style={{ marginRight: '15px' }} className={styles.view}>
+                            <FaEye size={20} color='#01344a' />
+                        </span>
+                    </Tooltip>
+                    <Tooltip title='Baixar Cupom Fiscal'>
+                        <span onClick={() => generatePDF(order)} className={styles.view}>
+                            <FaDownload size={16} color='#01344a' />
+                        </span>
+                    </Tooltip>
+                </div>
             ),
         },
     ];
@@ -58,9 +108,13 @@ export default function Historic({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className={styles.historic}>
-                        <Table columns={columns} dataSource={historicData} pagination />
+                        <Table columns={columns} dataSource={orders} pagination />
                     </div>
-                    <ModalHistoric isModalOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} />
+                    <ModalHistoric
+                        isModalOpen={isModalOpen}
+                        closeModal={() => setIsModalOpen(false)}
+                        order={selectedOrder}
+                    />
                 </div>
             </div>
         </AuthenticatedLayout>
