@@ -26,7 +26,7 @@ Route::get('/', function () {
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->name('dashboardCompany.index');
+    Route::get('/dashboard-company', [DashboardCompanyController::class, 'index'])->name('dashboardCompany.index');
     Route::post('/address', [AddressController::class, 'create'])->name('address.create');
     Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
 });
