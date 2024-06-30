@@ -23,9 +23,11 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboardCompany.index');
+
 /** ----------------- Routes Client ----------------- **/
 Route::middleware('auth', 'verified', 'client')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
     Route::post('/address', [AddressController::class, 'create'])->name('address.create');
     Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
@@ -36,7 +38,6 @@ Route::middleware('auth', 'verified', 'client')->group(function () {
 
 /** ----------------- Routes Company ----------------- **/
 Route::middleware('auth', 'verified', 'company')->group(function () {
-    Route::get('/dashboardCompany', [DashboardCompanyController::class, 'index'])->name('dashboardCompany.index');
     Route::get('/product', [ProductController::class, 'index'])->name('products.index');
     Route::post('/product', [ProductController::class, 'store'])->name('products.store');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
