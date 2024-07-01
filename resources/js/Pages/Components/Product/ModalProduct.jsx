@@ -1,12 +1,18 @@
 import React from 'react';
 import { Button, Divider, Image, Modal, message } from 'antd';
 
-const ModalProduct = ({ isModalOpen, closeModal, product }) => {
+const ModalProduct = ({ isModalOpen, closeModal, product, auth }) => {
     const handleAddItem = (id) => {
         const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
-        storedItems[id] = (storedItems[id] || 0) + 1;
-        localStorage.setItem("cart", JSON.stringify(storedItems));
-        message.success(`${product.nmproduct} adicionado ao carrinho!`);
+
+        if (storedItems[id] < product.qtproduct) {
+            storedItems[id] = (storedItems[id] || 0) + 1;
+            localStorage.setItem("cart", JSON.stringify(storedItems));
+            message.success(`${product.nmproduct} adicionado ao carrinho!`);
+        } else {
+            message.error(`Você já adicionou o máximo disponível (${product.qtproduct} unidades)`);
+        }
+        
     };
 
     const handleRemoveItem = (id) => {
@@ -41,14 +47,14 @@ const ModalProduct = ({ isModalOpen, closeModal, product }) => {
                         <Divider className='mt-3' />
                         <p className='mt-5'>Preço: R$ {parseFloat(product.price).toFixed(2)}</p>
                         <p style={{ color: product.qtproduct > 0 ? 'green' : 'red' }}>{product.qtproduct > 0 ? "Em estoque" : "Fora de estoque"}</p>
-                        <div className='mt-8'>
+                        {auth.user.type == "client" && <div className='mt-8'>
                             <Button className='mr-5' onClick={() => handleAddItem(product.id)}>
                                 Adicionar no carrinho
                             </Button>
                             <Button danger onClick={() => handleRemoveItem(product.id)}>
                                 Remover do carrinho
                             </Button>
-                        </div>
+                        </div>}
                     </div>
                 </div>
             </div>

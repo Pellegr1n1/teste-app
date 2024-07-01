@@ -4,7 +4,8 @@ import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { PlusOutlined } from '@ant-design/icons';
 
-export default function ProductForm({ categories, onPreviewChange, onResetPreview }) {
+export default function ProductForm({ auth, categories, onPreviewChange, onResetPreview, disabled }) {
+
     const { data, setData, errors, processing, recentlySuccessful, post, reset } = useForm({
         nmproduct: '',
         qtproduct: '',
@@ -74,6 +75,7 @@ export default function ProductForm({ categories, onPreviewChange, onResetPrevie
                         required
                         autoComplete="nmproduct"
                         style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        disabled={disabled}
                     />
                 </Form.Item>
 
@@ -89,6 +91,7 @@ export default function ProductForm({ categories, onPreviewChange, onResetPrevie
                         autoComplete="qtproduct"
                         size="large"
                         style={{ width: '100%', borderRadius: '6px', backgroundColor: "#f3f4f6" }}
+                        disabled={disabled}
                     />
                 </Form.Item>
 
@@ -103,6 +106,7 @@ export default function ProductForm({ categories, onPreviewChange, onResetPrevie
                         onChange={handleCategoryChange}
                         size="large"
                         style={{ width: '100%' }}
+                        disabled={disabled}
                     />
                 </Form.Item>
 
@@ -117,8 +121,10 @@ export default function ProductForm({ categories, onPreviewChange, onResetPrevie
                         required
                         autoComplete="price"
                         style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        disabled={disabled}
                     />
                 </Form.Item>
+
                 <div className='flex justify-between w-full'>
                     <Form.Item
                         label="Imagem"
@@ -131,6 +137,7 @@ export default function ProductForm({ categories, onPreviewChange, onResetPrevie
                             maxCount={1}
                             onChange={(e) => setData('image', e.file)}
                             beforeUpload={() => false}
+                            disabled={disabled}
                         >
                             <Button
                                 style={{
@@ -138,21 +145,29 @@ export default function ProductForm({ categories, onPreviewChange, onResetPrevie
                                     background: 'none',
                                 }}
                                 type="button"
+                                disabled={disabled}
                             >
-                                <div className="flex flex-col items-center">
-                                    <PlusOutlined />
-                                    Upload
+                                <div>
+                                    <div className="flex flex-col items-center">
+                                        <PlusOutlined />
+                                        Upload
+                                    </div>
                                 </div>
                             </Button>
                         </Upload>
                     </Form.Item>
                     <Form.Item className='flex items-end'>
-                        <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", backgroundColor: "#01344a" }}>
-                            Cadastrar
-                        </Button>
-                        <Button type="primary" className="ml-2" onClick={resetForm} style={{ height: "40px", backgroundColor: "#01344a" }}>
-                            Cancelar
-                        </Button>
+                        {!disabled ?
+                            <>
+                                <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", backgroundColor: "#01344a" }}>
+                                    Cadastrar
+                                </Button>
+                                <Button type="primary" className="ml-2" onClick={resetForm} style={{ height: "40px", backgroundColor: "#01344a" }}>
+                                    Cancelar
+                                </Button>
+                            </> :
+                            <p className='ml-20 text-base text-red-500 text-right'>Por favor, cadastre um endereço <a href={route('address.edit')} className='font-bold text-black'>aqui</a> para prosseguir com o cadastro de produto. </p>
+                        }
                         <Transition
                             show={recentlySuccessful}
                             enter="transition ease-in-out"

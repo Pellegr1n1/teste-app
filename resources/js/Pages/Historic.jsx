@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { Table, Tooltip, Modal, Rate } from 'antd';
@@ -16,10 +16,6 @@ export default function Historic({ auth, orders, unavaliatedOrders }) {
     const { post, setData } = useForm({
         idorder: null,
         value: 0
-    });
-
-    useEffect(() => {
-        console.log(unavaliatedOrders);
     });
 
     const generatePDF = (order) => {

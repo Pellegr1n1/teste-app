@@ -9,11 +9,7 @@ import CustomCard from './Components/Cart/Card';
 import styles from './Styles/Product.module.css';
 import defaultImage from '@/Assets/Images/commonItem.jpg';
 
-export default function Product({ auth, products, categories }) {
-    const showEdit = () => {
-        alert('Editando os dados no forms!')
-    };
-
+export default function Product({ auth, products, categories, address }) {
     const {
         delete: destroy,
         put
@@ -29,7 +25,6 @@ export default function Product({ auth, products, categories }) {
 
     useEffect(() => {
         setListProducts(products);
-        console.log(products);
     }, [products]);
 
     const handleDelete = (record) => {
@@ -162,6 +157,8 @@ export default function Product({ auth, products, categories }) {
                         <div className="w-1/2 pl-4">
                             <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                                 <ProductForm
+                                    disabled={address.length === 0}
+                                    auth={auth.user.id}
                                     categories={categories}
                                     onPreviewChange={handlePreviewChange}
                                     onResetPreview={handleResetPreview}

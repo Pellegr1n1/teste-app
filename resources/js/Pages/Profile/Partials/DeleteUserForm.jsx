@@ -46,7 +46,7 @@ export default function DeleteUserForm({ className = '' }) {
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Deletar Conta</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-900">Deletar Conta</h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     Depois que sua conta for excluída, todos os seus recursos e dados serão excluídos permanentemente. Antes

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -19,12 +20,15 @@ class ProductController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $products = Product::where('iduser', $userId)->with('category:id,color,nmcategory')->get();
+        $products = Product::where('iduser', $userId)->with(['category:id,nmcategory,color'])->get();
+        $address = Address::where('iduser', $userId)->get();
+
         $categories = Category::all();
 
         return Inertia::render('Product', [
             'products' => $products,
             'categories' => $categories,
+            'address' => $address
         ]);
     }
 
@@ -41,7 +45,7 @@ class ProductController extends Controller
             'qtproduct' => 'required',
             'price' => 'required',
             'idcategory' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // ajuste conforme suas necessidades de validação
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $file_name = time() . '-' . $request->file('image')->getClientOriginalName();

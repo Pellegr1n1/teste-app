@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { Avatar, Image, List, Skeleton, Tooltip } from 'antd';
-import ModalCompany from './Components/Company/ModalCompany';
+import { Avatar, Image, List, Popover, Skeleton, Tooltip } from 'antd';
 import ModalProduct from './Components/Product/ModalProduct';
 import styles from './Styles/Dashboard.module.css';
 
@@ -22,6 +21,20 @@ export default function Dashboard({ auth, products, topProducts }) {
                 }}
             />
         );
+    }
+
+    const contentTopProduct = (item) => {
+        return (
+            <>
+                <p><span className='font-bold'>Empresa:</span> {item.name}</p>
+                <div className='flex items-center'>
+                    <p className='mr-1'><span className='font-bold'>Categoria:</span> {item.nmcategory}</p>
+
+                    {colorCategory(item.color)}
+                </div>
+                <p><span className='font-bold'>Quantidade de produtos vendidos:</span> {parseInt(item.total_sold)}</p>
+            </>
+        )
     }
 
     return (
@@ -93,43 +106,52 @@ export default function Dashboard({ auth, products, topProducts }) {
                     <div className="mt-6">
                         <h2 className="text-xl font-semibold text-black mb-4">Ranking de produtos mais comprados</h2>
                         <div className="p-4 sm:p-8 bg-white border border-gray-200 shadow-md md:rounded-lg flex">
-                            {topProducts.length == 3 ? (
+                            {topProducts && topProducts.length == 3 ? (
                                 <div className="w-full flex">
                                     <div className="w-1/3">
                                         <p className='font-bold text-[#eab308]'>1° Lugar</p>
-                                        <span className='flex items-center mb-3'><Tooltip title={topProducts[0].nmcategory}>{colorCategory(topProducts[0].nmcategory)}</Tooltip>{topProducts[0]?.nmproduct}</span>
+                                        <span className='flex items-center mb-3'><Tooltip title={topProducts[0].nmcategory}>{colorCategory(topProducts[0].color)}</Tooltip>{`${topProducts[0]?.nmproduct} - ${topProducts[2]?.name}`}</span>
                                         <p className='font-bold text-[#6c757d]'>2° Lugar</p>
-                                        <span className='flex items-center mb-3'><Tooltip title={topProducts[1].nmcategory}>{colorCategory(topProducts[1].nmcategory)}</Tooltip>{topProducts[1]?.nmproduct}</span>
+                                        <span className='flex items-center mb-3'><Tooltip title={topProducts[1].nmcategory}>{colorCategory(topProducts[1].color)}</Tooltip>{`${topProducts[1]?.nmproduct} - ${topProducts[2]?.name}`}</span>
                                         <p className='font-bold text-[#bc6c25]'>3° Lugar</p>
-                                        <span className='flex items-center mb-3'><Tooltip title={topProducts[1].nmcategory}>{colorCategory(topProducts[2].nmcategory)}</Tooltip>{topProducts[2]?.nmproduct}</span>
+                                        <span className='flex items-center mb-3'><Tooltip title={topProducts[2].nmcategory}>{colorCategory(topProducts[2].color)}</Tooltip>{`${topProducts[2]?.nmproduct} - ${topProducts[2]?.name}`}</span>
                                     </div>
                                     <div className="flex-1 flex justify-center items-end space-x-4">
                                         {/* Segundo lugar */}
                                         <div className='flex flex-col items-center'>
                                             <img style={{ width: '90px' }} className={`${styles.avatarContainer}`} src='https://cdn-icons-png.flaticon.com/128/522/522404.png' />
-                                            <div className="bottom-0 bg-[#c0c0c0] w-36 h-20" style={{ height: '120px' }}>
-                                                <div className={`flex w-full h-full items-center justify-center`}>
-                                                    <Avatar size={64} src={`storage/${topProducts[1].image}`} className='bg-white' />
+
+                                            <Popover content={contentTopProduct(topProducts[1])} title={topProducts[1]?.nmproduct} trigger="hover" placement="leftBottom">
+                                                <div className="bottom-0 bg-[#c0c0c0] w-36 h-20" style={{ height: '120px' }}>
+                                                    <div className={`flex w-full h-full items-center justify-center`}>
+                                                        <Avatar size={64} src={`storage/${topProducts[1].image}`} className='bg-white' />
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </Popover>
                                         </div>
                                         {/* Primeiro lugar */}
                                         <div className='flex flex-col items-center'>
                                             <img style={{ width: '120px' }} className={`${styles.avatarContainer}`} src='https://cdn-icons-png.flaticon.com/128/625/625398.png' />
-                                            <div className="bottom-0 bg-yellow-500 w-36" style={{ height: '200px' }}>
-                                                <div className={`flex w-full h-full items-center justify-center`}>
-                                                    <Avatar size={64} src={`storage/${topProducts[0].image}`} className='bg-white' />
+
+                                            <Popover content={contentTopProduct(topProducts[0])} title={topProducts[0]?.nmproduct} trigger="hover" placement="top">
+                                                <div className="bottom-0 bg-yellow-500 w-36" style={{ height: '200px' }}>
+                                                    <div className={`flex w-full h-full items-center justify-center`}>
+                                                        <Avatar size={64} src={`storage/${topProducts[0].image}`} className='bg-white' />
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </Popover>
                                         </div>
                                         {/* Terceiro lugar */}
                                         <div className='flex flex-col items-center'>
                                             <img style={{ width: '60px' }} className={`${styles.avatarContainer}`} src='https://cdn-icons-png.flaticon.com/128/522/522405.png' />
-                                            <div className="bottom-0 bg-[#cd7f32] w-36" style={{ height: '90px' }}>
-                                                <div className={`flex w-full h-full items-center justify-center`}>
-                                                    <Avatar size={64} src={`storage/${topProducts[2].image}`} className='bg-white' />
+
+                                            <Popover content={contentTopProduct(topProducts[2])} title={topProducts[2]?.nmproduct} trigger="hover" placement="rightBottom">
+                                                <div className="bottom-0 bg-[#cd7f32] w-36" style={{ height: '90px' }}>
+                                                    <div className={`flex w-full h-full items-center justify-center`}>
+                                                        <Avatar size={64} src={`storage/${topProducts[2].image}`} className='bg-white' />
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </Popover>
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +169,7 @@ export default function Dashboard({ auth, products, topProducts }) {
                             setProductToShow(null);
                         }}
                         product={productToShow}
+                        auth={auth}
                     />
                 )}
             </div>
