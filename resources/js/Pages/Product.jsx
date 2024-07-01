@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Head, useForm } from '@inertiajs/react';
-import { Table, Space, Modal, ColorPicker } from "antd";
+import { Table, Space, Modal, ColorPicker, message } from "antd";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -8,11 +8,12 @@ import ProductForm from "./Components/Product/ProductForm";
 import CustomCard from './Components/Cart/Card';
 import styles from './Styles/Product.module.css';
 import defaultImage from '@/Assets/Images/commonItem.jpg';
+import { Inertia } from '@inertiajs/inertia';
 
-export default function Product({ auth, products, categories, address }) {
+export default function Product({ auth, products, categories, address, product }) {
     const {
         delete: destroy,
-        put
+        get,
     } = useForm();
 
     const [listProducts, setListProducts] = useState([]);
@@ -20,10 +21,16 @@ export default function Product({ auth, products, categories, address }) {
         nmproduct: '',
         qtproduct: '',
         price: '',
+        color: '',
         image: defaultImage
     });
 
     useEffect(() => {
+        if (address.length === 0) {
+            message.warning('Por favor, cadastre um endereço para prosseguir com o cadastro de produto.').then(() => {
+                Inertia.visit(route('address.edit'));
+            });
+        }
         setListProducts(products);
     }, [products]);
 
@@ -34,9 +41,22 @@ export default function Product({ auth, products, categories, address }) {
             okText: "Sim",
             cancelText: "Cancelar",
             onOk() {
-                destroy(route('products.destroy', { id: record.id }));
-            },
+                destroy(route('products.destroy', { id: record.id }), {
+                    onSuccess: () => {
+                        message.success('Produto excluído com sucesso!');
+                    },
+                    onError: (error) => {
+                        message.error('Erro ao excluir o produto!');
+                        console.error('Erro ao excluir o produto:', error);
+                    }
+                });
+            }
+
         });
+    };
+    const handleEdit = (record) => {
+        message.info('Você entrou em modo edição, para sair clique em cancelar!');
+        get(route('products.edit', { id: record.id }))
     };
 
     const handlePreviewChange = (data) => {
@@ -106,7 +126,7 @@ export default function Product({ auth, products, categories, address }) {
             key: "action",
             render: (record) => (
                 <Space size={30}>
-                    <a onClick={() => showEdit(record)}>
+                    <a onClick={() => handleEdit(record)}>
                         <FaRegEdit className={styles.iconEdit} size={20} />
                     </a>
                     <a onClick={() => handleDelete(record)}>
@@ -157,6 +177,7 @@ export default function Product({ auth, products, categories, address }) {
                         <div className="w-1/2 pl-4">
                             <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                                 <ProductForm
+                                    editProduct={product}
                                     disabled={address.length === 0}
                                     auth={auth.user.id}
                                     categories={categories}

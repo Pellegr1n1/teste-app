@@ -2,26 +2,27 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { React, useState, useEffect } from "react";
 import CategoryForm from "./Components/Category/CategoryForm";
-import { Table, Space, Modal, ColorPicker } from "antd";
+import { Table, Space, Modal, ColorPicker, message } from "antd";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import styles from "./Styles/TableActionIcon.module.css";
 import { useForm } from '@inertiajs/react';
 
-const Category = ({ auth, categories }) => {
+const Category = ({ auth, categories, category }) => {
     const [data, setData] = useState([]);
 
     const {
         delete: destroy,
-        put
+        get
     } = useForm();
 
     useEffect(() => {
         setData(categories);
     }, [categories]);
 
-    const showEdit = (id) => {
-        route('categories.edit', { id: id });
+    const handleEdit = (id) => {
+        message.info('Você entrou em modo edição, para sair clique em cancelar!');
+        get(route('categories.edit', { id: id }));
     };
 
     const handleDelete = (id) => {
@@ -31,13 +32,22 @@ const Category = ({ auth, categories }) => {
             okText: "Sim",
             cancelText: "Cancelar",
             onOk() {
-                destroy(route('categories.destroy', { id: id }))
+                destroy(route('categories.destroy', { id: id }), {
+                    onSuccess: () => {
+                        message.success('Categoria excluída com sucesso!');
+                    },
+                    onError: (error) => {
+                        message.error('Erro ao excluir a categoria!');
+                        console.error('Erro ao excluir a categoria!', error);
+                    }
+                });
             }
+
         })
     };
 
     const columns = [
-        {   
+        {
             width: '15%',
             title: "Cor",
             align: 'center',
@@ -68,7 +78,7 @@ const Category = ({ auth, categories }) => {
             key: "action",
             render: (_, record) => (
                 <Space size={30}>
-                    <a onClick={() => showEdit(record.id)}>
+                    <a onClick={() => handleEdit(record.id)}>
                         <FaRegEdit className={styles.iconEdit} size={20} />
                     </a>
                     <a onClick={() => handleDelete(record.id)}>
@@ -93,7 +103,7 @@ const Category = ({ auth, categories }) => {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <CategoryForm auth={auth.user.id} />
+                        <CategoryForm editCategory={category} auth={auth.user.id} />
                     </div>
                     <div className={"mt-10"}>
                         <Table columns={columns} dataSource={data} size='large' pagination={{ pageSize: 5 }} />

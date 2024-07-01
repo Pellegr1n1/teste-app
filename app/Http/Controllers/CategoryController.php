@@ -47,9 +47,11 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::find($id);
+        $categories = Category::where('iduser', Auth::id())->get();
 
         return Inertia::render('Category', [
             'category' => $category,
+            'categories' => $categories
         ]);
     }
 
@@ -67,13 +69,12 @@ class CategoryController extends Controller
         $request->validate([
             'nmcategory' => 'required',
             'tax' => 'required',
-            'dscategory' => 'required',
             'color' => 'required'
         ]);
 
         $category->update($request->all());
 
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
+        return redirect()->route('categories.index')->with('success', 'Categoria atualizada com sucesso!');;
     }
 
 

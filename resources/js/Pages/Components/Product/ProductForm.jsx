@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
-import { Form, Input, Button, InputNumber, Select, Upload, message, ConfigProvider } from 'antd';
+import { Form, Input, Button, InputNumber, Select, Upload, ConfigProvider, message } from 'antd';
 import { useForm } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
 import { PlusOutlined } from '@ant-design/icons';
 
-export default function ProductForm({ auth, categories, onPreviewChange, onResetPreview, disabled }) {
+export default function ProductForm({ editProduct, categories, onPreviewChange, onResetPreview, disabled }) {
 
-    const { data, setData, errors, processing, recentlySuccessful, post, reset } = useForm({
-        nmproduct: '',
-        qtproduct: '',
-        price: '',
-        color: '',
-        idcategory: '',
-        image: null
+    const { data, setData, errors, processing, post, put } = useForm({
+        nmproduct: editProduct ? editProduct.nmproduct : '',
+        qtproduct: editProduct ? editProduct.qtproduct : '',
+        price: editProduct ? editProduct.price : '',
+        color: editProduct && editProduct.category ? editProduct.category.color : '',
+        idcategory: editProduct ? editProduct.idcategory : '',
+        image: editProduct ? editProduct.image : null
     });
 
     const [listCategory, setListCategory] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         setListCategory(categories);
+        if (editProduct) {
+            setIsEditing(true);
+        }
     }, [categories]);
 
     useEffect(() => {
@@ -26,12 +29,29 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
     }, [data]);
 
     const submit = () => {
-        post(route('products.store'), {
-            onSuccess: () => {
-                reset();
-                onResetPreview();
-            }
-        });
+        if (isEditing) {
+            put(route('products.update', { id: editProduct.id }), {
+                onSuccess: () => {
+                    resetForm();
+                    message.success('Produto atualizado com sucesso!');
+                },
+                onError: (error) => {
+                    message.error('Erro ao atualizar o produto!');
+                    console.error('Erro ao atualizar o produto:' + error);
+                }
+            });
+        } else {
+            post(route('products.store'), {
+                onSuccess: () => {
+                    resetForm();
+                    message.success('Produto cadastrado com sucesso!');
+                },
+                onError: (error) => {
+                    message.error('Erro ao cadastrar o produto!');
+                    console.error('Erro ao cadastrar o produto:' + error);
+                }
+            });
+        }
     };
 
     const options = listCategory.map(item => ({
@@ -40,8 +60,15 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
     }));
 
     const resetForm = () => {
-        reset();
-        onResetPreview();
+        setData({
+            nmproduct: '',
+            qtproduct: '',
+            price: '',
+            color: '',
+            idcategory: '',
+            image: null
+        })
+        setIsEditing(false);
     };
 
     const handleCategoryChange = (value) => {
@@ -137,7 +164,7 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
                             maxCount={1}
                             onChange={(e) => setData('image', e.file)}
                             beforeUpload={() => false}
-                            disabled={disabled}
+                            disabled={isEditing || disabled}
                         >
                             <Button
                                 style={{
@@ -157,26 +184,12 @@ export default function ProductForm({ auth, categories, onPreviewChange, onReset
                         </Upload>
                     </Form.Item>
                     <Form.Item className='flex items-end'>
-                        {!disabled ?
-                            <>
-                                <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", backgroundColor: "#01344a" }}>
-                                    Cadastrar
-                                </Button>
-                                <Button type="primary" className="ml-2" onClick={resetForm} style={{ height: "40px", backgroundColor: "#01344a" }}>
-                                    Cancelar
-                                </Button>
-                            </> :
-                            <p className='ml-20 text-base text-red-500 text-right'>Por favor, cadastre um endereço <a href={route('address.edit')} className='font-bold text-black'>aqui</a> para prosseguir com o cadastro de produto. </p>
-                        }
-                        <Transition
-                            show={recentlySuccessful}
-                            enter="transition ease-in-out"
-                            enterFrom="opacity-0"
-                            leave="transition ease-in-out"
-                            leaveTo="opacity-0"
-                        >
-                            <p className="text-sm text-gray-600 dark:text-green-400">Cadastrando...</p>
-                        </Transition>
+                        <Button type="primary" htmlType="submit" loading={processing} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                            {isEditing ? "Salvar" : "Cadastrar"}
+                        </Button>
+                        <Button type="primary" className="ml-2" onClick={resetForm} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                            Cancelar
+                        </Button>
                     </Form.Item>
                 </div>
             </Form>

@@ -1,24 +1,60 @@
-import { Form, Input, Button, InputNumber, ColorPicker } from 'antd';
+import { Form, Input, Button, InputNumber, ColorPicker, message } from 'antd';
 import { useForm } from '@inertiajs/react';
-import { useState } from 'react';
-import { Transition } from '@headlessui/react';
+import { useEffect, useState } from 'react';
 
-export default function CategoryForm({ auth }) {
-    const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
-        nmcategory: '',
-        tax: '',
-        dscategory: '',
-        color: '#fff',
+export default function CategoryForm({ auth, editCategory }) {
+
+    const { data, setData, errors, post, put, processing } = useForm({
+        nmcategory: editCategory ? editCategory.nmcategory : '',
+        tax: editCategory ? editCategory.tax : '',
+        dscategory: editCategory ? editCategory.dscategory : '',
+        color: editCategory ? editCategory.color : '#fff',
         iduser: auth
     });
+
+    useEffect(() => {
+        if (editCategory) {
+            setIsEditing(true);
+        }
+    }, [])
+
     const [_, setColor] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
     const submit = () => {
-        post(route('categories.store'), {
-            onSuccess: () => {
-                reset();
-            }
+        if (isEditing) {
+            put(route('categories.update', { id: editCategory.id }), {
+                onSuccess: () => {
+                    message.success('Categoria atualizada com sucesso!')
+                    resetForm();
+                },
+                onError: (error) => {
+                    message.error('Erro ao atualizar a categoria!');
+                    console.error('Erro ao atualizar a categoria: ' + error);
+                }
+            });
+        } else {
+            post(route('categories.store'), {
+                onSuccess: () => {
+                    message.success('Categoria cadastrada com sucesso!');
+                    resetForm();
+                },
+                onError: (error) => {
+                    message.error('Erro ao cadastrar a categoria!');
+                    console.error('Erro ao cadastrar a categoria: ' + error);
+                }
+            });
+        }
+    };
+
+    const resetForm = () => {
+        setData({
+            nmcategory: '',
+            tax: '',
+            dscategory: '',
+            color: '#FFF'
         });
+        setIsEditing(false);
     };
 
     return (
@@ -72,7 +108,7 @@ export default function CategoryForm({ auth }) {
                         showText
                         arrow
                         trigger='hover'
-                        defaultValue={data.color}
+                        value={data.color}
                         onChange={(c) => {
                             setColor(c.toHexString());
                             setData('color', c.toHexString());
@@ -81,21 +117,12 @@ export default function CategoryForm({ auth }) {
                     />
                 </Form.Item>
                 <Form.Item className='flex items-end'>
-                    <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", backgroundColor: "#01344a" }}>
-                        Cadastrar
+                    <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", width: '100px', backgroundColor: "#01344a" }}>
+                        {isEditing ? "Salvar" : "Cadastrar"}
                     </Button>
-                    <Button type="primary" className="ml-2" style={{ height: "40px", backgroundColor: "#01344a" }}>
+                    <Button type="primary" className="ml-2" onClick={resetForm} style={{ height: "40px", width: '100px', backgroundColor: "#01344a" }}>
                         Cancelar
                     </Button>
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600 dark:text-green-400">Cadastrando...</p>
-                    </Transition>
                 </Form.Item>
             </div>
         </Form>

@@ -60,6 +60,56 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Produto criado com sucesso.');
     }
+    /**
+     * Pega os dados do produto para realizar a edição.
+     *
+     * @param int $id do produto
+     * @return \Inertia\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function edit($id)
+    {
+        $userId = Auth::id();
+        $product = Product::with('category')->find($id);
+
+        if ($product) {
+            $products = Product::where('iduser', $userId)->with(['category:id,nmcategory,color'])->get();
+            $address = Address::where('iduser', $userId)->get();
+            $categories = Category::all();
+
+            return Inertia::render('Product', [
+                'product' => $product,
+                'products' => $products,
+                'categories' => $categories,
+                'address' => $address
+            ]);
+        } else {
+            return redirect()->route('products.index')
+                ->with('error', 'Erro ao puxar os dados do produto.');
+        }
+    }
+
+    /**
+     * Atualiza os dados de um produto.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int $id do produto
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'nmproduct' => 'required',
+            'qtproduct' => 'required',
+            'price' => 'required',
+            'idcategory' => 'required',
+        ]);
+
+        $product = Product::find($id);
+
+        $product->update($validatedData);
+
+        return redirect()->route('products.index')->with('success', 'Produto atualizado com sucesso!');
+    }
 
     /**
      * Remove um produto existente.
