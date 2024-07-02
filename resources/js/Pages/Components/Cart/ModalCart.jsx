@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Table, Steps, Button } from "antd";
+import { Modal, Table, Steps, Button, Tooltip } from "antd";
 import styles from "./ModalCart.module.css";
 import CardAddress from "./CardAddress";
 import { useForm } from '@inertiajs/react';
+import { IoTrashOutline } from "react-icons/io5";
+import stylesTable from "../../Styles/TableActionIcon.module.css";
 
-const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
-    const [disabledButton, setDisabledButton] = useState(false);
+const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress, removeItem, removeAllItem }) => {
+    const [_, setDisabledButton] = useState(true);
+    const [selectIndex, setSelectIndex] = useState(null);
+    const [current, setCurrent] = useState(0);
 
-    const { post, data, setData, } = useForm({
+    const { post, data, setData } = useForm({
         total: 0,
         products: cartItems
     });
@@ -24,6 +28,7 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
             total: total.toFixed(2),
             products: updatedCartItems
         });
+
         if (cartItems.length === 0) {
             setDisabledButton(true);
         } else {
@@ -31,6 +36,13 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
         }
     }, [cartItems]);
 
+    useEffect(() => {
+        if (current === 1 && (selectIndex === null || listAddress.length === 0)) {
+            setDisabledButton(true);
+        } else {
+            setDisabledButton(false);
+        }
+    }, [selectIndex, listAddress, current]);
 
     const columns = [
         {
@@ -55,28 +67,46 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
             key: "total",
             render: (total) => `R$ ${parseFloat(total).toFixed(2)}`,
         },
+        {
+            width: '10%',
+            title: "Ações",
+            align: 'center',
+            key: "action",
+            render: (_, record) => (
+                <Tooltip title={`Remover ${record.product.toLowerCase()}`}>
+                    <a onClick={() => removeItem(record.key)} className="flex justify-center">
+                        <IoTrashOutline className={stylesTable.iconDelete} size={20} />
+                    </a>
+                </Tooltip>
+            ),
+        }
     ];
 
     const tab1 = () => {
         return (
-            <Table
-                dataSource={cartItems.map(item => ({
-                    key: item.id,
-                    product: item.nmproduct,
-                    price: item.price,
-                    qtd: item.quantity,
-                    total: item.price * item.quantity,
-                }))}
-                columns={columns}
-                pagination={false}
-            />
+            <div>
+                <Table
+                    dataSource={cartItems.map(item => ({
+                        key: item.id,
+                        product: item.nmproduct,
+                        price: item.price,
+                        qtd: item.quantity,
+                        total: item.price * item.quantity,
+                    }))}
+                    columns={columns}
+                    pagination={false}
+                />
+                <div className="flex flex-col items-start">
+                    <Button className="mt-5" danger onClick={() => removeAllItem()}>Remover todos os itens do carrinho</Button>
+                </div>
+            </div>
         );
     };
 
     const tab2 = () => {
         return (
             <>
-                <CardAddress list={listAddress} disabledButton={setDisabledButton} />
+                <CardAddress list={listAddress} disabledButton={setDisabledButton} selectIndex={setSelectIndex} />
             </>
         );
     };
@@ -87,15 +117,13 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
 
     const tab3 = () => {
         return (
-            <div className={styles.teste}>
+            <div className={styles.info}>
                 <b>Informações</b>
                 <p style={{ color: '#2E4369' }}>Total a pagar: R$ {data.total}</p>
                 <p style={{ fontSize: '16px' }}>Por favor, note que aceitamos apenas pagamentos via PIX. Deseja finalizar sua a compra?</p>
             </div>
         );
     };
-
-
 
     const steps = [
         {
@@ -112,15 +140,7 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
         },
     ];
 
-    const [current, setCurrent] = useState(0);
     const next = () => {
-        if (data.total < 0) {
-            setDisabledButton(true);
-        } else if (listAddress.length === 0) {
-            setDisabledButton(true);
-        } else {
-            setDisabledButton(false);
-        }
         setCurrent(current + 1);
     };
     const prev = () => {
@@ -145,7 +165,10 @@ const ModalCart = ({ isModalOpen, closeModal, cartItems, listAddress }) => {
             <div className={styles.content}>{steps[current].content}</div>
             <div style={{ marginTop: 24 }}>
                 {current < steps.length - 1 && (
-                    <Button type="primary" disabled={disabledButton} onClick={() => next()}>
+                    <Button
+                        type="primary"
+                        disabled={current === 1 && (selectIndex === null || listAddress.length === 0) || data.total == 0}
+                        onClick={() => next()}>
                         Próximo
                     </Button>
                 )}

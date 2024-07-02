@@ -10,13 +10,29 @@ use Inertia\Response;
 
 class AddressController extends Controller
 {
-    public function edit(Request $request): Response
+    public function edit(): Response
     {
         $address = Address::where('iduser', Auth::id())->get();
 
         return Inertia::render('Profile/AddressCompany', [
             'address' => $address
         ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'cep' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'street' => 'required',
+            'neighborhood' => 'required',
+            'number' => 'required'
+        ]);
+
+        $address = Address::findOrFail($id);
+
+        $address->update($validatedData);
     }
 
     public function create(Request $request)

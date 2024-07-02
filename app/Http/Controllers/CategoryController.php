@@ -33,6 +33,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nmcategory' => 'required|unique:categories',
+            'tax' => 'required',
+            'color' => 'required'
+        ]);
+        
         Category::create($request->all());
 
         return redirect()->route('categories.index')
@@ -67,7 +73,7 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
         $request->validate([
-            'nmcategory' => 'required',
+            'nmcategory' => 'required|unique:categories',
             'tax' => 'required',
             'color' => 'required'
         ]);

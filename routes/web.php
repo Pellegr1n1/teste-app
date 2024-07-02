@@ -26,6 +26,7 @@ Route::get('/', function () {
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::post('/address', [AddressController::class, 'create'])->name('address.create');
+    Route::put('/address/{id}', [AddressController::class, 'update'])->name('address.update');
     Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
 });
 

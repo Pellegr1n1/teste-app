@@ -1,11 +1,11 @@
 import React from 'react';
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 import FormAddressModalCart from './FormAddressModalCart';
 
-const ModalRegisterAddress = ({ isModalOpen, closeModal }) => {
+const ModalRegisterAddress = ({ isModalOpen, closeModal, address }) => {
     return (
         <Modal
-            title="Cadastro de Endereço"
+            title={Object.keys(address).length > 0 ? "Atualização de Endereço" : "Cadastro de Endereço"}
             open={isModalOpen}
             onCancel={closeModal}
             centered
@@ -14,7 +14,7 @@ const ModalRegisterAddress = ({ isModalOpen, closeModal }) => {
             ]}
             width={800}
         >
-            <FormAddressModalCart user={'client'} />
+            <FormAddressModalCart closeModal={closeModal} address={address}/>
         </Modal>
     );
 };

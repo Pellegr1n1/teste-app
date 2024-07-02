@@ -75,6 +75,11 @@ export default function Cart({ auth, products, address, categories, ratingsCount
         }
     };
 
+    const handleRemoveAllItem = () => {
+        localStorage.removeItem("cart");
+        updateCart();
+    }; 
+
     const showCompanyModal = (product, companyId) => {
         const relatedProducts = products.filter(product => product.iduser === companyId);
         setSelectedCompanyProducts(relatedProducts);
@@ -255,6 +260,8 @@ export default function Cart({ auth, products, address, categories, ratingsCount
                         closeModal={() => setIsModalOpen(false)}
                         listAddress={address}
                         cartItems={cartItems}
+                        removeItem={handleRemoveItem}
+                        removeAllItem={handleRemoveAllItem}
                     />
                     <ModalCompany
                         isModalOpen={isModalOpenCompany}

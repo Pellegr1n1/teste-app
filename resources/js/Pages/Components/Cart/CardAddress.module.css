@@ -24,21 +24,26 @@
 
 .actions {
     display: flex;
+    height: 20px;
     justify-content: space-around;
 }
 
 .edit {
     font-size: 20px;
+    color: grey;
 }
 
 .edit:hover {
     font-size: 22px;
+    color: #fca311;
 }
 
 .remove {
     font-size: 20px;
+    color: grey;
 }
 
 .remove:hover {
     font-size: 22px;
+    color: #c1121f;
 }

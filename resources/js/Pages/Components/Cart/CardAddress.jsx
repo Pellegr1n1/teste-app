@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Button, Modal } from 'antd';
 import ModalRegisterAddress from "./ModalRegisterAddress";
 import location from "@/Assets/Images/location.png";
@@ -8,18 +8,17 @@ import { Divider } from "antd";
 import styles from "./CardAddress.module.css";
 import { FaEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
-import PrimaryButton from "@/Components/PrimaryButton";
 import { useForm } from '@inertiajs/react';
 
-export default function CardAddress({ list, disabledButton }) {
+export default function CardAddress({ list, disabledButton, selectIndex }) {
     const [pageIndex, setPageIndex] = useState(0);
-    const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
+    const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
     const [showRegisterAddress, setShowRegisterAddress] = useState(false);
-    const [showDelete, setShowDelete] = useState(false);
     const addressesPerPage = 2;
     const totalPages = Math.ceil(list.length / addressesPerPage);
     const startAddressIndex = pageIndex * addressesPerPage;
     const endAddressIndex = Math.min(startAddressIndex + addressesPerPage, list.length);
+    const [addressSelect, setAddressSelect] = useState({});
 
     const {
         delete: destroy,
@@ -37,15 +36,19 @@ export default function CardAddress({ list, disabledButton }) {
     };
 
     const selectAddress = (index) => {
-        setSelectedAddressIndex(index);
+        setSelectedAddressIndex(index === selectedAddressIndex ? null : index);
+        selectIndex(index === selectedAddressIndex ? null : index);
         disabledButton(false);
     };
 
-    const handleEditClick = (id) => {
-
+    const handleEditClick = (e, address) => {
+        e.stopPropagation();
+        setShowRegisterAddress(true);
+        setAddressSelect(address);
     };
 
-    const handleDeleteClick = (id) => {
+    const handleDeleteClick = (e, id) => {
+        e.stopPropagation();
         Modal.confirm({
             title: "Confirmar exclusão",
             content: "Tem certeza que deseja excluir este endereço?",
@@ -56,6 +59,11 @@ export default function CardAddress({ list, disabledButton }) {
                 destroy(route('address.destroy', { id: id }))
             },
         });
+    };
+
+    const handleAddNewAddress = () => {
+        setShowRegisterAddress(true);
+        setAddressSelect({});
     };
 
     return (
@@ -92,11 +100,11 @@ export default function CardAddress({ list, disabledButton }) {
                             <div>
                                 <img src={selectedAddressIndex === startAddressIndex + index ? confirm : location} alt="Card Location" />
                                 <div className={styles.actions}>
-                                    <a onClick={() => handleEditClick(addr.id)}>
-                                        <FaEdit color="grey" className={styles.edit} />
+                                    <a onClick={(e) => handleEditClick(e, addr)}>
+                                        <FaEdit className={styles.edit} />
                                     </a>
-                                    <a onClick={() => handleDeleteClick(addr.id)}>
-                                        <FaRegTrashCan color="grey" className={styles.remove} />
+                                    <a onClick={(e) => handleDeleteClick(e, addr.id)}>
+                                        <FaRegTrashCan className={styles.remove} />
                                     </a>
                                 </div>
                             </div>
@@ -106,8 +114,8 @@ export default function CardAddress({ list, disabledButton }) {
             </div>
             {list.length < 4 && (
                 <>
-                    <PrimaryButton style={{ width: '100%' }} onClick={() => setShowRegisterAddress(true)}>Cadastrar Novo Endereço</PrimaryButton>
-                    <ModalRegisterAddress isModalOpen={showRegisterAddress} closeModal={() => setShowRegisterAddress(false)} />
+                    <Button style={{ width: '100%', height: '40px' }} onClick={handleAddNewAddress}>Cadastrar Novo Endereço</Button>
+                    <ModalRegisterAddress address={addressSelect} isModalOpen={showRegisterAddress} closeModal={() => setShowRegisterAddress(false)} />
                 </>
             )}
         </div>

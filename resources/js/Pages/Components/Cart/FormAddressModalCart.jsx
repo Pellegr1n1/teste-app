@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, Col, Row } from "antd";
+import { Button, Form, Input, Col, Row, message } from 'antd';
 import { useForm } from '@inertiajs/react';
 
-function FormAddressModalCart({ user, address }) {
+const FormAddressModalCart = ({ address, closeModal }) => {
     const [addressFieldsDisabled, setAddressFieldsDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [form] = Form.useForm();
 
-    const { data, setData, post } = useForm({
-        cep: '',
-        state: '',
-        city: '',
-        street: '',
-        neighborhood: '',
-        number: ''
+    const { data, setData, post, put } = useForm({
+        cep: address ? address.cep : '',
+        state: address ? address.state : '',
+        city: address ? address.city : '',
+        street: address ? address.street : '',
+        neighborhood: address ? address.neighborhood : '',
+        number: address ? address.number : ''
     });
 
-    if (address) {
-        useEffect(() => {
-            if (address.length > 0) {
-                const { cep, state, city, street, neighborhood, number } = address[0];
-                form.setFieldsValue({ cep, state, city, street, neighborhood, number });
-            }
-        }, [address]);
-    }
+    useEffect(() => {
+        if (Object.keys(address).length > 0) {
+            const { cep, state, city, street, neighborhood, number } = address;
+            form.setFieldsValue({ cep, state, city, street, neighborhood, number });
+        }
+    }, [address]);
 
     const onSearch = async (cep) => {
         try {
@@ -55,12 +53,36 @@ function FormAddressModalCart({ user, address }) {
         }
     };
 
-    const handleRegister = async (values) => {
+    const handleRegister = async () => {
         try {
             setIsLoading(true);
-            post(route('address.create'), values);
+            if (Object.keys(address).length > 0){
+                put(route('address.update', { id: address.id }), {
+                    onSuccess: () => {
+                        message.success('Endereço atualizado com sucesso!')
+                        resetForm();
+                    },
+                    onError: (error) => {
+                        message.error('Erro ao atualizar a endereço!');
+                        console.error('Erro ao atualizar a endereço: ' + error);
+                    }
+                });
+            } else {
+                post(route('address.create'), {
+                    onSuccess: () => {
+                        message.success('Endereço cadastrada com sucesso!')
+                        resetForm();
+                    },
+                    onError: (error) => {
+                        message.error('Erro ao cadastrar a endereço!');
+                        console.error('Erro ao cadastrar a endereço: ' + error);
+                    }
+                });
+                
+            }
             form.resetFields();
             setAddressFieldsDisabled(true);
+            closeModal();
         } catch (error) {
             console.error('Erro ao cadastrar endereço:', error);
         } finally {
@@ -70,10 +92,7 @@ function FormAddressModalCart({ user, address }) {
 
     return (
         <div>
-            <Form form={form}
-                layout='vertical'
-                style={{ width: '100%' }}
-                onFinish={handleRegister}>
+            <Form form={form} layout='vertical' style={{ width: '100%' }} onFinish={handleRegister}>
                 <Row align="middle" gutter={20}>
                     <Col span={8}>
                         <Form.Item
@@ -144,14 +163,12 @@ function FormAddressModalCart({ user, address }) {
                         </Form.Item>
                     </Col>
                 </Row>
-                {(user === 'company' && address.length == 1) ? "" :
                 <Form.Item>
-                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large">Cadastrar</Button>
+                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large">{Object.keys(address).length > 0 ? "Atualizar" : "Cadastrar"}</Button>
                 </Form.Item>
-                }
             </Form>
         </div>
-    )
-}
+    );
+};
 
 export default FormAddressModalCart;

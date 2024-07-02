@@ -24,7 +24,7 @@ export default function addressCompany({ auth, address }) {
                     </div>
 
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <FormAddressModalCart user={'company'} address={address} className="max-w-xl" />
+                        <FormAddressModalCart address={address[0]} closeModal={() => {}} className="max-w-xl" />
                     </div>
                 </div>
             </div>
