@@ -10,6 +10,7 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
         qtproduct: editProduct ? editProduct.qtproduct : '',
         price: editProduct ? editProduct.price : '',
         color: editProduct && editProduct.category ? editProduct.category.color : '',
+        fgenabled: editProduct ? editProduct.fgenabled : 1,
         idcategory: editProduct ? editProduct.idcategory : '',
         image: editProduct ? editProduct.image : null
     });
@@ -65,6 +66,7 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
             qtproduct: '',
             price: '',
             color: '',
+            fgenabled: 1,
             idcategory: '',
             image: null
         })
@@ -81,66 +83,59 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
     };
 
     return (
-        <ConfigProvider
-            theme={{
-                components: {
-                    Select: {
-                        selectorBg: '#f3f4f6'
-                    },
-                },
-            }}
-        >
-            <Form onFinish={submit} layout="vertical" className="mt-6 space-y-6" encType='multipart/form-data'>
-                <Form.Item
-                    label="Nome"
-                    validateStatus={errors.nmproduct ? 'error' : ''}
-                    help={errors.nmproduct}
-                >
-                    <Input
-                        value={data.nmproduct}
-                        onChange={(e) => setData('nmproduct', e.target.value)}
-                        required
-                        autoComplete="nmproduct"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
-                        disabled={disabled}
-                    />
-                </Form.Item>
+        <Form onFinish={submit} layout="vertical" className="mt-6 space-y-6" encType='multipart/form-data'>
+            <Form.Item
+                label="Nome"
+                validateStatus={errors.nmproduct ? 'error' : ''}
+                help={errors.nmproduct}
+            >
+                <Input
+                    value={data.nmproduct}
+                    onChange={(e) => setData('nmproduct', e.target.value)}
+                    required
+                    autoComplete="nmproduct"
+                    style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                    disabled={disabled}
+                />
+            </Form.Item>
 
-                <Form.Item
-                    label="Quantidade"
-                    validateStatus={errors.qtproduct ? 'error' : ''}
-                    help={errors.qtproduct}
-                >
-                    <InputNumber
-                        value={data.qtproduct}
-                        onChange={(value) => setData('qtproduct', value)}
-                        required
-                        autoComplete="qtproduct"
-                        size="large"
-                        style={{ width: '100%', borderRadius: '6px', backgroundColor: "#f3f4f6" }}
-                        disabled={disabled}
-                    />
-                </Form.Item>
+            <Form.Item
+                label="Quantidade"
+                validateStatus={errors.qtproduct ? 'error' : ''}
+                help={errors.qtproduct}
+            >
+                <InputNumber
+                    value={data.qtproduct}
+                    onChange={(value) => setData('qtproduct', value)}
+                    required
+                    autoComplete="qtproduct"
+                    size="large"
+                    style={{ width: '100%', borderRadius: '6px', backgroundColor: "#f3f4f6" }}
+                    disabled={disabled}
+                />
+            </Form.Item>
 
-                <Form.Item
-                    label="Categoria"
-                    validateStatus={errors.idcategory ? 'error' : ''}
-                    help={errors.idcategory}
-                >
-                    <Select
-                        options={options}
-                        value={data.idcategory ? `${data.idcategory}-${data.color}` : undefined}
-                        onChange={handleCategoryChange}
-                        size="large"
-                        style={{ width: '100%' }}
-                        disabled={disabled}
-                    />
-                </Form.Item>
+            <Form.Item
+                label="Categoria"
+                validateStatus={errors.idcategory ? 'error' : ''}
+                help={errors.idcategory}
+            >
+                <Select
+                    options={options}
+                    value={data.idcategory ? `${data.idcategory}-${data.color}` : undefined}
+                    onChange={handleCategoryChange}
+                    size="large"
+                    style={{ width: '100%' }}
+                    disabled={disabled}
+                />
+            </Form.Item>
 
+            <div className="flex justify-between space-x-4">
                 <Form.Item
                     label="Preço"
                     validateStatus={errors.price ? 'error' : ''}
                     help={errors.price}
+                    className="w-1/2"
                 >
                     <Input
                         value={data.price}
@@ -151,48 +146,73 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
                         disabled={disabled}
                     />
                 </Form.Item>
+                <Form.Item
+                    label="Situação"
+                    validateStatus={errors.fgenabled ? 'error' : ''}
+                    help={errors.fgenabled}
+                    className="w-1/2"
+                >
+                    <Select
+                        options={[
+                            {
+                                value: 1,
+                                label: 'Habilitado',
+                            },
+                            {
+                                value: 2,
+                                label: 'Desabilitado'
+                            }
+                        ]}
+                        value={data.fgenabled == 1 ? 'Habilitado' : 'Desabilitado'}
+                        onChange={(value) => setData('fgenabled', value)}
+                        size='large'
+                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        disabled={disabled}
+                    />
 
-                <div className='flex justify-between w-full'>
-                    <Form.Item
-                        label="Imagem"
-                        validateStatus={errors.image ? 'error' : ''}
-                        help={errors.image}
+                </Form.Item>
+            </div>
+
+            <div className='flex justify-between w-full'>
+                <Form.Item
+                    label="Imagem"
+                    validateStatus={errors.image ? 'error' : ''}
+                    help={errors.image}
+                >
+                    <Upload
+                        name="image"
+                        listType="picture-card"
+                        maxCount={1}
+                        onChange={(e) => setData('image', e.file)}
+                        beforeUpload={() => false}
+                        disabled={isEditing || disabled}
                     >
-                        <Upload
-                            name="image"
-                            listType="picture-card"
-                            maxCount={1}
-                            onChange={(e) => setData('image', e.file)}
-                            beforeUpload={() => false}
-                            disabled={isEditing || disabled}
+                        <Button
+                            style={{
+                                border: 0,
+                                background: 'none',
+                            }}
+                            type="button"
+                            disabled={disabled}
                         >
-                            <Button
-                                style={{
-                                    border: 0,
-                                    background: 'none',
-                                }}
-                                type="button"
-                                disabled={disabled}
-                            >
-                                <div>
-                                    <div className="flex flex-col items-center">
-                                        <PlusOutlined />
-                                        Upload
-                                    </div>
+                            <div>
+                                <div className="flex flex-col items-center">
+                                    <PlusOutlined />
+                                    Upload
                                 </div>
-                            </Button>
-                        </Upload>
-                    </Form.Item>
-                    <Form.Item className='flex items-end'>
-                        <Button type="primary" htmlType="submit" loading={processing} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
-                            {isEditing ? "Salvar" : "Cadastrar"}
+                            </div>
                         </Button>
-                        <Button type="primary" className="ml-2" onClick={resetForm} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
-                            Cancelar
-                        </Button>
-                    </Form.Item>
-                </div>
-            </Form>
-        </ConfigProvider>
+                    </Upload>
+                </Form.Item>
+                <Form.Item className='flex items-end'>
+                    <Button type="primary" htmlType="submit" loading={processing} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                        {isEditing ? "Salvar" : "Cadastrar"}
+                    </Button>
+                    <Button type="primary" className="ml-2" onClick={resetForm} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                        Cancelar
+                    </Button>
+                </Form.Item>
+            </div>
+        </Form>
     );
 }

@@ -13,7 +13,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category:id,nmcategory,color', 'user:id,document,name,email')->get();
+        $products = Product::with('category:id,nmcategory,color', 'user:id,document,name,email')
+                            ->where('fgenabled', 1)
+                            ->get();
 
         $topProducts = $this->getTopSellingProducts(3);
 

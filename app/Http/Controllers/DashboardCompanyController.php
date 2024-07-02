@@ -17,6 +17,7 @@ class DashboardCompanyController extends Controller
         // Obter todos os produtos da empresa logada com as categorias e usuário associados
         $products = Product::with('category:id,nmcategory,color', 'user:id,document,name,email')
             ->where('iduser', $userId)
+            ->where('fgenabled', 1)
             ->get();
 
         // Calcular o total de produtos vendidos para esta empresa

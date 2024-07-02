@@ -3,6 +3,7 @@ import image1 from '@/Assets/Images/sacolas-de-compras.png';
 import image2 from '@/Assets/Images/atendimento.png';
 import image3 from '@/Assets/Images/experiencia.png';
 import image4 from '@/Assets/Images/entrega.png';
+import image5 from '@/Assets/Images/design.jpg';
 import logo from '@/Assets/Images/logo.png';
 
 export default function Welcome({ auth }) {
@@ -58,8 +59,7 @@ export default function Welcome({ auth }) {
                                     >
                                         <img
                                             id="background1"
-                                            className="absolute left-0 top-0 w-full"
-                                            src={"https://images.spiceworks.com/wp-content/uploads/2022/06/16081603/Sales-Intelligence.jpg"}
+                                            src={image5}
                                         />
                                         <div className="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"></div>
                                     </div>

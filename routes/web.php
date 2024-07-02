@@ -34,6 +34,7 @@ Route::middleware('auth', 'verified')->group(function () {
 Route::middleware('auth', 'verified', 'client')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
+    Route::get('/payload', [PayloadController::class, 'index'])->name('payload.index');
     Route::post('/payload', [PayloadController::class, 'create'])->name('payload.create');
     Route::post('/order', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/avaliable', [AvaliableController::class, 'create'])->name('avaliable.create');
@@ -48,7 +49,7 @@ Route::middleware('auth', 'verified', 'company')->group(function () {
     Route::get('/product', [ProductController::class, 'index'])->name('products.index');
     Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::post('/product', [ProductController::class, 'store'])->name('products.store');
-    Route::put('/product/{id}', [ProductController::class, 'update'])->name('products.update');
+    Route::put('/product/{id}/edit', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     /** ----------------- Routes Category ----------------- **/
     Route::get('/category', [CategoryController::class, 'index'])->name('categories.index');

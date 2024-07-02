@@ -19,7 +19,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category:id,nmcategory,color', 'user:id,document,name,email', 'address:id,street,number,city,state,neighborhood'])->get();
+        $products = Product::with(['category:id,nmcategory,color', 'user:id,document,name,email', 'address:id,street,number,city,state,neighborhood'])
+                            ->where('fgenabled', 1)
+                            ->get();
         $address = Address::where('iduser', Auth::id())->get();
         $categories = Category::all();
 

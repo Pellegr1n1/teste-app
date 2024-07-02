@@ -45,6 +45,7 @@ class ProductController extends Controller
             'qtproduct' => 'required',
             'price' => 'required',
             'idcategory' => 'required',
+            'fgenabled' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -52,6 +53,7 @@ class ProductController extends Controller
         $path = $request->file('image')->storeAs('uploads', $file_name, 'public');
 
         $data = $request->all();
+        // Definindo dados
         $data['iduser'] = Auth::id();
         $data['image'] = $path;
 
@@ -101,6 +103,7 @@ class ProductController extends Controller
             'nmproduct' => 'required',
             'qtproduct' => 'required',
             'price' => 'required',
+            'fgenabled' => 'required',
             'idcategory' => 'required',
         ]);
 

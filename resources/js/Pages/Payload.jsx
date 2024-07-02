@@ -25,6 +25,7 @@ const Payload = ({ payload, auth, total, products }) => {
             setProcessingPayment(false);
             message.success('Pagamento verificado com sucesso. Aguarde você será redirecionado!').then(() => {
                 localStorage.clear();
+                document.cookie = 'payload=; Max-Age=0; path=/;';
                 post(route('orders.create'));
             });
         }, 1000);

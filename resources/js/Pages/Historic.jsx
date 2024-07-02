@@ -13,6 +13,8 @@ export default function Historic({ auth, orders, unavaliatedOrders }) {
     const [rateModalOpen, setRateModalOpen] = useState(false);
     const [selectedRateOrder, setSelectedRateOrder] = useState(null);
 
+    const desc = ['Péssimo', 'Ruim', 'Normal', 'Bom', 'Excelente'];
+
     const { post, setData } = useForm({
         idorder: null,
         value: 0
@@ -99,8 +101,9 @@ export default function Historic({ auth, orders, unavaliatedOrders }) {
                         </div>
                     </Tooltip>
                 ) : (
-                    <Tooltip title={avaliables[0].value}>
-                        <Rate allowHalf disabled value={avaliables.length > 0 ? parseFloat(avaliables[0].value) : 0} />
+                    <Tooltip title={desc[avaliables[0].value - 1]
+                    }>
+                        <Rate disabled value={avaliables.length > 0 ? parseFloat(avaliables[0].value) : 0} />
                     </Tooltip>
                 )
             ),
@@ -164,14 +167,19 @@ export default function Historic({ auth, orders, unavaliatedOrders }) {
                         {selectedRateOrder && (
                             <div style={{ textAlign: 'center' }}>
                                 <p style={{ fontSize: '16px', fontWeight: 400 }}>Avalie seu pedido ID: {selectedRateOrder.id}</p>
-                                <Rate allowHalf defaultValue={0} onChange={(value) => {
-                                    setData({
-                                        idorder: selectedRateOrder.id,
-                                        value: value
-                                    });
-                                }} />
+                                <Rate
+                                    tooltips={desc}
+                                    defaultValue={1}
+                                    onChange={(value) => {
+                                        setData({
+                                            idorder: selectedRateOrder.id,
+                                            value: value < 1 ? 1 : value
+                                        });
+                                    }}
+                                />
                             </div>
                         )}
+
                     </Modal>
                 </div>
             </div>

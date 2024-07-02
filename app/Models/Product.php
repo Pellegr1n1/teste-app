@@ -19,6 +19,7 @@ class Product extends Model
         'qtproduct',
         'price',
         'image',
+        'fgenabled',
         'iduser',
         'idcategory'
     ];

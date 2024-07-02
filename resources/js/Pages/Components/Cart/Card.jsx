@@ -8,6 +8,7 @@ function CustomCard({ id, name, company, product, user, price, stock, src, onAdd
     let situationStyle = stock > 0 ? "available" : "unavailable";
     let situation = stock > 0 ? "Em estoque" : "Fora de estoque";
     const [addItem, setAddItem] = useState(initialQuantity);
+    const desc = ['Péssimo', 'Ruim', 'Normal', 'Bom', 'Excelente'];
 
     useEffect(() => {
         setAddItem(initialQuantity);
@@ -38,9 +39,11 @@ function CustomCard({ id, name, company, product, user, price, stock, src, onAdd
             cover={
                 <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
                     <img alt={name} src={src} className={styles.img} style={{ marginBottom: '10px' }} />
-                    <div style={{display: 'flex'}}>
-                        <Rate allowHalf disabled value={rating} />
-                        <span style={{marginLeft: '10px'}}>({ratingsCount})</span>
+                    <div style={{ display: 'flex' }}>
+                        <Tooltip title={desc[rating - 1]}>
+                            <Rate disabled value={rating} />
+                        </Tooltip>
+                        <span style={{ marginLeft: '10px' }}>({ratingsCount})</span>
                     </div>
                 </div >
 

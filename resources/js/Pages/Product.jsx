@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Head, useForm } from '@inertiajs/react';
-import { Table, Space, Modal, ColorPicker, message } from "antd";
+import { Table, Space, Modal, ColorPicker, Tag, Tooltip, message } from "antd";
 import { FaRegEdit } from "react-icons/fa";
 import { IoTrashOutline } from "react-icons/io5";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -92,7 +92,8 @@ export default function Product({ auth, products, categories, address, product }
     const columns = [
         {
             title: "Categoria",
-            width: '15%',
+            width: '17%',
+            align: 'center',
             dataIndex: "category[id]",
             key: "category[id]",
             render: (_, record) => (
@@ -105,20 +106,33 @@ export default function Product({ auth, products, categories, address, product }
         {
             title: "Nome",
             align: 'center',
+            width: '25%',
             dataIndex: "nmproduct",
             key: "nmproduct",
         },
         {
             title: "Preço",
             align: 'center',
+            width: '15%',
             dataIndex: "price",
             key: "price",
         },
         {
             title: "Estoque",
             align: 'center',
+            width: '15%',
             dataIndex: "qtproduct",
             key: "qtproduct",
+        },
+        {
+            title: "Situação",
+            align: 'center',
+            width: '10%',
+            dataIndex: "fgenabled",
+            key: "fgenabled",
+            render: (fgenabled) => (
+                fgenabled === "1" ? <Tag color="green">Habilitado</Tag> : <Tag color="red">Desabilitado</Tag>
+            ),
         },
         {
             title: "Ações",
@@ -126,12 +140,16 @@ export default function Product({ auth, products, categories, address, product }
             key: "action",
             render: (record) => (
                 <Space size={30}>
-                    <a onClick={() => handleEdit(record)}>
-                        <FaRegEdit className={styles.iconEdit} size={20} />
-                    </a>
-                    <a onClick={() => handleDelete(record)}>
-                        <IoTrashOutline className={styles.iconDelete} size={20} />
-                    </a>
+                    <Tooltip title='Editar'>
+                        <a onClick={() => handleEdit(record)}>
+                            <FaRegEdit className={styles.iconEdit} size={20} />
+                        </a>
+                    </Tooltip>
+                    <Tooltip title='Excluir'>
+                        <a onClick={() => handleDelete(record)}>
+                            <IoTrashOutline className={styles.iconDelete} size={20} />
+                        </a>
+                    </Tooltip>
                 </Space>
             ),
         },

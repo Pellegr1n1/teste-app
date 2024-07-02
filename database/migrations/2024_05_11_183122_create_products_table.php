@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nmproduct');
             $table->integer('qtproduct');
             $table->decimal('price', 10, 2);
+            $table->enum('fgenabled', [1, 2]);
             $table->unsignedBigInteger('iduser');
             $table->unsignedBigInteger('idcategory');
             $table->string('image');
