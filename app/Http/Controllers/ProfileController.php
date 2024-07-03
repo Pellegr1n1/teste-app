@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,5 +60,28 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Update the user's profile picture.
+     */
+    public function picture(Request $request, $id)
+    {
+        dd($request->all());
+
+        // Obter o usuário pelo ID fornecido (se necessário)
+        $user = User::findOrFail($id);
+
+        // Armazenar a imagem no armazenamento público
+        $file_name = time() . '-' . $request->file('image')->getClientOriginalName();
+        $path = $request->file('image')->storeAs('uploads', $file_name, 'public');
+
+        // Atualizar os dados do usuário com o novo caminho da imagem
+        $user->image = $path;
+        
+        $user->save();
+
+        // Redirecionar de volta com mensagem de sucesso
+        return Redirect::back()->with('status', 'Foto de perfil atualizada com sucesso.');
     }
 }

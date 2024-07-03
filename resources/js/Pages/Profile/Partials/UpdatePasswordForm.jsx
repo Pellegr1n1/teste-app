@@ -36,10 +36,10 @@ export default function UpdatePasswordForm({ className = '' }) {
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-900">Informações de Perfil</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-900">Atualizar Senha</h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Atualize as informações de perfil e endereço de e-mail da sua contas.
+                    Certifique-se de que sua conta esteja usando uma senha longa e aleatória para permanecer segura.
                 </p>
             </header>
 
