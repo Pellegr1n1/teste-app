@@ -73,7 +73,7 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
         $request->validate([
-            'nmcategory' => 'required|unique:categories',
+            'nmcategory' => 'required|unique:categories,nmcategory,' . $category->id,
             'tax' => 'required',
             'color' => 'required'
         ]);
