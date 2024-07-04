@@ -19,14 +19,16 @@ class UsersTableSeeder extends Seeder
                 'name' => 'Client',
                 'email' => 'client@gmail.com',
                 'type' => 'client',
-                'password' => Hash::make('engsoft2024')
+                'password' => Hash::make('engsoft2024'),
+                'image' => 'uploads/user-default.png'
             ],
             [
                 'document' => '11.111.111/1111-11',
                 'name' => 'Company',
                 'email' => 'company@gmail.com',
                 'type' => 'company',
-                'password' => Hash::make('engsoft2024')
+                'password' => Hash::make('engsoft2024'),
+                'image' => 'uploads/user-default.png'
             ]
         ]);
     }
