@@ -2,12 +2,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
-import { Head, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import UpdateProfilePictureForm from './Partials/UpdateProfilePictureForm';
 
 export default function Edit({ auth, mustVerifyEmail, status }) {
-    const user = usePage().props.auth.user;
-
     return (
         <AuthenticatedLayout
             user={auth.user}

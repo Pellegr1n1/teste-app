@@ -76,6 +76,7 @@ class ProfileController extends Controller
         
         $user->save();
 
+        // Redirecionar de volta com mensagem de sucesso
         return Redirect::back()->with('status', 'Foto de perfil atualizada com sucesso.');
     }
 }

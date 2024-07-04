@@ -3,6 +3,7 @@ import { Button, Form, Input, Col, Row, message } from 'antd';
 import { useForm } from '@inertiajs/react';
 
 const FormAddressModalCart = ({ address, closeModal }) => {
+    console.log(address)
     const [addressFieldsDisabled, setAddressFieldsDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
