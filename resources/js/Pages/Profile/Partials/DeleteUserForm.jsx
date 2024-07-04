@@ -6,6 +6,7 @@ import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import { useForm } from '@inertiajs/react';
+import { Button } from 'antd';
 
 export default function DeleteUserForm({ className = '' }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
@@ -31,7 +32,10 @@ export default function DeleteUserForm({ className = '' }) {
 
         destroy(route('profile.destroy'), {
             preserveScroll: true,
-            onSuccess: () => closeModal(),
+            onSuccess: () => {
+                closeModal()
+                message.success('Conta deletada com sucesso.');
+            },
             onError: () => passwordInput.current.focus(),
             onFinish: () => reset(),
         });
@@ -54,7 +58,9 @@ export default function DeleteUserForm({ className = '' }) {
                 </p>
             </header>
 
-            <DangerButton onClick={confirmUserDeletion}>Deletar Conta</DangerButton>
+            <Button onClick={confirmUserDeletion} style={{ height: "40px", width: "130px", color: 'white', backgroundColor: "#01344a" }}>
+                Deletar Conta
+            </Button>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <form onSubmit={deleteUser} className="p-6">

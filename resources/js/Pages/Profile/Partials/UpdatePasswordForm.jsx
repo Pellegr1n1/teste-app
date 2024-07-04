@@ -1,9 +1,6 @@
 import { useRef } from 'react';
-import { Form, Input, Button, Typography, Alert } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { useForm } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
-
-const { Title, Paragraph } = Typography;
 
 export default function UpdatePasswordForm({ className = '' }) {
     const passwordInput = useRef();
@@ -18,7 +15,10 @@ export default function UpdatePasswordForm({ className = '' }) {
     const updatePassword = () => {
         put(route('password.update'), {
             preserveScroll: true,
-            onSuccess: () => reset(),
+            onSuccess: () => {
+                reset();
+                message.success('Senha atualizada com sucesso.');
+            },
             onError: (errors) => {
                 if (errors.password) {
                     reset('password', 'password_confirmation');
@@ -36,10 +36,10 @@ export default function UpdatePasswordForm({ className = '' }) {
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-900">Informações de Perfil</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-900">Atualizar Senha</h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Atualize as informações de perfil e endereço de e-mail da sua contas.
+                    Certifique-se de que sua conta esteja usando uma senha longa e aleatória para permanecer segura.
                 </p>
             </header>
 
@@ -55,7 +55,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.current_password}
                         onChange={(e) => setData('current_password', e.target.value)}
                         autoComplete="current-password"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9", height: '42px' }}
                     />
                 </Form.Item>
 
@@ -70,7 +70,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
                         autoComplete="new-password"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9", height: '42px' }}
                     />
                 </Form.Item>
 
@@ -84,26 +84,14 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.password_confirmation}
                         onChange={(e) => setData('password_confirmation', e.target.value)}
                         autoComplete="new-password"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9", height: '42px' }}
                     />
                 </Form.Item>
 
                 <div className="flex items-center gap-4">
-                    <Button type="primary" htmlType="submit" loading={processing} style={{ backgroundColor: "#01344a" }}>
+                    <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
                         Salvar
                     </Button>
-
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <Paragraph type="success" className="ml-2">
-                            Salvando.
-                        </Paragraph>
-                    </Transition>
                 </div>
             </Form>
         </section>

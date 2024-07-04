@@ -19,10 +19,12 @@ class CartController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category:id,nmcategory,color', 'user:id,document,name,email', 'address:id,street,number,city,state,neighborhood'])
+        $products = Product::with(['category:id,nmcategory,color', 'user:id,document,name,email,image', 'address:id,number,city,state,neighborhood'])
                             ->where('fgenabled', 1)
                             ->get();
         $address = Address::where('iduser', Auth::id())->get();
+        $addressAll = Address::all();
+
         $categories = Category::all();
 
         $orders = Order::where('iduser', Auth::id())->with('items')->get();
@@ -60,6 +62,7 @@ class CartController extends Controller
 
         return Inertia::render('Cart', [
             'products' => $products,
+            'addressAll' => $addressAll,
             'address' => $address,
             'categories' => $categories,
             'ratingsCount' => $ratingsCount

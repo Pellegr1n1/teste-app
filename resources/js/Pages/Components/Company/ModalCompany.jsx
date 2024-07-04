@@ -1,8 +1,7 @@
 import React from 'react';
 import { Modal, Button, Skeleton, List, Divider, Avatar, Rate, Image } from 'antd';
-import { AntDesignOutlined  } from '@ant-design/icons';
 
-const ModalCompany = ({ isModalOpen, closeModal, products, product }) => {
+const ModalCompany = ({ isModalOpen, closeModal, products, product, address }) => {
     if (!product) {
         return null;
     }
@@ -24,7 +23,7 @@ const ModalCompany = ({ isModalOpen, closeModal, products, product }) => {
                 <div className='flex items-center'>
                     <Avatar
                         size={100}
-                        icon={<AntDesignOutlined />}
+                        src={`storage/${product.user.image}`}
                         className='mr-5'
                     />
                     <div className='flex w-3/4 items-center'>
@@ -32,18 +31,18 @@ const ModalCompany = ({ isModalOpen, closeModal, products, product }) => {
                             <p className='m-0 text-3xl'>{product.user.name}</p>
                             <p className='m-0'>{product.user.document}</p>
                         </div>
-                        <div className='ml-20'>
+                        {address[0] && <div className='ml-20'>
                             <p className='m-0 font-bold'>Endereço</p>
                             <div className='flex'>
                                 <div>
-                                    <p className='m-0'>{product.address.street}, {product.address.number}</p>
-                                    <p className='m-0'>{product.address.neighborhood}</p>
+                                    <p className='m-0'>{address[0].street}, {address[0].number}</p>
+                                    <p className='m-0'>{address[0].neighborhood}</p>
                                 </div>
                                 <div className='ml-10'>
-                                    <p className='m-0'>{product.address.city} - {product.address.state}</p>
+                                    <p className='m-0'>{address[0].city} - {address[0].state}</p>
                                 </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                     <div>
                         <Rate disabled defaultValue={3} />

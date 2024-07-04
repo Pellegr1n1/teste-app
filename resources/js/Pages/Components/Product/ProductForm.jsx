@@ -187,21 +187,7 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
                         beforeUpload={() => false}
                         disabled={isEditing || disabled}
                     >
-                        <Button
-                            style={{
-                                border: 0,
-                                background: 'none',
-                            }}
-                            type="button"
-                            disabled={disabled}
-                        >
-                            <div>
-                                <div className="flex flex-col items-center">
-                                    <PlusOutlined />
-                                    Upload
-                                </div>
-                            </div>
-                        </Button>
+                        {'+ Upload'}
                     </Upload>
                 </Form.Item>
                 <Form.Item className='flex items-end'>

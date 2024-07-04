@@ -9,7 +9,7 @@ import ModalCart from "./Components/Cart/ModalCart";
 import ModalCompany from './Components/Company/ModalCompany';
 import ModalInfoColor from './Components/Cart/ModalInfoColor';
 
-export default function Cart({ auth, products, address, categories, ratingsCount }) {
+export default function Cart({ auth, products, address, categories, ratingsCount, addressAll }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpenInfoColor, setIsModalInfoColor] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +23,7 @@ export default function Cart({ auth, products, address, categories, ratingsCount
     const [tree, setTree] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [addressCompany, setAddressCompany] = useState(null);
     const [selectedCompanyProducts, setSelectedCompanyProducts] = useState([]);
 
     useEffect(() => {
@@ -82,6 +83,9 @@ export default function Cart({ auth, products, address, categories, ratingsCount
 
     const showCompanyModal = (product, companyId) => {
         const relatedProducts = products.filter(product => product.iduser === companyId);
+        const addressComp = addressAll.filter(address => address.iduser === companyId);
+        
+        setAddressCompany(addressComp);
         setSelectedCompanyProducts(relatedProducts);
         setSelectedProduct(product);
         setIsModalOpenCompany(true);
@@ -268,6 +272,7 @@ export default function Cart({ auth, products, address, categories, ratingsCount
                         closeModal={closeModal}
                         products={selectedCompanyProducts}
                         product={selectedProduct}
+                        address={addressCompany}
                     />
                     <ModalInfoColor
                         isModalOpen={isModalOpenInfoColor}

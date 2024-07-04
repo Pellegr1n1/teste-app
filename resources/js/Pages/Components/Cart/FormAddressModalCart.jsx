@@ -7,6 +7,7 @@ const FormAddressModalCart = ({ address, closeModal }) => {
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [form] = Form.useForm();
+    let verifyAddress = address != undefined && Object.keys(address).length > 0;
 
     const { data, setData, post, put } = useForm({
         cep: address ? address.cep : '',
@@ -18,7 +19,7 @@ const FormAddressModalCart = ({ address, closeModal }) => {
     });
 
     useEffect(() => {
-        if (Object.keys(address).length > 0) {
+        if (verifyAddress) {
             const { cep, state, city, street, neighborhood, number } = address;
             form.setFieldsValue({ cep, state, city, street, neighborhood, number });
         }
@@ -56,7 +57,7 @@ const FormAddressModalCart = ({ address, closeModal }) => {
     const handleRegister = async () => {
         try {
             setIsLoading(true);
-            if (Object.keys(address).length > 0){
+            if (verifyAddress){
                 put(route('address.update', { id: address.id }), {
                     onSuccess: () => {
                         message.success('Endereço atualizado com sucesso!')
@@ -164,7 +165,7 @@ const FormAddressModalCart = ({ address, closeModal }) => {
                     </Col>
                 </Row>
                 <Form.Item>
-                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large">{Object.keys(address).length > 0 ? "Atualizar" : "Cadastrar"}</Button>
+                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large">{verifyAddress ? "Atualizar" : "Cadastrar"}</Button>
                 </Form.Item>
             </Form>
         </div>

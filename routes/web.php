@@ -28,6 +28,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/address', [AddressController::class, 'create'])->name('address.create');
     Route::put('/address/{id}', [AddressController::class, 'update'])->name('address.update');
     Route::delete('/address/{id}', [AddressController::class, 'destroy'])->name('address.destroy');
+    Route::get('/address/{id}', [AddressController::class, 'getByUserId'])->name('address.getByUserId');
 });
 
 /** ----------------- Routes Client ----------------- **/
@@ -63,6 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/{id}', [ProfileController::class, 'picture'])->name('profile.picture');
 });
 
 require __DIR__ . '/auth.php';

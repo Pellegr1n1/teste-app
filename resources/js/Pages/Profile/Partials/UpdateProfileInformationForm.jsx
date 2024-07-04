@@ -1,8 +1,5 @@
-import { Form, Input, Button, Typography, Alert } from 'antd';
+import { Form, Input, Button, Alert } from 'antd';
 import { Link, useForm, usePage } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
-
-const { Title, Paragraph, Text } = Typography;
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
@@ -13,16 +10,21 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     });
 
     const submit = () => {
-        patch(route('profile.update'));
+        patch(route('profile.update'), {
+            onSuccess: () => {
+                reset();
+                message.success('Informações de perfil atualizadas com sucesso.');
+            }
+        });
     };
 
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-900">Atualizar Senha</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-900">Informações de Perfil</h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Certifique-se de que sua conta esteja usando uma senha longa e aleatória para permanecer segura.
+                    Atualize as informações de perfil e endereço de e-mail da sua contas.
                 </p>
             </header>
 
@@ -81,21 +83,9 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 )}
 
                 <Form.Item className="flex items-center gap-4">
-                    <Button type="primary" htmlType="submit" loading={processing} style={{ backgroundColor: "#01344a" }}>
+                    <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
                         Salvar
                     </Button>
-
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <Text type="success" className="ml-2">
-                            Salvando.
-                        </Text>
-                    </Transition>
                 </Form.Item>
             </Form>
         </section>
