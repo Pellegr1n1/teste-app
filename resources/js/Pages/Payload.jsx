@@ -36,8 +36,8 @@ const Payload = ({ payload, auth, total, products }) => {
             user={auth}
             header={
                 <>
-                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Pagamento</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400"> Realize o pagamento através do QR Code ou copie e cole o código.</p>
+                    <h2 className="font-semibold text-xl text-white leading-tight">Pagamento</h2>
+                    <p className="text-sm text-white/80"> Realize o pagamento através do QR Code ou copie e cole o código.</p>
                 </>
             }
         >

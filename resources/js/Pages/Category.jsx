@@ -94,8 +94,8 @@ const Category = ({ auth, categories, category }) => {
             user={auth.user}
             header={
                 <>
-                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Categoria</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Cadastre categorias para serem utilizadas nos produtos</p>
+                    <h2 className="font-semibold text-xl text-white leading-tight">Categoria</h2>
+                    <p className="text-sm text-white/80">Cadastre categorias para serem utilizadas nos produtos</p>
                 </>
             }         >
             <Head title="Categoria" />

@@ -1,12 +1,7 @@
 import { useRef, useState } from 'react';
-import DangerButton from '@/Components/DangerButton';
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import Modal from '@/Components/Modal';
-import SecondaryButton from '@/Components/SecondaryButton';
-import TextInput from '@/Components/TextInput';
+import { Modal, Button, Form, message, Input } from 'antd';
 import { useForm } from '@inertiajs/react';
-import { Button } from 'antd';
 
 export default function DeleteUserForm({ className = '' }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
@@ -33,7 +28,7 @@ export default function DeleteUserForm({ className = '' }) {
         destroy(route('profile.destroy'), {
             preserveScroll: true,
             onSuccess: () => {
-                closeModal()
+                closeModal();
                 message.success('Conta deletada com sucesso.');
             },
             onError: () => passwordInput.current.focus(),
@@ -43,7 +38,6 @@ export default function DeleteUserForm({ className = '' }) {
 
     const closeModal = () => {
         setConfirmingUserDeletion(false);
-
         reset();
     };
 
@@ -54,51 +48,40 @@ export default function DeleteUserForm({ className = '' }) {
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     Depois que sua conta for excluída, todos os seus recursos e dados serão excluídos permanentemente. Antes
-                    excluir sua conta, baixe quaisquer dados ou informações que você deseja reter.
+                    de excluir sua conta, baixe quaisquer dados ou informações que você deseja reter.
                 </p>
             </header>
 
-            <Button onClick={confirmUserDeletion} style={{ height: "40px", width: "130px", color: 'white', backgroundColor: "#01344a" }}>
+            <Button type='primary' onClick={confirmUserDeletion} className="h-[40px] w-[120px]" danger>
                 Deletar Conta
             </Button>
 
-            <Modal show={confirmingUserDeletion} onClose={closeModal}>
-                <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        Tem certeza de que deseja excluir sua conta?
-                    </h2>
-
-                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        Depois que sua conta for excluída, todos os seus recursos e dados serão excluídos permanentemente. Por favor
-                        digite sua senha para confirmar que deseja excluir permanentemente sua conta.
-                    </p>
-
-                    <div className="mt-6">
-                        <InputLabel htmlFor="password" value="Senha" className="sr-only" />
-
-                        <TextInput
-                            id="password"
+            <Modal
+                title="Tem certeza de que deseja excluir sua conta?"
+                open={confirmingUserDeletion}
+                onCancel={closeModal}
+                footer={[]}
+            >
+                <Form layout="vertical" onSubmit={deleteUser}>
+                    <Form.Item label="Senha" validateStatus={errors.password ? 'error' : ''} help={errors.password}>
+                        <Input.Password
                             type="password"
-                            name="password"
-                            ref={passwordInput}
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
-                            className="mt-1 block w-3/4"
-                            isFocused
-                            placeholder="Password"
+                            ref={passwordInput}
+                            placeholder="Senha"
+                            className='h-[42px]'
                         />
-
-                        <InputError message={errors.password} className="mt-2" />
-                    </div>
-
-                    <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeModal}>Cancelar</SecondaryButton>
-
-                        <DangerButton className="ms-3" disabled={processing}>
+                    </Form.Item>
+                    <Form.Item className='flex justify-end'>
+                        <Button key="cancel" onClick={closeModal} className="h-[40px] w-[120px]">
+                            Cancelar
+                        </Button>
+                        <Button key="delete" type="primary" onClick={deleteUser} loading={processing} danger className="h-[40px] w-[120px] ms-4">
                             Deletar Conta
-                        </DangerButton>
-                    </div>
-                </form>
+                        </Button>
+                    </Form.Item>
+                </Form>
             </Modal>
         </section>
     );

@@ -44,17 +44,17 @@ export default function DashboardCompany({ auth, products, stockInfo, totalReven
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Painel de Produtos</h2>}
+            header={<h2 className="font-semibold text-xl text-white leading-tight">Painel de Produtos</h2>}
         >
             <Head title="DashboardCompany" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-grey-900">
+                        <h1 className="text-2xl font-bold text-gray-900">
                             Bem-vindo(a), {auth.user.name}!
                         </h1>
-                        <p className="text-gray-600 dark:text-gray-500">Aqui está o resumo do que está acontecendo na sua empresa hoje:</p>
+                        <p className="text-gray-600">Aqui está o resumo do que está acontecendo na sua empresa hoje:</p>
                     </div>
 
                     <div className="mt-6">
@@ -62,7 +62,10 @@ export default function DashboardCompany({ auth, products, stockInfo, totalReven
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             {products && products.length > 0 ?
                                 <List
-                                    pagination
+                                    pagination={{
+                                        pageSize: 5,
+                                        showSizeChanger: false
+                                    }}
                                     dataSource={products}
                                     renderItem={(item, index) => (
                                         <List.Item

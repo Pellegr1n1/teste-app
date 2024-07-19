@@ -4,7 +4,7 @@ import { Card, Tooltip, Rate, message } from "antd";
 const { Meta } = Card;
 import styles from "./Card.module.css";
 
-function CustomCard({ id, name, company, product, user, price, stock, src, onAddItem, onRemoveItem, initialQuantity, categoryColor, showModal, rating, ratingsCount }) {
+function CustomCard({ id, name, company, product, user, price, stock, src, onAddItem, onRemoveItem, initialQuantity, categoryColor, showModal, rating, ratingsCount, isView }) {
     let situationStyle = stock > 0 ? "available" : "unavailable";
     let situation = stock > 0 ? "Em estoque" : "Fora de estoque";
     const [addItem, setAddItem] = useState(initialQuantity);
@@ -15,6 +15,8 @@ function CustomCard({ id, name, company, product, user, price, stock, src, onAdd
     }, [initialQuantity]);
 
     const handleAddItem = () => {
+        isView && message.success("Para finalizar sua compra, faça login em sua conta!");
+        
         if (addItem < stock) {
             setAddItem(addItem + 1);
             onAddItem(id);

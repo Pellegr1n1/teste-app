@@ -1,164 +1,198 @@
+import React, { useState } from 'react';
+import { Button, ConfigProvider, Layout, Menu } from 'antd';
 import { Link, Head } from '@inertiajs/react';
-import image1 from '@/Assets/Images/sacolas-de-compras.png';
-import image2 from '@/Assets/Images/atendimento.png';
-import image3 from '@/Assets/Images/experiencia.png';
-import image4 from '@/Assets/Images/entrega.png';
-import image5 from '@/Assets/Images/design.jpg';
-import logo from '@/Assets/Images/logo.png';
+import image1 from '@/Assets/Images/dashboard-card.png';
+import image2 from '@/Assets/Images/success-card.png';
+import image3 from '@/Assets/Images/delivery-card.png';
+import background from '@/Assets/Images/welcome-bg.png';
+import logo from '@/Assets/Images/logo-mc.png';
+import { Card, Col, Row } from 'antd';
+import {
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
+    LoginOutlined,
+    UserOutlined,
+    UserAddOutlined,
+} from '@ant-design/icons';
+import ModalAbout from './Components/About/AboutModal';
 
-export default function Welcome({ auth }) {
+const { Header, Sider, Content } = Layout;
+const { Meta } = Card;
+
+const Welcome = ({ auth }) => {
+    const [collapsed, setCollapsed] = useState(false);
+    const [showAbout, setShowAbout] = useState(false);
+
     return (
         <>
-            <Head title="Welcome" />
-            <div className="bg-gray-50 text-black/50 bg-white dark:bg-gray-800 dark:text-white/50">
+            <ConfigProvider
+                theme={{
+                    components: {
+                        Layout: {
+                            siderBg: 'linear-gradient(to bottom, #035096, #65a8c5)',
 
-                <div className="relative min-h-screen flex flex-col items-center justify-center">
-                    <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                        <header className="grid grid-cols-2 items-center gap-2 lg:grid-cols-3">
-                            <img id="logo" src={logo} />
-
-                            <div className="flex  lg:col-start-2">
-
+                        },
+                        Menu: {
+                            darkItemBg: 'transparent'
+                        }
+                    },
+                }}
+            >
+                <Head title="Welcome" />
+                <Layout style={{ minHeight: '100vh', backgroundImage: background }}>
+                    <Layout>
+                        <Content style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover' }}>
+                            <Header style={{ padding: 0, background: '#f3f4f6' }}>
+                                <Button
+                                    type="text"
+                                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                    onClick={() => setCollapsed(!collapsed)}
+                                    style={{
+                                        fontSize: '16px',
+                                        width: 64,
+                                        height: 64,
+                                    }}
+                                />
+                            </Header>
+                            <div className='mb-5 mr-20 ml-20'>
+                                <Row align={'center'}>
+                                    <p className='text-[36px] font-bold'>Seja Bem-vindo(a), ao Market & Client</p>
+                                </Row>
+                                <Row align={'center'}>
+                                    <p className='text-[16px] text-center'>
+                                        No Market & Client, conectamos clientes e empresas com as melhores soluções de mercado. Explore nossos serviços e descubra como podemos ajudar você a alcançar seus objetivos.
+                                    </p>
+                                </Row>
                             </div>
-                            <nav className="-mx-3 flex flex-1 justify-end">
-                                {auth.user ? (
-                                    <Link
-                                        href={auth.type === 'client' ? route('dashboard') : route('dashboardCompany.index')}
-                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            <Row gutter={[48]} justify="center" style={{ padding: '24px 16px' }}>
+                                <Col>
+                                    <Card
+                                        hoverable
+                                        style={{
+                                            width: 360,
+                                            height: '100%'
+                                        }}
+                                        cover={<img alt="example" src={image1} />}
                                     >
-                                        Dashboard
-                                    </Link>
-                                ) : (
-                                    <>
-                                        <Link
-                                            href={route('login')}
-                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                        >
-                                            Login
-                                        </Link>
-                                        <Link
-                                            href={route('register')}
-                                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                        >
-                                            Registrar
-                                        </Link>
-                                    </>
-                                )}
-                            </nav>
-                        </header>
-
-                        <main className="mt-6">
-                            <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                                <div
-                                    id="docs-card"
-                                    className="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                                >
-                                    <div
-                                        id="screenshot-container"
-                                        className="relative flex w-full flex-1 items-stretch"
+                                        <Meta
+                                            title={<p className='text-[24px] text-center'>Dashboard Inteligente</p>}
+                                            description={
+                                                <div>
+                                                    <p className='text-center'>
+                                                        Dashboard personalizado para suas necessidades. Transforme seus dados em insights valiosos e tome decisões as melhores decisões com facilidade.
+                                                    </p>
+                                                </div>
+                                            }
+                                        />
+                                    </Card>
+                                </Col>
+                                <Col>
+                                    <Card
+                                        hoverable
+                                        style={{
+                                            width: 360,
+                                            height: '100%'
+                                        }}
+                                        cover={<img alt="example" src={image2} />}
                                     >
-                                        <img
-                                            id="background1"
-                                            src={image5}
+                                        <Meta
+                                            title={<p className='text-[24px] text-center'>Parceria para o Sucesso</p>}
+                                            description={
+                                                <div>
+                                                    <p className='text-center'>
+                                                        Things & Foods oferece uma solução integrada para empresas e clientes,
+                                                        proporcionando facilidade na gestão e uma experiência de compra memorável.
+                                                    </p>
+                                                </div>
+                                            }
                                         />
-                                        <div className="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"></div>
-                                    </div>
-
-                                    <div className="relative flex items-center gap-6 lg:items-end">
-                                        <div id="docs-card-content" className="flex items-start gap-6 lg:flex-col">
-                                            <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/70 sm:size-16">
-                                                <img
-                                                    id="background1"
-                                                    className="max-w-[30px]"
-                                                    src={image1}
-                                                />
-                                            </div>
-
-                                            <div className="pt-3 sm:pt-5 lg:pt-0">
-                                                <h2 className="text-xl font-semibold text-black dark:text-white">
-                                                    Experimente o Futuro das Compras
-                                                </h2>
-
-                                                <p className="mt-4 text-sm/relaxed">
-                                                    Things & Foods oferece uma experiência de compra intuitiva e moderna.
-                                                    Gerencie produtos, vendas, históricos e realize compras de forma eficiente e sem complicações.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* primeiro */}
-                                <div
-                                    className="flex items-center gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                                >
-                                    <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/70 sm:size-16">
-                                        <img
-                                            id="background1"
-                                            className="max-w-[30px]"
-                                            src={image2}
+                                    </Card>
+                                </Col>
+                                <Col>
+                                    <Card
+                                        hoverable
+                                        style={{
+                                            width: 360,
+                                            height: '100%'
+                                        }}
+                                        cover={<img alt="example" src={image3} />}
+                                    >
+                                        <Meta
+                                            title={<p className='text-[24px] text-center'>Entrega Rápida</p>}
+                                            description={
+                                                <div>
+                                                    <p className='text-center'>
+                                                        Seus produtos favoritos entregues com rapidez e cuidado, onde e quando precisar.
+                                                    </p>
+                                                </div>
+                                            }
                                         />
-                                    </div>
+                                    </Card>
+                                </Col>
+                            </Row>
 
-                                    <div className="pt-3 sm:pt-5">
-                                        <h2 className="text-xl font-semibold text-black dark:text-white">Atendimento Sob Medida</h2>
+                            <Row align="middle" justify="center" style={{ margin: '20px 0' }}>
+                                <Button type="primary" size="large" className="mx-2" href={route('carts.index')}>
+                                    Ver Produtos
+                                </Button>
+                                <Button type="default" size="large" className="mx-2" onClick={() => setShowAbout(true)}>
+                                    Sobre Nós
+                                </Button>
+                            </Row>
 
-                                        <p className="mt-4 text-sm/relaxed">
-                                            Assitência personalizada para suas escolhas. Transforme seus produtos e compras em experiências únicas.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* segundo */}
-                                <div
-
-                                    className="flex items-center gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                                >
-                                    <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/70 sm:size-16">
-                                        <img
-                                            id="background1"
-                                            className="max-w-[35px]"
-                                            src={image3}
-                                        />
-                                    </div>
-
-                                    <div className="pt-3 sm:pt-5">
-                                        <h2 className="text-xl font-semibold text-black dark:text-white">
-                                            Parceria para o Sucesso
-                                        </h2>
-
-                                        <p className="mt-4 text-sm/relaxed">
-                                            Things & Foods oferece uma solução integrada para empresas e clientes,
-                                            proporcionando facilidade na gestão e uma experiência de compra memorável.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* terceiro */}
-                                <div className="flex items-center gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800">
-                                    <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/70 sm:size-16">
-                                        <img
-                                            id="background1"
-                                            className="max-w-[35px]"
-                                            src={image4}
-                                        />
-                                    </div>
-
-                                    <div className="pt-3 sm:pt-5">
-                                        <h2 className="text-xl font-semibold text-black dark:text-white">
-                                            Entrega Rápida e Confiável
-                                        </h2>
-
-                                        <p className="mt-4 text-sm/relaxed">
-                                            Seus produtos favoritos entregues com rapidez e cuidado, onde e quando precisar.
-                                        </p>
-                                    </div>
-                                </div>
+                        </Content>
+                        <Sider trigger={null} collapsible collapsed={collapsed} width={200}>
+                            <div className='flex items-center p-4'>
+                                <img id="logo" src={logo} width={50} />
+                                {!collapsed && <p className='ml-3 text-xl/relaxed text-white'>Market & Client</p>}
                             </div>
-                        </main>
-                    </div>
-                </div>
-            </div>
+                            <Menu
+                                theme="dark"
+                                mode="inline"
+                                items={[
+                                    auth.user ?
+                                        {
+                                            key: '1',
+                                            icon: <UserOutlined />,
+                                            label: (
+                                                <Link href={auth.type === 'client' ? route('dashboard') : route('dashboardCompany.index')}>
+                                                    Dashboard
+                                                </Link>
+                                            ),
+                                        }
+                                        :
+                                        [
+                                            {
+                                                key: '2',
+                                                icon: <LoginOutlined />,
+                                                label: (
+                                                    <Link href={route('login')}>
+                                                        Login
+                                                    </Link>
+                                                ),
+                                            },
+                                            {
+                                                key: '3',
+                                                icon: <UserAddOutlined />,
+                                                label: (
+                                                    <Link href={route('register')}>
+                                                        Registrar
+                                                    </Link>
+                                                ),
+                                            },
+                                        ]
+                                ].flat()}
+                            />
+                        </Sider>
+                    </Layout>
+                </Layout>
+            </ConfigProvider>
+            <ModalAbout
+                isModalOpen={showAbout}
+                closeModal={() => setShowAbout(false)}
+            />
         </>
     );
-}
+};
+
+export default Welcome;

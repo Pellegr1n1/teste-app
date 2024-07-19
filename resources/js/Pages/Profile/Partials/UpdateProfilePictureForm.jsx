@@ -11,7 +11,6 @@ export default function UpdateProfilePictureForm({ className = '' }) {
     const updateProfilePicture = () => {
         post(route('profile.picture', user.id), {
             onSuccess: () => {
-                reset();
                 message.success('Foto de perfil atualizada com sucesso.');
             }
         });
@@ -35,6 +34,12 @@ export default function UpdateProfilePictureForm({ className = '' }) {
                     validateStatus={errors.image ? 'error' : ''}
                     help={errors.image}
                     name={'image'}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Para salvar adicione uma imagem ao campo!'
+                        }
+                    ]}
                 >
                     <Upload
                         name="image"
@@ -50,7 +55,7 @@ export default function UpdateProfilePictureForm({ className = '' }) {
                 </Form.Item>
 
                 <div className="flex items-center gap-4">
-                    <Button type="primary" htmlType="submit" style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                    <Button type="primary" htmlType="submit" className="h-[40px] w-[100px]">
                         Salvar
                     </Button>
                 </div>

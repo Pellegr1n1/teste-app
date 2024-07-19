@@ -1,4 +1,4 @@
-import { Form, Input, Button, Alert } from 'antd';
+import { Form, Input, Button, Alert, message } from 'antd';
 import { Link, useForm, usePage } from '@inertiajs/react';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
@@ -12,7 +12,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     const submit = () => {
         patch(route('profile.update'), {
             onSuccess: () => {
-                reset();
                 message.success('Informações de perfil atualizadas com sucesso.');
             }
         });
@@ -39,8 +38,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         onChange={(e) => setData('name', e.target.value)}
                         required
                         autoComplete="name"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
-                    />
+                        className="rounded-md border border-[#d9d9d9] h-[42px]"
+                        />
                 </Form.Item>
                 <Form.Item
                     label="Email"
@@ -53,7 +52,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         onChange={(e) => setData('email', e.target.value)}
                         required
                         autoComplete="username"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        className="rounded-md border border-[#d9d9d9] h-[42px]"
                     />
                 </Form.Item>
 
@@ -83,7 +82,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 )}
 
                 <Form.Item className="flex items-center gap-4">
-                    <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                    <Button type="primary" htmlType="submit" loading={processing} className="h-[40px] w-[100px]">
                         Salvar
                     </Button>
                 </Form.Item>

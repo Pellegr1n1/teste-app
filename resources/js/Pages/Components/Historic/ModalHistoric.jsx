@@ -24,7 +24,7 @@ const ModalHistoric = ({ isModalOpen, closeModal, order }) => {
     return (
         <Modal
             title="Itens do Pedido"
-            visible={isModalOpen}
+            open={isModalOpen}
             onCancel={closeModal}
             footer={null}
         >

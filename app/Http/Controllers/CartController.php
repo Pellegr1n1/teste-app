@@ -19,7 +19,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category:id,nmcategory,color', 'user:id,document,name,email,image', 'address:id,number,city,state,neighborhood'])
+        $products = Product::with(['category:id,nmcategory,color', 'user:id,document,name,email,image'])
                             ->where('fgenabled', 1)
                             ->get();
         $address = Address::where('iduser', Auth::id())->get();

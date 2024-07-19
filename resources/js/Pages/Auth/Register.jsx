@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
-import ToggleSwitch from '@/Components/Toggle';
+import { Form, Input, Button, message, Switch } from 'antd';
 import InputMask from 'react-input-mask';
 
 export default function Register() {
@@ -13,6 +9,7 @@ export default function Register() {
 
     const handleToggle = () => {
         setIsChecked(!isChecked);
+        setData('type', !isChecked ? 'company' : 'client');
     };
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -30,132 +27,125 @@ export default function Register() {
         };
     }, []);
 
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route('register'));
+    const submit = () => {
+        post(route('register'), {
+            onSuccess: () => {
+                message.success('Registro realizado com sucesso!');
+            },
+            onError: (error) => {
+                message.error('Erro ao realizar registro!');
+                console.error('Erro ao realizar registro:' + error);
+            }
+        });
     };
 
     return (
         <GuestLayout>
             <Head title="Register" />
 
-            <form onSubmit={submit}>
-                <div className='flex' style={{ alignItems: 'center' }}>
-                    <ToggleSwitch
-                        checked={isChecked}
-                        onChange={() => {
-                            handleToggle();
-                            setData('type', isChecked ? 'client' : 'company');
-                        }}
-                    />
-                    {isChecked ?
-                        <p className='text-white ml-2'>Cadastrar pessoa jurídica/empresa</p>
-                        :
-                        <p className='text-white ml-2'>Cadastrar pessoa física</p>
-                    }
-                </div>
+            <Form onFinish={submit} layout="vertical" className="register-form">
+                <Form.Item>
+                    <div className='flex items-center'>
+                        <Switch
+                            checked={isChecked}
+                            onChange={handleToggle}
+                        />
+                        {isChecked ?
+                            <p className='ml-2'>Cadastrar pessoa jurídica/empresa</p>
+                            :
+                            <p className='ml-2'>Cadastrar pessoa física</p>
+                        }
+                    </div>
+                </Form.Item>
 
-
-                <div className='mt-10'>
-                    <InputLabel htmlFor="document" value="Documento" />
+                <Form.Item
+                    label="Documento"
+                    validateStatus={errors.document ? 'error' : ''}
+                    help={errors.document}
+                >
                     <InputMask
-                        id="document"
-                        name="document"
                         mask={isChecked ? "99.999.999/9999-99" : "999.999.999-99"}
                         placeholder={isChecked ? "CNPJ" : "CPF"}
                         value={data.document}
-                        className="mt-1 block w-full"
-                        autoComplete="document"
-                        isFocused={true}
                         onChange={(e) => setData('document', e.target.value)}
                         required
                     >
-                        {(inputProps) => <TextInput {...inputProps} />}
+                        {(inputProps) => <Input {...inputProps} style={{ borderRadius: '6px', borderColor: "#d9d9d9" }} />}
                     </InputMask>
-                    <InputError message={errors.document} className="mt-2" />
-                </div>
+                </Form.Item>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="name" value="Nome" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
+                <Form.Item
+                    label="Nome"
+                    validateStatus={errors.name ? 'error' : ''}
+                    help={errors.name}
+                >
+                    <Input
                         value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
                         onChange={(e) => setData('name', e.target.value)}
                         required
+                        autoComplete="name"
+                        style={{ borderRadius: '6px', borderColor: "#d9d9d9" }}
                     />
+                </Form.Item>
 
-                    <InputError message={errors.name} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
+                <Form.Item
+                    label="Email"
+                    validateStatus={errors.email ? 'error' : ''}
+                    help={errors.email}
+                >
+                    <Input
                         type="email"
-                        name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
+                        autoComplete="username"
+                        style={{ borderRadius: '6px', borderColor: "#d9d9d9" }}
                     />
+                </Form.Item>
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Senha" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
+                <Form.Item
+                    label="Senha"
+                    validateStatus={errors.password ? 'error' : ''}
+                    help={errors.password}
+                >
+                    <Input.Password
                         value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirmar Senha" />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
                         autoComplete="new-password"
+                        style={{ borderRadius: '6px', height: '42px', borderColor: "#d9d9d9" }}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    label="Confirmar Senha"
+                    validateStatus={errors.password_confirmation ? 'error' : ''}
+                    help={errors.password_confirmation}
+                >
+                    <Input.Password
+                        value={data.password_confirmation}
                         onChange={(e) => setData('password_confirmation', e.target.value)}
                         required
+                        autoComplete="new-password"
+                        style={{ borderRadius: '6px', height: '42px', borderColor: "#d9d9d9" }}
                     />
+                </Form.Item>
 
-                    <InputError message={errors.password_confirmation} className="mt-2" />
-                </div>
+                <Form.Item>
+                    <div className="flex items-center justify-end">
+                        <Link
+                            href={route('login')}
+                            className="underline text-sm text-gray-500 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Já possui registro?
+                        </Link>
 
-                <div className="flex items-center justify-end mt-4">
-                    <Link
-                        href={route('login')}
-                        className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    >
-                        Já possui registro?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Registrar
-                    </PrimaryButton>
-                </div>
-            </form>
+                        <Button type="primary" htmlType="submit" loading={processing} className="h-[40px] w-[100px] ms-4">
+                            Registrar
+                        </Button>
+                    </div>
+                </Form.Item>
+            </Form>
         </GuestLayout>
     );
 }

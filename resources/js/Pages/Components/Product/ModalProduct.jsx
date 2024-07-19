@@ -5,14 +5,13 @@ const ModalProduct = ({ isModalOpen, closeModal, product, auth }) => {
     const handleAddItem = (id) => {
         const storedItems = JSON.parse(localStorage.getItem("cart")) || {};
 
-        if (storedItems[id] < product.qtproduct) {
+        if (!storedItems[id] || storedItems[id] <= product.qtproduct) {
             storedItems[id] = (storedItems[id] || 0) + 1;
             localStorage.setItem("cart", JSON.stringify(storedItems));
             message.success(`${product.nmproduct} adicionado ao carrinho!`);
         } else {
             message.error(`Você já adicionou o máximo disponível (${product.qtproduct} unidades)`);
         }
-        
     };
 
     const handleRemoveItem = (id) => {

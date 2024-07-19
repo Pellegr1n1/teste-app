@@ -153,8 +153,8 @@ export default function Cart({ auth, products, address, categories, ratingsCount
             user={auth.user}
             header={
                 <>
-                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Carrinho</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Adicione produtos ao seu carrinho e aproveite nossas promoções</p>
+                    <h2 className="font-semibold text-xl text-white leading-tight">Carrinho</h2>
+                    <p className="text-sm text-white/80">Adicione produtos ao seu carrinho e aproveite nossas promoções</p>
                 </>
             }
         >
@@ -216,6 +216,7 @@ export default function Cart({ auth, products, address, categories, ratingsCount
                                     showModal={() => showCompanyModal(product, product.iduser)}
                                     product={product}
                                     user={product.iduser}
+                                    isView={auth.user ? false : true}
                                 />
                             );
                         })}
@@ -250,13 +251,13 @@ export default function Cart({ auth, products, address, categories, ratingsCount
                                 icon={<InfoCircleOutlined />}
                                 onClick={() => setIsModalInfoColor(true)}
                             />
-                            <FloatButton
+                            {auth.user && <FloatButton
                                 icon={<ShoppingCartOutlined />}
                                 badge={{
                                     count: totalItems,
                                 }}
                                 onClick={() => setIsModalOpen(true)}
-                            />
+                            />}
                         </FloatButton.Group>
                     </Tooltip>
                     <ModalCart

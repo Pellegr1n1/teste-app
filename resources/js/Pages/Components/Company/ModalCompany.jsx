@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Skeleton, List, Divider, Avatar, Rate, Image } from 'antd';
+import { Modal, Button, Skeleton, List, Divider, Avatar, Image } from 'antd';
 
 const ModalCompany = ({ isModalOpen, closeModal, products, product, address }) => {
     if (!product) {
@@ -18,6 +18,7 @@ const ModalCompany = ({ isModalOpen, closeModal, products, product, address }) =
             centered
             destroyOnClose
             width={1400}
+            style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}
         >
             <div className='p-5' style={{ width: '100%' }}>
                 <div className='flex items-center'>
@@ -43,9 +44,6 @@ const ModalCompany = ({ isModalOpen, closeModal, products, product, address }) =
                                 </div>
                             </div>
                         </div>}
-                    </div>
-                    <div>
-                        <Rate disabled defaultValue={3} />
                     </div>
                 </div>
                 <Divider />

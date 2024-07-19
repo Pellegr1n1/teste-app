@@ -67,16 +67,17 @@ class ProfileController extends Controller
      */
     public function picture(Request $request, $id)
     {
+        $request->validate([
+            'image' => 'required'
+        ]);
+
         $user = User::findOrFail($id);
 
         $file_name = time() . '-' . $request->file('image')->getClientOriginalName();
         $path = $request->file('image')->storeAs('uploads', $file_name, 'public');
 
         $user->image = $path;
-        
-        $user->save();
 
-        // Redirecionar de volta com mensagem de sucesso
-        return Redirect::back()->with('status', 'Foto de perfil atualizada com sucesso.');
+        $user->save();
     }
 }

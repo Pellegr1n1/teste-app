@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { useForm } from '@inertiajs/react';
 
 export default function UpdatePasswordForm({ className = '' }) {
@@ -16,7 +16,6 @@ export default function UpdatePasswordForm({ className = '' }) {
         put(route('password.update'), {
             preserveScroll: true,
             onSuccess: () => {
-                reset();
                 message.success('Senha atualizada com sucesso.');
             },
             onError: (errors) => {
@@ -55,7 +54,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.current_password}
                         onChange={(e) => setData('current_password', e.target.value)}
                         autoComplete="current-password"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9", height: '42px' }}
+                        className="rounded-md border border-[#d9d9d9] h-[42px]"
                     />
                 </Form.Item>
 
@@ -70,7 +69,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
                         autoComplete="new-password"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9", height: '42px' }}
+                        className="rounded-md border border-[#d9d9d9] h-[42px]"
                     />
                 </Form.Item>
 
@@ -84,12 +83,12 @@ export default function UpdatePasswordForm({ className = '' }) {
                         value={data.password_confirmation}
                         onChange={(e) => setData('password_confirmation', e.target.value)}
                         autoComplete="new-password"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9", height: '42px' }}
+                        className="rounded-md border border-[#d9d9d9] h-[42px]"
                     />
                 </Form.Item>
 
                 <div className="flex items-center gap-4">
-                    <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                    <Button type="primary" htmlType="submit" loading={processing} className="h-[40px] w-[100px]">
                         Salvar
                     </Button>
                 </div>

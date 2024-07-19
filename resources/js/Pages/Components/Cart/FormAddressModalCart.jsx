@@ -166,7 +166,7 @@ const FormAddressModalCart = ({ address, closeModal }) => {
                     </Col>
                 </Row>
                 <Form.Item>
-                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large">{verifyAddress ? "Atualizar" : "Cadastrar"}</Button>
+                    <Button loading={isLoading} type="primary" htmlType="submit" block size="large" className="h-[40px] w-[100px]">{verifyAddress ? "Atualizar" : "Cadastrar"}</Button>
                 </Form.Item>
             </Form>
         </div>

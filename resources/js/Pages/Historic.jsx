@@ -141,8 +141,8 @@ export default function Historic({ auth, orders, unavaliatedOrders }) {
             user={auth.user}
             header={
                 <>
-                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Histórico</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Explore o seu histórico de compras e aproveite as promoções ao adicionar novos produtos ao seu carrinho.</p>
+                    <h2 className="font-semibold text-xl text-white leading-tight">Histórico</h2>
+                    <p className="text-sm text-white/80">Explore o seu histórico de compras e aproveite as promoções ao adicionar novos produtos ao seu carrinho.</p>
                 </>
             }
         >
@@ -160,8 +160,8 @@ export default function Historic({ auth, orders, unavaliatedOrders }) {
                     />
                     <Modal
                         title="Avaliação do Pedido"
-                        visible={rateModalOpen}
-                        onOk={avaliableOrder} // Chama a função ao pressionar OK
+                        open={rateModalOpen}
+                        onOk={avaliableOrder}
                         onCancel={() => setRateModalOpen(false)}
                     >
                         {selectedRateOrder && (

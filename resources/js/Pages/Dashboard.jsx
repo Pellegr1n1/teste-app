@@ -40,17 +40,17 @@ export default function Dashboard({ auth, products, topProducts }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Painel</h2>}
+            header={<h2 className="font-semibold text-xl text-white leading-tight">Painel</h2>}
         >
             <Head title="Dashboard" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white border border-gray-200 overflow-hidden shadow-md md:rounded-lg p-6">
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-900">
+                        <h1 className="text-2xl font-bold text-gray-900">
                             Bem-vindo(a), {auth.user.name}!
                         </h1>
-                        <p className="text-gray-600 dark:text-gray-500">Aqui está o resumo do que está acontecendo na sua loja hoje:</p>
+                        <p className="text-gray-600">Aqui está o resumo do que está acontecendo na sua loja hoje:</p>
                     </div>
 
                     <div className="mt-6">
@@ -58,7 +58,10 @@ export default function Dashboard({ auth, products, topProducts }) {
                         <div className="p-4 sm:p-8 bg-white border border-gray-200 shadow-md md:rounded-lg">
                             {products && products.length > 0 ?
                                 <List
-                                    pagination
+                                    pagination={{
+                                        pageSize: 5,
+                                        showSizeChanger: false
+                                    }}
                                     dataSource={products}
                                     renderItem={(item, index) => (
                                         <List.Item
@@ -122,10 +125,14 @@ export default function Dashboard({ auth, products, topProducts }) {
                                             <img style={{ width: '90px' }} className={`${styles.avatarContainer}`} src='https://cdn-icons-png.flaticon.com/128/522/522404.png' />
 
                                             <Popover content={contentTopProduct(topProducts[1])} title={topProducts[1]?.nmproduct} trigger="hover" placement="leftBottom">
-                                                <div className="bottom-0 bg-[#c0c0c0] w-36 h-20" style={{ height: '120px' }}>
-                                                    <div className={`flex w-full h-full items-center justify-center`}>
-                                                        <Avatar size={64} src={`storage/${topProducts[1].image}`} className='bg-white' />
+                                                <div className='flex flex-col items-center'>
+                                                    <div className='w-40 h-[20px] bg-[#c0c0c0]' style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 10px 15px -3px rgba(0, 0, 0, 0.3)', zIndex: '10' }} />
+                                                    <div className="bottom-0 bg-[#c0c0c0] w-36 h-20" style={{ height: '120px' }}>
+                                                        <div className={`flex w-full h-full items-center justify-center`}>
+                                                            <Avatar size={64} src={`storage/${topProducts[1].image}`} className='bg-white' />
+                                                        </div>
                                                     </div>
+                                                    <div className='w-[180px] h-[20px] bg-[#c0c0c0]' style={{ boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)' }} />
                                                 </div>
                                             </Popover>
                                         </div>
@@ -134,10 +141,14 @@ export default function Dashboard({ auth, products, topProducts }) {
                                             <img style={{ width: '120px' }} className={`${styles.avatarContainer}`} src='https://cdn-icons-png.flaticon.com/128/625/625398.png' />
 
                                             <Popover content={contentTopProduct(topProducts[0])} title={topProducts[0]?.nmproduct} trigger="hover" placement="top">
-                                                <div className="bottom-0 bg-yellow-500 w-36" style={{ height: '200px' }}>
-                                                    <div className={`flex w-full h-full items-center justify-center`}>
-                                                        <Avatar size={64} src={`storage/${topProducts[0].image}`} className='bg-white' />
+                                                <div className='flex flex-col items-center'>
+                                                    <div className='w-40 h-[20px] bg-yellow-500' style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 10px 15px -3px rgba(0, 0, 0, 0.3)', zIndex: '10' }} />
+                                                    <div className="bottom-0 bg-yellow-500 w-36" style={{ height: '200px' }}>
+                                                        <div className={`flex w-full h-full items-center justify-center`}>
+                                                            <Avatar size={64} src={`storage/${topProducts[0].image}`} className='bg-white' />
+                                                        </div>
                                                     </div>
+                                                    <div className='w-[180px] h-[20px] bg-yellow-500' style={{ boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)' }} />
                                                 </div>
                                             </Popover>
                                         </div>
@@ -146,10 +157,14 @@ export default function Dashboard({ auth, products, topProducts }) {
                                             <img style={{ width: '60px' }} className={`${styles.avatarContainer}`} src='https://cdn-icons-png.flaticon.com/128/522/522405.png' />
 
                                             <Popover content={contentTopProduct(topProducts[2])} title={topProducts[2]?.nmproduct} trigger="hover" placement="rightBottom">
-                                                <div className="bottom-0 bg-[#cd7f32] w-36" style={{ height: '90px' }}>
-                                                    <div className={`flex w-full h-full items-center justify-center`}>
-                                                        <Avatar size={64} src={`storage/${topProducts[2].image}`} className='bg-white' />
+                                                <div className='flex flex-col items-center'>
+                                                    <div className='w-40 h-[20px] bg-[#cd7f32]' style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 10px 15px -3px rgba(0, 0, 0, 0.3)', zIndex: '10' }} />
+                                                    <div className="bottom-0 bg-[#cd7f32] w-36" style={{ height: '90px' }}>
+                                                        <div className={`flex w-full h-full items-center justify-center`}>
+                                                            <Avatar size={64} src={`storage/${topProducts[2].image}`} className='bg-white' />
+                                                        </div>
                                                     </div>
+                                                    <div className='w-[180px] h-[20px] bg-[#cd7f32]' style={{ boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)' }} />
                                                 </div>
                                             </Popover>
                                         </div>

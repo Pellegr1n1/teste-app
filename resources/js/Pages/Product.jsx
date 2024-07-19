@@ -160,8 +160,8 @@ export default function Product({ auth, products, categories, address, product }
             user={auth.user}
             header={
                 <>
-                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Produto</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Cadastre produtos para serem anunciados no carrinho</p>
+                    <h2 className="font-semibold text-xl text-white leading-tight">Produto</h2>
+                    <p className="text-sm text-white/80">Cadastre produtos para serem anunciados no carrinho</p>
                 </>
             }
         >

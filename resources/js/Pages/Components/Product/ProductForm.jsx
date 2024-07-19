@@ -94,7 +94,7 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
                     onChange={(e) => setData('nmproduct', e.target.value)}
                     required
                     autoComplete="nmproduct"
-                    style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                    style={{ borderRadius: '6px', borderColor: "#d9d9d9" }}
                     disabled={disabled}
                 />
             </Form.Item>
@@ -110,8 +110,9 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
                     required
                     autoComplete="qtproduct"
                     size="large"
-                    style={{ width: '100%', borderRadius: '6px', backgroundColor: "#f3f4f6" }}
+                    style={{ width: '100%', borderRadius: '6px' }}
                     disabled={disabled}
+                    min={0}
                 />
             </Form.Item>
 
@@ -142,7 +143,7 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
                         onChange={(e) => setData('price', e.target.value)}
                         required
                         autoComplete="price"
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        style={{ borderRadius: '6px', borderColor: "#d9d9d9" }}
                         disabled={disabled}
                     />
                 </Form.Item>
@@ -166,7 +167,7 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
                         value={data.fgenabled == 1 ? 'Habilitado' : 'Desabilitado'}
                         onChange={(value) => setData('fgenabled', value)}
                         size='large'
-                        style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                        style={{ borderRadius: '6px', borderColor: "#d9d9d9" }}
                         disabled={disabled}
                     />
 
@@ -191,10 +192,10 @@ export default function ProductForm({ editProduct, categories, onPreviewChange, 
                     </Upload>
                 </Form.Item>
                 <Form.Item className='flex items-end'>
-                    <Button type="primary" htmlType="submit" loading={processing} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                    <Button type="primary" htmlType="submit" loading={processing} disabled={disabled} className="h-[40px] w-[100px]">
                         {isEditing ? "Salvar" : "Cadastrar"}
                     </Button>
-                    <Button type="primary" className="ml-2" onClick={resetForm} disabled={disabled} style={{ height: "40px", width: "100px", color: 'white', backgroundColor: "#01344a" }}>
+                    <Button type="primary" onClick={resetForm} disabled={disabled} className="h-[40px] w-[100px] ml-2">
                         Cancelar
                     </Button>
                 </Form.Item>

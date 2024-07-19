@@ -4,6 +4,7 @@ import '../css/app.css';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { ConfigProvider } from 'antd';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -13,7 +14,19 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <ConfigProvider
+                theme={{
+                        token: {
+                            colorPrimary: "#024a69",
+                            colorPrimaryHover: '#036a96'
+                        },
+                    
+                }}
+            >
+                <App {...props} />
+            </ConfigProvider>
+        );
     },
     progress: {
         color: '#4B5563',

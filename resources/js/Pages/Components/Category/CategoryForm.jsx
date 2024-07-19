@@ -69,7 +69,7 @@ export default function CategoryForm({ auth, editCategory }) {
                     onChange={(e) => setData('nmcategory', e.target.value)}
                     required
                     autoComplete="nmcategory"
-                    style={{ borderRadius: '6px', backgroundColor: "#f3f4f6", borderColor: "#d9d9d9" }}
+                    style={{ borderRadius: '6px', borderColor: "#d9d9d9" }}
                 />
             </Form.Item>
             <Form.Item
@@ -83,7 +83,7 @@ export default function CategoryForm({ auth, editCategory }) {
                     required
                     autoComplete="tax"
                     size="large"
-                    style={{ width: '100%', borderRadius: '6px', backgroundColor: "#f3f4f6" }}
+                    style={{ width: '100%', borderRadius: '6px' }}
                 />
             </Form.Item>
             <Form.Item
@@ -95,7 +95,6 @@ export default function CategoryForm({ auth, editCategory }) {
                     value={data.dscategory}
                     onChange={(e) => setData('dscategory', e.target.value)}
                     autoComplete="dscategory"
-                    style={{ backgroundColor: "#f3f4f6" }}
                 />
             </Form.Item>
             <div className='flex justify-between w-full'>
@@ -113,14 +112,13 @@ export default function CategoryForm({ auth, editCategory }) {
                             setColor(c.toHexString());
                             setData('color', c.toHexString());
                         }}
-                        style={{ backgroundColor: "#f3f4f6" }}
                     />
                 </Form.Item>
                 <Form.Item className='flex items-end'>
-                    <Button type="primary" htmlType="submit" loading={processing} style={{ height: "40px", width: '100px', backgroundColor: "#01344a" }}>
+                    <Button type="primary" htmlType="submit" loading={processing} className="h-[40px] w-[100px]">
                         {isEditing ? "Salvar" : "Cadastrar"}
                     </Button>
-                    <Button type="primary" className="ml-2" onClick={resetForm} style={{ height: "40px", width: '100px', backgroundColor: "#01344a" }}>
+                    <Button type="primary" onClick={resetForm} className="h-[40px] w-[100px] ml-2">
                         Cancelar
                     </Button>
                 </Form.Item>

@@ -13,16 +13,10 @@ use App\Http\Controllers\DashboardCompanyController;
 use App\Http\Controllers\HistoricController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PayloadController;
-use Inertia\Inertia;
+use App\Http\Controllers\WelcomeController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::post('/address', [AddressController::class, 'create'])->name('address.create');
@@ -34,7 +28,6 @@ Route::middleware('auth', 'verified')->group(function () {
 /** ----------------- Routes Client ----------------- **/
 Route::middleware('auth', 'verified', 'client')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/cart', [CartController::class, 'index'])->name('carts.index');
     Route::get('/payload', [PayloadController::class, 'index'])->name('payload.index');
     Route::post('/payload', [PayloadController::class, 'create'])->name('payload.create');
     Route::post('/order', [OrderController::class, 'create'])->name('orders.create');
